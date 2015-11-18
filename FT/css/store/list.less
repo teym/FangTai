@@ -1,0 +1,108 @@
+//商品列表
+.store-list{
+  margin-top:2rem;
+  padding: 2rem 1rem 0.5rem;
+  ul{
+    position: relative;
+  }
+  li{
+    position: absolute;
+    top:0;
+    left: 0;
+    border:1px solid #d8d7d7;
+    background-color: #fff;
+    transform : scale(0.94,0.94);
+    transition: transform .7s;
+    img{
+      width: 100%;
+    }
+    //选中图片
+    &.active{
+      position: relative;
+      z-index: 5;
+      border-right:none;
+      border-bottom:none;
+      box-shadow: 0.2rem 0.2rem 0.5rem #ccc;
+      transform : scale(1,1);
+      .photo{
+        padding:0.5rem;
+      }
+    }
+    &.next{
+      top: -1.1rem;
+      z-index: 4;
+      transform : scale(0.975,0.975);
+    }
+    &.next-two{
+      top: -1.9rem;
+      z-index: 3;
+      transform : scale(0.96,0.96);
+    }
+    &.next-three{
+      top:-2.7rem;
+    }
+  }
+  //图片信息
+  .photo{
+    padding:0.8rem;
+  }
+  //商品信息
+  .info{
+    position: relative;
+    width: 100%;
+    height: 6.5rem;
+    padding:1.5rem 0.5rem 0.5rem;
+    box-sizing: border-box;
+    color: #686868;
+    font-size: 1.6rem;
+    h5{
+      span{
+        color: #00a1fe;
+      }
+    }
+    //价格
+    .price{
+      margin-top:0.75rem;
+      font-family:'microsoft yahei';
+      b{
+        margin:0 1.2rem 0 -0.2rem;
+        font-weight: normal;
+        font-size: 2rem;
+        font-family: CenturyGothic;
+      }
+    }
+    //购买
+    .buy{
+      position: absolute;
+      top:2rem;
+      right: 0.5rem;
+      input{
+        padding:0 1.6rem;
+        border:none;
+        border-radius: 1rem;
+        background-color: #f46400;
+        color: #fff;
+        font-size: 1.8rem;
+        line-height: 2.2rem;
+      }
+      span{
+        display: block;
+        padding-top: 0.5rem;
+        font-size: 1rem;
+        font-family: sinsum;
+        transform : scale(0.95,0.95)
+      }
+    }
+  }
+}
+//列表数
+.list-num{
+  padding: 1rem 0;
+  color: #474747;
+  font-size: 1.8rem;
+  font-family: CenturyGothic;
+  text-align: center;
+  b{
+    font-size: 5rem;
+  }
+}

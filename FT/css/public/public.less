@@ -1,0 +1,429 @@
+html{font-size:62.5%;}body,input, select,textarea,button{font-size:12px;font-size:1.2rem;}
+@media only screen and (-webkit-min-device-pixel-ratio: 2){html{font-size: 10px;}body{-webkit-text-size-adjust:none;}}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px){html{font-size: 12px;}body{-webkit-text-size-adjust:none;}}
+@media screen and (max-device-width: 480px){html{font-size: 12px;}body{-webkit-text-size-adjust:none;}}
+@media screen and (max-device-width: 320px){html{font-size: 10px;}body{-webkit-text-size-adjust:none;}}
+html{font-family: 'FZLTCXHJW';}body,input, select,textarea,button{font-size:1.2rem;font-family: 'FZLTCXHJW';}
+a{outline:none;}
+a,button,input{-webkit-tap-highlight-color:rgba(255,0,0,0);}
+input[type="button"], input[type="submit"], input[type="reset"] {
+  -webkit-appearance: none;
+}
+/*字体*/
+@font-face {
+  font-family: "microsoft yahei";
+    font-family: 'FZLTCXHJW';
+    src: url("../../font/FZLTCXHJW.TTF");
+    src: url("../../font/FZLTCXHJW.TTF") format("truetype");
+}
+@font-face {
+  font-family: 'CenturyGothic';
+  src: url("../../font/CenturyGothic.TTF");
+  src: url("../../font/CenturyGothic.TTF") format("truetype");
+}
+/*标题*/
+.caption{
+  color: #4c4c4c;
+  font-weight: normal;
+  span{
+    color: #454545 ;
+  }
+}
+h2.caption{
+  position: relative;
+  margin-top: 3rem;
+  padding: 0rem 0 2rem;
+  font-size: 4rem;
+  text-align: center;
+  span{
+    display: block;
+    top:0;
+    width: 100%;
+    font-size: 2.4rem;
+    text-align: center;
+  }
+}
+//标题
+.section-caption{
+  position: relative;
+  height: 2.5rem;
+  padding:0.5rem 0;
+  background-color: #f0f0f0;
+  color: rgba(23,23,23,0.5);
+  font-size: 2.3rem;
+  line-height: 2.8rem;
+  text-align: center;
+  h2{
+    font-weight: normal;
+  }
+  .icon{
+    position: absolute;
+    top:0.75rem;
+    left: 0.5rem;
+    opacity: 0.6;
+  }
+  &.special{
+    background-color: #3d3d3d;
+    color: rgba(255,255,255,0.8);
+    font-size: 1.8rem;
+    .icon{
+      opacity: 1;
+    }
+  }
+}
+//信息列表
+.list-info{
+  ul{
+    padding-bottom: 4rem;
+  }
+  li{
+    position: relative;
+    padding:0 1rem;
+    color: #171717;
+    font-size: 1.3rem;
+    line-height: 4.5rem;
+    a{
+      display: block;
+      color: #171717;
+    }
+    .box{
+      padding:0 0.5rem;
+      border-bottom: 0.15rem solid #dcdcdc;
+    }
+    span{
+      float: right;
+      font-family: 'CenturyGothic';
+    }
+    //禁止
+    &.disabled{
+      color: #7f7f7f;
+      a{color: #7f7f7f;}
+    }
+    //经过
+    &.link.hover{
+      background-color: #d2d2d2;
+    }
+  }
+  //开关
+  .switch-btn{
+    position: relative;
+    float: right;
+    width: 3.5rem;
+    height: 1.8rem;
+    margin-top: 1.35rem;
+    border:0.1rem solid #888;
+    border-radius: 1rem;
+    background-color: #fff;
+    color: #fff;
+    &:before{
+      position: absolute;
+      top:0.15rem;
+      left: 1.8rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 1.5rem;
+      background: #3abb01;
+      transition: all .2s;
+      content: "";
+    }
+    //关
+    &.close{
+      &:before{
+        left: 0.15rem;
+        background: #5e5e5e;
+      }
+    }
+  }
+}
+/*容器*/
+.main-other{
+  position: relative;
+}
+/*颜色*/
+.bg-grey{
+  background-color: #ebebeb;
+}
+.bg-light-grey{
+  background-color: #f8f8f8;
+}
+.bg-darkgray{
+  background-color: #5d5d5d;
+}
+.text-white{
+  color: #fff;
+}
+/*透明层*/
+.transparency{
+  position: fixed;
+  top:0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+.opacity8{
+  opacity: 0.8;
+}
+.shade{
+  position: absolute;
+  top:0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  &:before{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    content: "";
+  }
+  &:after{
+    position: absolute;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    content: "";
+  }
+}
+//弹层
+.hint-modal{
+  display: none;
+  position: fixed;
+  top:0;
+  left: 0;
+  z-index: 12;
+  width:100%;
+  height: 100%;
+  main{
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+.hint-modal-box{
+  display: inline-block;
+  min-width: 15rem;
+  border-radius: 0.4rem;
+  background-color: rgba(0,0,0,0.8);
+  opacity: 0.8;
+  //box-shadow: 0.2rem 0.2rem 0.4rem #aaa;
+  color: #fff;
+  font-size: 1.4rem;
+
+  p{line-height: 250%;}
+  .tools{
+    border-top:0.1rem solid #435558;
+    font-size: 0;
+    li{
+      display: inline-block;
+      width: 50%;
+      border-right:0.1rem solid #435558;
+      box-sizing: border-box;
+      font-size: 1.8rem;
+      line-height: 3rem;
+      &.hover{
+        background-color: #000;
+      }
+      &.strong{
+        font-size: 2.4rem;
+      }
+      &:first-child{
+        border-bottom-left-radius: 0.4rem;
+      }
+      &:last-child{
+        border-right:none;
+        border-bottom-right-radius: 0.4rem;
+      }
+    }
+  }
+}
+//wifi样式
+.wifi{
+  background-color: #f3f3f3;
+  box-sizing: border-box;
+  .wifi-main{
+    padding-bottom: 1rem;
+    box-sizing: border-box;
+  }
+  //wifi状态
+  .wifi-status{
+    padding-top: 3.5rem;
+    text-align: center;
+    .icon{
+      width: 10rem;
+      height: 10rem;
+      margin:0 auto;
+    }
+    span{
+      display: block;
+      padding-top: 3.5rem;
+      color: rgba(0,0,0,0.6);
+      font-weight: bold;
+      font-size: 1.2rem;
+      transform : scale(0.9,0.9);
+    }
+  }
+  //wifi账号
+  .account{
+    margin-top: 3rem;
+    li{
+      position: relative;
+      height: 2.5rem;
+      margin:0 2rem;
+      padding:0.5rem 2rem 0 1.5rem;
+      line-height: 2.5rem;
+      &:first-child{
+        border-bottom: 0.1rem solid #bbb;
+      }
+      .icon{
+        position: absolute;
+        top:50%;
+        right:0.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-top: -0.5rem;
+      }
+      //表单
+      select,input{
+        width: 100%;
+        border:none;
+        background-color: transparent;
+        color: #333;
+      }
+      .input{
+        border:none;
+        background-color: transparent;
+        color: #000;
+        font-size: 1.4rem;
+        font-family: 'CenturyGothic' ;
+      }
+      //记住密码
+      .remember-password{
+        position: relative;
+        color: #666;
+        font-size: 1.2rem;
+        i{
+          position: absolute;
+          top:0rem;
+          left: -1.3rem;
+          width: 0.8rem;
+          height: 0.8rem;
+          margin-right: 0.5rem;
+          border:0.15rem solid #00ce42;
+          border-radius: 100%;
+
+        }
+        &.active{
+          i:before{
+            position: absolute;
+            top:24%;
+            left:22%;
+            width: 50%;
+            height: 50%;
+            border-radius: 100%;
+            background-color: #00ce42;
+            content: "";
+          }
+        }
+      }
+    }
+  }
+  //操作中样式
+  &.in-service{
+    //wifi状态垂直居中
+    .wifi-status{
+      position: absolute;
+      top:50%;
+      left: 0;
+      width: 100%;
+      height: 12rem;
+      margin-top:-9rem;
+      padding-top: 0;
+      text-align: center;
+    }
+    //操作中，隐藏账号
+    .account{
+      display: none;
+    }
+  }
+}
+//wifi底部按钮
+.wifi-tools-btn{
+  display: inline-block;
+  width: 100%;
+  height: 5.5rem;
+  padding:0rem 1.5rem;
+  box-sizing: border-box;
+  input{
+    width: 100%;
+    height: 3rem;
+    margin:1rem 0 1.5rem;
+    border:none;
+    border-radius: 1.5rem;
+    background-color: #e5e5e5;
+    box-shadow: 0.1rem 0.1rem 0.3rem rgba(0,0,0,0.32);
+    color: #000;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 3rem;
+  }
+}
+//版本样式
+.info-status{
+  display: table;
+  width: 100%;
+  height: 20rem;
+  text-align: center;
+  .box{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }
+  #loading,.icon{
+    width: 10rem;
+    height: 10rem;
+    margin:0 auto;
+  }
+  .loading-text{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    font-style: normal;
+    font-size: 2rem;
+    line-height: 10rem;
+    text-align: center;
+  }
+  h5{
+    position: relative;
+    padding-top: 1rem;
+    min-height: 1.5rem;
+    color: #171717;
+    font-size: 1.5rem;
+    span{
+      display: block;
+      padding-top: 0.5rem;
+      color: #7a7a7a;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  }
+}
+//公用大小样式
+.scaleFull{
+  transition: transform .5s;
+  transform : scale(1,1) !important;
+}
+.scaleEmpty{
+  transition: transform .5s;
+  transform : scale(0.2,0.2) !important;
+}
+.notransition{
+  transition: transform 0s;
+}

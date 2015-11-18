@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>方太净水器</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../css/public/style.css">
+    <link rel="stylesheet" href="../../css/control/control.css">
+</head>
+<body>
+<a class="icon-home" href="../index.html" title="回到主页"></a>
+<main id="main">
+    <div class="main-header clearfix">
+        <section>
+            <h2 class="caption"><span>WODE</span>控制</h2>
+        </section>
+    </div>
+    <!--饮水时间段-->
+    <div class="main-other control-main clearfix" status="true">
+        <!--开关-->
+        <div class="switch">
+            <input type="button" class="open defaultClick active" value="开启"/>
+            <input type="button" class="close defaultClick" value="关闭"/>
+        </div>
+        <!--提示开启-->
+        <div class="purifier open">
+            <div class="hint">请开启净水器</div>
+            <div class="purifier-show">
+                <div class="pr">
+                    <canvas id="progress_bar"></canvas>
+                    <input type="button" id="wash" class="wash-btn defaultClick" value="冲　洗"/>
+                    <h5 class="purifier-caption">70<span>%</span></h5>
+                    <span class="purifier-text">污染度</span>
+                </div>
+                <!--记录时间-->
+                <div class="time">
+                    <div class="prev-time">
+                        <h5>上一次<span>冲洗日期</span></h5>
+                        <time>2015年<span><b>8</b>月<b>18</b>日</span></time>
+                    </div>
+                    <div class="next-time">
+                        <time>2015年<span><b>11</b>月<b>5</b>日</span></time>
+                        <h5>上一次<span>冲洗日期</span></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+<script src="../../js/plugIn/jquery-1.11.3.min.js"></script>
+<script src="../../js/public/base.js"></script>
+<script src="../../js/control/index.js"></script>
+</html>

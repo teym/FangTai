@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>方太净水器</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../css/public/style.css">
+    <link rel="stylesheet" href="../../css/home.css">
+    <link rel="stylesheet" href="/FT/css/dosage/main.css">
+</head>
+<body>
+<a class="icon-home" href="../index.html" title="回到主页"></a>
+<main id="main">
+    <div class="main-header clearfix">
+        <section>
+            <h2 class="caption"><span>WODE</span>用量</h2>
+        </section>
+    </div>
+    <!--饮水时间段-->
+    <div class="main-other clearfix">
+        <div class="dosage">
+            <div class="menu-bar">
+                <input type="button" class="active" data-class="water" value="用水记录"/>
+                <input type="button" data-class="ele" value="用电记录"/>
+            </div>
+            <div class="dosage-main">
+                <div class="data-content" id="data-content">
+                    <canvas class="showdata" id="showdata"></canvas>
+                    <!--左侧信息-->
+                    <div class="summary">
+                        <dl>
+                            <dt>本周用水</dt>
+                            <dd><strong>15</strong>吨</dd>
+                        </dl>
+                    </div>
+                    <!--当天信息-->
+                    <div class="day-info">
+                        <dl>
+                            <dt>周三</dt>
+                            <dd><strong>2</strong>吨</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="submenu-bar">
+                <input type="button" class="active" value="周"/>
+                <input type="button" value="月"/>
+                <input type="button" value="年"/>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+<script src="../../js/plugIn/jquery-1.11.3.min.js"></script>
+<script src="../../js/public/base.js"></script>
+<script src="../../js/dosage/main.js"></script>
+</html>

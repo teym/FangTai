@@ -28,11 +28,11 @@ $(function(){
                 if($val/$(this).attr("data-height")>=0.1){
                     var $top = 0;
                     $(this).removeClass("active").siblings(".next").removeClass("next").siblings(".next-two").removeClass("next-two").siblings(".next-three").removeClass("next-three");
-                    $(this).next().addClass("active").css({top:0}).next().addClass("next").css({top:"-1.1rem"}).next().addClass("next-two").css({top:"-1.9rem"}).next().addClass("next-three").css({top:"-2.7rem"});
+                    $(this).next().addClass("active").css({top:0}).next().addClass("next").css({top:"-3.9%"}).next().addClass("next-two").css({top:"-6.6%"}).next().addClass("next-three").css({top:"-9.5%"});
                 }else if($val/$(this).attr("data-height")<=-0.1){
                     var $top = "-1.1rem";
                     $(this).removeClass("active").siblings(".next").removeClass("next").siblings(".next-two").removeClass("next-two").siblings(".next-three").removeClass("next-three");
-                    $(this).prev().addClass("active").css({top:0}).next().addClass("next").next().addClass("next-two").css({top:"-1.9rem"}).next().addClass("next-three").css({top:"-2.7rem"});
+                    $(this).prev().addClass("active").css({top:0}).next().addClass("next").next().addClass("next-two").css({top:"-6.6%"}).next().addClass("next-three").css({top:"-9.5%"});
                 }
                 $(this).animate({top:$top||0},700,function(){});
                 //改变数字

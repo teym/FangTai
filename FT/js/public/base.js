@@ -1,6 +1,6 @@
 $(function(){
-	var init = {
-		base : function(){
+    var init = {
+        base : function(){
             document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
             document.documentElement.style.webkitUserSelect = "none";//禁止选中
             init.event();
@@ -8,14 +8,15 @@ $(function(){
             clickStyle({box:".icon-upward,.icon-downward,.hint-modal-box .tools li,.list-info .link",class:"hover"});
             //自动获取屏幕最小高度
             $(window).bind("resize",function(){
+                init.rem();
+                $("body").css({display:"block"});
                 //获取页面最小高度
                 var $H = $(window).height(),
                     $header = $(".main-header").height();
                 $(".main-other").css({minHeight:$H-$header});
-                init.rem();
             }).trigger("resize");
-		},
-		event : function(){
+        },
+        event : function(){
             //显示热水器
             $(".icon-add").on("touchend",function(){
                 $(".nav-WaterPurifier").show().find(".active").removeClass("active");
@@ -41,15 +42,7 @@ $(function(){
                 $(this).hasClass("close")?$(this).removeClass("close"):$(this).addClass("close");
                 return false;
             });
-            //退回上一层
-            $("body").on("touchstart",".icon-home",function(){
-                if(){
-
-                }
-                hekr.close();
-                return false;
-            });
-		},
+        },
         rem : function(){
             !function(win, option) {
                 var count = 0,
@@ -99,8 +92,10 @@ $(function(){
                 }
             });
         }
-	};
-	init.base();
+    };
+    init.base();
+
+
 });
 /*触摸点击事件*/
 function clickStyle(info){

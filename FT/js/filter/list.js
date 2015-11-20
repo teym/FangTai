@@ -44,7 +44,7 @@ $(function(){
                     //随机时间调用
                     other(val);
                 }
-            },250/(info.val*100));
+            },50/(info.val*100));
             //绘制基础效果
             function start(val){
                 //绘制灰曲线
@@ -109,12 +109,12 @@ $(function(){
 
                 //绘制标题文本
                 context.beginPath();
-                context.font = "1rem microsoft yahei";
+                context.font = info.width*0.2+"px microsoft yahei";
                 context.fillStyle = "transparent";
                 context.fillText(info.title, 0, 0);
                 var text  = context.measureText(info.title),
                     width = text.width;
-                context.font = "1rem microsoft yahei";
+                context.font = info.width*0.2+"px microsoft yahei";
                 context.fillStyle = "#fff";
                 context.fillText(info.title, (info.width-width)/2, info.height*0.96);
                 context.closePath();
@@ -130,7 +130,7 @@ $(function(){
                 //汽泡动画
                 setInterval(function(){
                     randomBubble();
-                },random(2000,5000));
+                },random(3000,5000));
                 //随机汽泡
                 function randomBubble(){
                     var $num = 5;
@@ -162,7 +162,7 @@ $(function(){
                     context.beginPath();
                     context.arc(info.width*0.2,newtopH+blank+info.height*0.03, info.width*0.1, 0, Math.PI * 2, true);
                     context.closePath();
-                    context.lineWidth = 3;
+                    context.lineWidth = info.width*0.04;
                     context.strokeStyle = '#6ddffd';
                     context.stroke();
                 }
@@ -171,7 +171,7 @@ $(function(){
                     context.beginPath();
                     context.arc(info.width*0.45,newtopH+blank+info.height*0.02, info.width*0.07, 0, Math.PI * 2, true);
                     context.closePath();
-                    context.lineWidth = 2;
+                    context.lineWidth = info.width*0.03;
                     context.strokeStyle = '#6ddffd';
                     context.stroke();
                 }
@@ -180,7 +180,7 @@ $(function(){
                     context.beginPath();
                     context.arc(info.width*0.08,newtopH+blank+(-info.height*0.03), info.width*0.05, 0, Math.PI * 2, true);
                     context.closePath();
-                    context.lineWidth = 1.5;
+                    context.lineWidth = info.width*0.0225;
                     context.strokeStyle = '#6ddffd';
                     context.stroke();
                 };
@@ -189,7 +189,7 @@ $(function(){
                     context.beginPath();
                     context.arc(info.width*0.3,newtopH+blank+(-info.height*0.03), info.width*0.04, 0, Math.PI * 2, true);
                     context.closePath();
-                    context.lineWidth = 1;
+                    context.lineWidth = info.width*0.015;
                     context.strokeStyle = '#6ddffd';
                     context.stroke();
                 };
@@ -200,20 +200,20 @@ $(function(){
                     topH    = info.height-height;
                 //绘制值文本
                 context.beginPath();
-                context.font = "1.5rem Arial";
+                context.font = info.width*0.32+"px Arial";
                 context.fillStyle = "transparent";
                 context.fillText(val*100+"%", 0, 0);
                 var text    = context.measureText(val*100+"%"),
                     width   = text.width;
-                context.font = "1.5rem Arial";
+                context.font = info.width*0.32+"px Arial";
                 context.fillStyle = "#fff";
                 if(val>0.7){
-                    context.fillText(val*100+"%", (info.width-width)/2,topH+45+(info.height*0.03));
+                    context.fillText(val*100+"%", (info.width-width)/2,topH+info.width*0.5+(info.height*0.03));
                 }else if(val<=0.25){
                     context.fillStyle = "#ea0047";
-                    context.fillText(val*100+"%", (info.width-width)/2,topH-25);
+                    context.fillText(val*100+"%", (info.width-width)/2,topH-info.width*0.15);
                 }else{
-                    context.fillText(val*100+"%", (info.width-width)/2,topH+45);//+(topH<blank*8?blank*8:topH)
+                    context.fillText(val*100+"%", (info.width-width)/2,topH+info.width*0.5);//+(topH<blank*8?blank*8:topH)
                 }
                 context.closePath();
             };

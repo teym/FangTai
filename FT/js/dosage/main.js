@@ -254,8 +254,8 @@ Canvas = function(id,param){
                 context.globalCompositeOperation="destination-over";
                 context.strokeStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
 
-                var lineWidth = 2;
-                context.lineWidth = 5;
+                var lineWidth = width*0.0015;
+                context.lineWidth = width*0.015;
                 context.moveTo(0,dataList[0]- lineWidth);
                 var k = 1;
                 if(initFlg) {

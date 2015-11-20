@@ -49,14 +49,11 @@ $(function(){
                 val     = info.val/info.max;
             info.height = info.width;
 
-            var outerCirLineWidth = 10,
+            var outerCirLineWidth = info.width*0.05,
                 outerRadius = info.width/2 - outerCirLineWidth/2;//外部圆半径
 
-            var outline = 7,innerRadius = outerRadius-outline;
+            var outline = info.width*0.035,innerRadius = outerRadius-outline;
             var center = {pointX:info.width/2,pointY:info.height/2};
-            var outerCirLineWidth = 10,
-                outerRadius = info.width/2 - outerCirLineWidth/2;//外部圆半径
-            var outline = 7,innerRadius = outerRadius - outline;
 
             var curPoint = {};
 
@@ -167,7 +164,7 @@ $(function(){
                         curPoint.right.pointX - outline/2,curPoint.right.pointY + (outline/2) * val
                     );
                 }
-                context.arc(center.pointX, center.pointY, innerRadius - (outline/2) * val, curPoint.startDeg, curPoint.endDeg, false);
+                context.arc(center.pointX, center.pointY, innerRadius - (outline/2)*val, curPoint.startDeg, curPoint.endDeg, false);
                 context.fill();
                 context.closePath();
 

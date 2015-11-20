@@ -32,8 +32,8 @@ $(function(){
         playFilter : function(info){
             var filter  = document.getElementById(info.id),
                 context = filter.getContext("2d"),
-                blank   = info.height*0.005,
-                val2    = 0;
+                blank   = info.height*0.005;
+            window.val2    = 0;
             var $time = setInterval(function(){
                 val2+=0.01;
                 var val = parseFloat(val2.toFixed(2));
@@ -44,7 +44,7 @@ $(function(){
                     //随机时间调用
                     other(val);
                 }
-            },50/(info.val*100));
+            },50/(val2*100));
             //绘制基础效果
             function start(val){
                 //绘制灰曲线

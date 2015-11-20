@@ -3,17 +3,61 @@ $(function(){
 		base : function(){
             init.event();
             init.resize();//获取屏幕
-            clickStyle({box:".header-nav li",class:"active"});
+            clickStyle({box:".header-nav li,.nav-WaterPurifier li",class:"active"});
             var $malfunction = $(".malfunction-status"),
-                $len         = $malfunction.length,
-                $num
+                $len         = $malfunction.length;
             setInterval(function(){
                 $malfunction.eq(random(0,$len-1)).show().siblings().hide();
             },1000);
 		},
 		event : function(){
             //删除净水机
-            $(".nav-WaterPurifier li:not(.add-WaterPurifier)").bind("touchstart",function(e){
+            $("body").on("click",".icon-remove",function(){
+                $(".cancel-binding").css({display:"table"});
+                $(this).closest(".status-remove").removeClass("status-remove");
+                return false;
+            });
+            //选中净水机
+           /* $("body").on("touchstart",".nav-WaterPurifier h3",function(){
+                var $li = $(this).closest("li");
+                if($li.hasClass("active")){
+                    $li.removeClass("active");
+                }else{
+                    $li.addClass("active").siblings().removeClass("active");
+                }
+            });*/
+            //删除净水机
+            $("body").on("touchstart",".nav-WaterPurifier li:not(.status-remove)",function(){
+                window.startVal = window.moveVal = event.touches[0].pageX;
+                $(this).find(".tools").hide();
+            }).on("touchmove",".nav-WaterPurifier li:not(.status-remove)",function(){
+                    window.moveVal = event.touches[0].pageX;
+                    //左滑效果
+                    var $distance = window.startVal-window.moveVal,
+                        $width    = $(this).width();
+                    if($distance/$width>0.1){
+                        $(this).addClass("status-remove");
+                    }
+                    return false;
+                });
+            /*$(".nav-WaterPurifier li:not(.status-remove)").bind("touchstart",function(e){
+                window.startVal = window.moveVal = event.touches[0].pageX;
+                $(this).find(".tools").hide();
+                console.log($(this).hasClass("status-remove"));
+            }).bind("touchmove",function(){
+                    window.moveVal = event.touches[0].pageX;
+                    //左滑效果
+                    var $distance = window.startVal-window.moveVal,
+                        $width    = $(this).width();
+                    if($distance/$width>0.1){
+                        $(this).addClass("status-remove").find(".tools").show();
+                    }
+                    return false;
+                }).bind("touchend",function(){
+                    return false;
+                });*/
+            //删除净水机
+            /*$(".nav-WaterPurifier li:not(.add-WaterPurifier)").bind("touchstart",function(e){
                 window.startVal = window.moveVal = event.touches[0].pageX;
                 }).bind("touchmove",function(){
                     window.moveVal = event.touches[0].pageX;
@@ -42,26 +86,14 @@ $(function(){
                     }
                     return false;
                     //$(this).css({left:$val,opacity:1-(-$distance/$width)});
-            });
+            });*/
             /*//替换净水机
             $("body").on("click",".icon-change",function(){
                 $(".cancel-binding").css({display:"table"});
                 return false;
             });
-            //删除净水机
-            $("body").on("click",".icon-remove",function(){
-                $(".change-Water").css({display:"table"});
-                return false;
-            });
-            //选中净水机
-            $("body").on("touchstart",".nav-WaterPurifier h3",function(){
-                var $li = $(this).closest("li");
-                if($li.hasClass("active")){
-                    $li.removeClass("active");
-                }else{
-                    $li.addClass("active").siblings().removeClass("active");
-                }
-            });*/
+             */
+
             //拖动切换菜单
             $("#nav .sub-nav").bind("touchstart",function(e){
                 //清除参数

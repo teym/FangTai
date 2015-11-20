@@ -21,7 +21,7 @@ $(function(){
             $("body").on("touchend",".submenu-bar input",function(){
                 var $val = $(this).val();
                 if($val=="周"){
-                    canvas.draw(data);
+                    canvas.changeTimeType(7,data);
                 }else if($val=="月"){
                     canvas.changeTimeType(12,yearData);
                 }else if($val=="年"){

@@ -14,7 +14,16 @@ $(function(){
             //删除净水机
             $("body").on("click",".icon-remove",function(){
                 $(".cancel-binding").css({display:"table"});
-                $(this).closest(".status-remove").removeClass("status-remove");
+                return false;
+            });
+            //确定删除净水机
+            $("body").on("click",".cancel-binding li",function(){
+                if($(this).hasClass("submit")){
+                    $(".status-remove").fadeOut(500,function(){
+                        $(this).remove();
+                    });
+                }
+                $(".status-remove").removeClass("status-remove");
                 return false;
             });
             //选中净水机
@@ -27,16 +36,22 @@ $(function(){
                 }
             });*/
             //删除净水机
-            $("body").on("touchstart",".nav-WaterPurifier li:not(.status-remove)",function(){
-                window.startVal = window.moveVal = event.touches[0].pageX;
-                $(this).find(".tools").hide();
+            $("body").on("touchstart",".nav-WaterPurifier li",function(){
+                if(!$(this).hasClass("status-remove")){
+                    window.startVal = window.moveVal = event.touches[0].pageX;
+                    $(".status-remove").removeClass("status-remove");
+                }else{
+                    window.startVal = "";
+                }
             }).on("touchmove",".nav-WaterPurifier li:not(.status-remove)",function(){
-                    window.moveVal = event.touches[0].pageX;
-                    //左滑效果
-                    var $distance = window.startVal-window.moveVal,
-                        $width    = $(this).width();
-                    if($distance/$width>0.1){
-                        $(this).addClass("status-remove");
+                    if(window.startVal){
+                        window.moveVal = event.touches[0].pageX;
+                        //左滑效果
+                        var $distance = window.startVal-window.moveVal,
+                            $width    = $(this).width();
+                        if($distance/$width>0.1){
+                            $(this).addClass("status-remove");
+                        }
                     }
                     return false;
                 });
@@ -93,7 +108,107 @@ $(function(){
                 return false;
             });
              */
-
+            //拖动切换菜单
+           /* $("#nav .sub-nav").bind("touchstart",function(e){
+                //清除参数
+                $(this).find(".scaleFull").removeClass("scaleFull");
+                $(this).find(".notransition").removeClass("notransition")
+                $(this).find(".box").css({transform : "scale(1,1)"});
+                $(this).find("li").stop(true,true);
+                //设置参数
+                window.startVal = window.moveVal = event.touches[0].pageX;
+                window.width = $(this).find(".active").width();
+                window.siblingsWidth = $(this).find(".active").addClass("selected").siblings().width();
+            }).bind("touchmove",function(e){
+                    window.moveVal = event.touches[0].pageX;
+                    var $val = window.startVal - window.moveVal,
+                        $positiveVal = $val>0?$val:-$val;
+                    //计算拖拽值
+                    var $width  = window.width-$positiveVal<window.siblingsWidth?window.siblingsWidth:window.width-$positiveVal,
+                        $sWidth = window.siblingsWidth+$positiveVal>window.width?window.width:window.siblingsWidth+$positiveVal;
+                    console.log($width,$sWidth,$val);
+                    //一起移动的值
+                    var $selected = $(this).find(".selected");
+                    if($val>0){
+                        var $move = $selected.next();
+                    }else{
+                        var $move = $selected.prev();
+                    }
+                    if($move.length==1){
+                        $selected.addClass("active").css({width:$width}).find(".box").css({
+                            opacity   : $width/window.width+0.4,
+                            transform : "scale("+$width/window.width+","+$width/window.width+")"
+                        });
+                        $move.addClass("active").css({width:$sWidth}).find(".box").css({
+                            opacity   : $sWidth/window.width+0.4,
+                            transform : "scale("+$sWidth/window.width+","+$sWidth/window.width+")"
+                        });
+                        //小于一定值，取消选中效果
+                        if($width/window.width<0.1){
+                            $selected.removeClass("active").find(".box").css({
+                                opacity   : 1,
+                                transform : "scale(1,1)"
+                            });
+                        }
+                        if($sWidth/window.width<0.1){
+                            $move.removeClass("active").find(".box").css({
+                                opacity   : 1,
+                                transform : "scale(1,1)"
+                            });
+                        }
+                    }else{
+                        if($val<0){
+                            $move.width({width:$sWidth});
+                        }
+                    }
+                    if($move.next().length==0){
+                        $move.prev().addClass("prev");
+                    }else{
+                        $move.siblings(".prev").removeClass("prev");
+                    }
+                    if($move.prev().length==0){
+                        $move.next().addClass("next");
+                    }else{
+                        $move.siblings(".next").removeClass("next");
+                    }
+                }).bind("touchend",function(e){
+                    var $val = window.startVal - window.moveVal,
+                        $positiveVal = $val>0?$val:-$val;
+                    //计算拖拽值
+                    var $width  = window.width-$positiveVal<window.siblingsWidth?window.siblingsWidth:window.width-$positiveVal,
+                        $sWidth = window.siblingsWidth+$positiveVal>window.width?window.width:window.siblingsWidth+$positiveVal;
+                    console.log($width,$sWidth,$val);
+                    //一起移动的值
+                    var $selected = $(this).find(".selected");
+                    if($val>0){
+                        var $move = $selected.next();
+                    }else{
+                        var $move = $selected.prev();
+                    }
+                    if($move.length==1){
+                        if($positiveVal/window.width>0.1){
+                            $move.find(".box").addClass("scaleFull").animate({opacity:1},500,function(){
+                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                            });
+                            $selected.find(".box").addClass("scaleEmpty").animate({opacity:1},500,function(){
+                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                            });
+                            $move.addClass("active selected").animate({width:window.width}).siblings().animate({width:window.siblingsWidth},500,function(){
+                                $(this).removeClass("active selected");
+                            });
+                        }else{
+                            $selected.find(".box").addClass("scaleFull").animate({opacity:1},500,function(){
+                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                            });
+                            $move.find(".box").addClass("scaleEmpty").animate({opacity:1},500,function(){
+                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                            });
+                            $selected.addClass("active selected").animate({width:window.width},500).siblings().animate({width:window.siblingsWidth},500,function(){
+                                $(this).removeClass("active selected");
+                            });
+                        }
+                    }
+                });*/
             //拖动切换菜单
             $("#nav .sub-nav").bind("touchstart",function(e){
                 //清除参数
@@ -146,7 +261,7 @@ $(function(){
                         });
                     }
                     //拖拽达到一定值，更改选中菜单
-                    if($sWidth>$dataWidth*0.3){
+                    if($sWidth>$dataWidth*0.1){
                         $moveLi.removeClass("selected").next().addClass("selected");
                     }else{
                         $moveLi.addClass("selected").next().removeClass("selected");
@@ -176,7 +291,7 @@ $(function(){
                         });
                     }
                     //拖拽达到一定值，更改选中菜单
-                    if($sWidth>$dataWidth*0.3){
+                    if($sWidth>$dataWidth*0.1){
                         $moveLi.removeClass("selected").prev().addClass("selected");
                     }else{
                         $moveLi.addClass("selected").prev().removeClass("selected");
@@ -197,6 +312,22 @@ $(function(){
                         $moveLi.removeClass("active");
                     }
                 }*/
+                if($val>0){
+                    var $move = $moveLi.next();
+                }else{
+                    var $move = $moveLi.prev();
+                }
+
+                if($move.next().length==0){
+                    $move.prev().addClass("prev");
+                }else{
+                    $move.siblings(".prev").removeClass("prev");
+                }
+                if($move.prev().length==0){
+                    $move.next().addClass("next");
+                }else{
+                    $move.siblings(".next").removeClass("next");
+                }
                 return false;
             }).bind("touchend",function(e){
                 var $parent = $(this).parent(),
@@ -241,6 +372,14 @@ $(function(){
                 $(".serve-portion,.serve-portion li").height($H*0.205);//服务
                 $li.find(".active").css({width:$W-($liWidth*2)});
                 //42.5  37  20.5
+                //为下面元素设计百分比
+                return;
+                var $subLi = $("#nav").find(".sub-nav .active");
+                for(var i=0;i<$subLi.length;i++){
+                    var $width = $subLi.eq(i).width(),
+                        $proportion = $subLi.eq(i).find("i").attr("data-proportion");
+                    $subLi.eq(i).find("i").css({height:$width*$proportion});
+                }
             }).trigger("resize");
         }
 	};

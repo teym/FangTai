@@ -15,12 +15,14 @@ $(function(){
                     $header = $(".main-header").height();
                 $(".main-other").css({minHeight:$H-$header});
             }).trigger("resize");
+            window.Hekr = Hekr;
         },
         event : function(){
             //显示热水器
             $(".icon-add").on("touchend",function(){
                 $(".nav-WaterPurifier").show().find(".active").removeClass("active");
                 $("body").append("<div class='transparency'></div>");
+                $(".status-remove").removeClass("status-remove");
             });
             //显示头部左侧菜单
             $(".icon-catalogue").on("touchend",function(){
@@ -41,6 +43,14 @@ $(function(){
             $("body").on("touchstart",".switch-btn",function(){
                 $(this).hasClass("close")?$(this).removeClass("close"):$(this).addClass("close");
                 return false;
+            });
+            //返回上一层
+            $("body").on("touchstart",".back",function(){
+                if(window.Hekr){
+                    Hekr.close();
+                }else{
+                    location.href = $(this).attr("data-href");
+                }
             });
         },
         rem : function(){

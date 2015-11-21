@@ -1,8 +1,9 @@
 var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
-    less = require('gulp-less'),
+    less = require('gulp-less');
+    /*,
     notify = require('gulp-notify'),
-    minifyCss = require('gulp-minify-css');
+    minifyCss = require('gulp-minify-css')*/
 
 gulp.task('watch', function () {    // 这里的watch，是自定义的，写成live或者别的也行
     var server = livereload();

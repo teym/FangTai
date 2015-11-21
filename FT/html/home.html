@@ -12,7 +12,38 @@
     <link rel="stylesheet" href="../css/home.css">
 </head>
 <body>
+<style>
+
+    html,body {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    .logo-container {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        bottom: 50%;
+    }
+    .logo-container img {
+        width: 50%;
+        opacity: 0;
+    }
+
+    .logo-container canvas {
+        position: absolute;
+        border-radius: 50%;
+    }
+
+
+</style>
+    <div class="logo-container">
+        <img class="logo-container-img" src="../images/icon/icon-logo.png">
+        <canvas id="cir_canvas"></canvas>
+    </div>
     <canvas id="gradual"></canvas>
+
 </body>
 <script src="../js/plugIn/jquery-1.11.3.min.js"></script>
 <script src="../js/home.js"></script>

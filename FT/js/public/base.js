@@ -15,7 +15,7 @@ $(function(){
                     $header = $(".main-header").height();
                 $(".main-other").css({minHeight:$H-$header});
             }).trigger("resize");
-            window.Hekr = Hekr;
+            //window.Hekr = Hekr;
         },
         event : function(){
             //显示热水器

@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
+    minifyCss = require('gulp-minify-css'),
     less = require('gulp-less');
     /*,
     notify = require('gulp-notify'),

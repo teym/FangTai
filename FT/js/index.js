@@ -21,6 +21,7 @@ $(function(){
                 if($(this).hasClass("submit")){
                     $(".status-remove").fadeOut(500,function(){
                         $(this).remove();
+                        Hekr.removeDevice("VDEV_1AFE349C3DPN",function(){});
                     });
                 }
                 $(".status-remove").removeClass("status-remove");
@@ -393,10 +394,5 @@ $(function(){
 document.addEventListener('HekrSDKReady',function(){
   Hekr.getDevices(function(list,error){
     console.log(list,error);
-  });
-  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      //返回 "48 09 02 01 00 01 20 01"
-      console.log(str);
-
   });
 }, false);

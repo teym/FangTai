@@ -61,9 +61,9 @@ var Map = function(){
 
     var searchThing = '景点';
 
-    var myIcon = new BMap.Icon("/FT/images/map/icon-address-grey.png",
+    var myIcon = new BMap.Icon("../../images/map/icon-address-grey.png",
         new BMap.Size(110,135));
-    var myIcon2 = new BMap.Icon("/FT/images/map/icon-address-green.png", new BMap.Size(110,135));
+    var myIcon2 = new BMap.Icon("../../images/map/icon-address-green.png", new BMap.Size(110,135));
     var activeMarketIndex = 0;
 
     var laterTimer = null;
@@ -125,12 +125,12 @@ var Map = function(){
     //获取覆盖物位置
     function attribute(e){
 
-        $('.BMap_Marker .active img').attr('src','/FT/images/map/icon-address-grey.png');
+        $('.BMap_Marker .active img').attr('src','../../images/map/icon-address-grey.png');
         $('.BMap_Marker.active,.BMap_Marker .active').removeClass('active');
         if(e) {
             var p = e.target;
             $(p.V).addClass('active');
-            $(p.zc.childNodes[0]).find('img').attr('src','/FT/images/map/icon-address-green.png');
+            $(p.zc.childNodes[0]).find('img').attr('src','../../images/map/icon-address-green.png');
             $(p.zc.childNodes[0]).addClass('active');
             $(p.zc.childNodes[1]).addClass('active');
         }

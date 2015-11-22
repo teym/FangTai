@@ -29,6 +29,9 @@ $(function(){
                     self.attr("data-status","cancel");
                     $("#loading").css({display:"block"}).siblings(".icon").hide();
                     $span.text("连接中，请稍后");
+                    /* Hekr.config(SSID,$.trim($(".account-password").val()),function(ret,error){
+
+                    });*/
                     //连接返回
                     $time = setTimeout(function(){
                         var $num = random(1,2);
@@ -45,6 +48,7 @@ $(function(){
                         }
                     },1000);
                 }else if(self.attr("data-status")=="cancel"){//取消连接网络
+                    //Herk.cancelConfig();
                     $(".wifi").removeClass("in-service");
                     $input.val("确定");
                     self.attr("data-status","link");
@@ -52,11 +56,21 @@ $(function(){
                     $span.text("请选择一个可以用的WLAN");
                     clearTimeout($time);
                 }else if(self.attr("data-status")=="success"){
-                    location.href = "index.html";
+                    location.href = "index.html?openType=push";
                 }
             });
 		}
 	};
 	init.base();
 });
-
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+  Hekr.currentSSID(function(info){
+    window.SSID = info;
+    $(".account-name").val(info);
+  });//获取用户SSID
+  //查询净水器
+  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+      
+  });
+}, false);

@@ -45,13 +45,13 @@ $(function(){
             });
             //返回上一层
             $("body").on("touchstart",".back",function(){
-                Hekr.close();
-//                location.href = $(this).attr("data-href");
+//                Hekr.close();
+                location.href = $(this).attr("data-href");
             });
             //返回指定页面
             $("body").on("touchstart",".backTo",function(){
-                Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
-//                location.href = $(this).attr("data-href");
+//                Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
+                location.href = $(this).attr("data-href");
             });
         },
         rem : function(){

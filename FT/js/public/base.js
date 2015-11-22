@@ -45,13 +45,13 @@ $(function(){
             });
             //返回上一层
             $("body").on("touchstart",".back",function(){
-//                Hekr.close();
-                location.href = $(this).attr("data-href");
+                Hekr.close();
+//                location.href = $(this).attr("data-href");
             });
             //返回指定页面
             $("body").on("touchstart",".backTo",function(){
-//                Hekr.backTo($(this).attr("data-href"),true);
-                location.href = $(this).attr("data-href");
+                Hekr.backTo($(this).attr("data-href"),true);
+//                location.href = $(this).attr("data-href");
             });
         }, 
         rem : function(){
@@ -108,30 +108,13 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-    Hekr.sendMsg("VDEV_1AFE349C3DPN",'(uartdata "00012000")');//查询净水器
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-        //返回 "48 09 02 01 00 01 20 01"
-        console.log(str);
-        var msg = UARTDATA.decode("4809020100012001C7");//[0,1,32,1]
-        if(msg[1]==1&&msg[2]==32){//反馈设备开关
-            if(msg[3]==1){//开
-                $(".switch").find(".open").click();
-            }else if(msg[3]==2){//关
-                $(".switch").find(".close").click();
-            }
-        }
-        //返回 "48 09 02 01 00 08 20 4B C7"
+        //返回 "48 09 02 01 C1 0B 30 01 50"
         var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
+        console.log(msg);
         if(msg[1]==8&&msg[2]==32){//反馈污染度
             progress.stopAnim();
             progress.drawProgress(msg[3],'pollutant');
-        }
-        //返回 "48 09 02 01 02 02 20 01"
-        var msg = UARTDATA.decode("4809020102022001C7");//[2,2,32,1]
-        if(msg[1]==2&&msg[2]==32&&msg[3]==1){
-            $('#wash').val('冲洗中');
-            $(".purifier-text").text("冲洗中");
-            progress.washProgress(30,'wash');
         }
     });
 }, false);
@@ -153,3 +136,4 @@ function clickStyle(info){
 function random(n,t){
     return null == t&&(t=n,n=0),n+Math.floor(Math.random()*(t-n+1))
 }
+//获取

@@ -37,9 +37,7 @@ $(function(){
             var $time = setInterval(function(){
                 val2+=0.01;
                 var val = parseFloat(val2.toFixed(2));
-                console.log(val);
                 if(val<info.val){
-                console.log(val,info.val);
                     start(val);
                 }else{
                     clearInterval($time);

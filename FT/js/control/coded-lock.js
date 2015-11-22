@@ -64,7 +64,7 @@ function verify(info){
     self.password = "1357";
     self.hint = function(){
         if(info.num == self.password){
-            location.href = "index.html";
+            location.href = "index.html?openType=push";
         }else{
             window.opportunity-=1;
             if(window.opportunity==0){
@@ -128,7 +128,7 @@ function resetPassword(info){
         if(info.num == window.defaultPassword){
             $(".lock-hint").html("密码重置成功");
             setTimeout(function(){
-                location.href = "index.html";
+                location.href = "index.html?openType=push";
             },1000);
         }else if(window.defaultPassword){
             window.defaultPassword = "";

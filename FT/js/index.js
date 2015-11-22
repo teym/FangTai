@@ -108,12 +108,12 @@ $(function(){
                 return false;
             });
              */
-            //拖动切换菜单
-           /* $("#nav .sub-nav").bind("touchstart",function(e){
+           /* //拖动切换菜单
+           $("#nav .sub-nav").bind("touchstart",function(e){
                 //清除参数
+                $(this).find(".box").css({transform : "scale(1,1)"});
                 $(this).find(".scaleFull").removeClass("scaleFull");
                 $(this).find(".notransition").removeClass("notransition")
-                $(this).find(".box").css({transform : "scale(1,1)"});
                 $(this).find("li").stop(true,true);
                 //设置参数
                 window.startVal = window.moveVal = event.touches[0].pageX;
@@ -188,27 +188,28 @@ $(function(){
                     if($move.length==1){
                         if($positiveVal/window.width>0.1){
                             $move.find(".box").addClass("scaleFull").animate({opacity:1},500,function(){
-                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                                $(this).addClass("notransition scaleFull").css({transform : "scale(1,1)"}).removeClass("scaleEmpty");
                             });
                             $selected.find(".box").addClass("scaleEmpty").animate({opacity:1},500,function(){
-                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                                $(this).addClass("notransition scaleFull").css({transform : "scale(1,1)"}).removeClass("scaleEmpty");
                             });
                             $move.addClass("active selected").animate({width:window.width}).siblings().animate({width:window.siblingsWidth},500,function(){
                                 $(this).removeClass("active selected");
                             });
                         }else{
                             $selected.find(".box").addClass("scaleFull").animate({opacity:1},500,function(){
-                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                                $(this).addClass("notransition scaleFull").css({transform : "scale(1,1)"}).removeClass("scaleEmpty");
                             });
                             $move.find(".box").addClass("scaleEmpty").animate({opacity:1},500,function(){
-                                $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                                $(this).addClass("notransition scaleFull").css({transform : "scale(1,1)"}).removeClass("scaleEmpty");
                             });
                             $selected.addClass("active selected").animate({width:window.width},500).siblings().animate({width:window.siblingsWidth},500,function(){
                                 $(this).removeClass("active selected");
                             });
                         }
                     }
-                });*/
+                });
+            return;*/
             //拖动切换菜单
             $("#nav .sub-nav").bind("touchstart",function(e){
                 //清除参数
@@ -338,11 +339,13 @@ $(function(){
                     opacity   : 1
                 },500,function(){
                     $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
+                    $(this).css({transform : "scale(1,1)"}).stop(true,true);
                 });
                 $parent.find(".selected .box").addClass("scaleFull").animate({
                     opacity   : 1
                 },500,function(){
                     $(this).addClass("notransition");
+                    $(this).css({transform : "scale(1,1)"}).stop(true,true);;
                 });
                 $parent.find(".selected").removeClass("selected").animate({
                     width     : $width

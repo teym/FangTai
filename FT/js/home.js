@@ -68,8 +68,12 @@ var Circle = function(){
       var maxX = $W - original.pointX,
           maxY = $H/2 +  original.pointY,
           maxRadius = maxX > maxY ? maxX : maxY;
-
-      maxRadius = Math.ceil(maxRadius*58/(40 * original.pointY));
+      console.log('$W',$W);
+      console.log('$H',$H);
+      console.log('maxX',maxX);
+      console.log('maxY',maxY);
+      console.log('maxRadius',maxRadius);
+      maxRadius = Math.ceil((35 * maxRadius / 23)/original.pointY);
 
       drawInit(maxRadius,true);
   }
@@ -94,7 +98,6 @@ var Circle = function(){
       }else {
           drawCir();
       }
-      console.log('lv',radiusParam);
   }
 
   /**
@@ -201,21 +204,25 @@ var Circle = function(){
      * @param maxRadius
      */
   function bigToSmall(maxRadius){
-      var animTimer = null,loop = maxRadius;
+      var animTimer = null,loop = maxRadius,loopTemp = (loop - 1)/20;
       animTimer = setInterval(function(){
+          loop = loop < 1? 1 : loop;
           drawInit(loop);
-          loop--;
-          if(loop === 0) {
+          console.log('loop',loop);
+          if(loop === 1) {
               clearInterval(animTimer);
               animTimer = null;
               //图片渐显
               $('.logo-container img').animate({opacity:1},500,'linear',function(){
                   console.log('lv','finish');
                   setTimeout(function(){
-                   location.href = "login.html"
-                   },2500);
+                      location.href = "login.html"
+                  },2500);
               })
           }
+          loop -= loopTemp;
+//          loop = loop < 0 ? 0 : loop;
+
       },50);
   }
 

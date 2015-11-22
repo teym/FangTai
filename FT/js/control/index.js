@@ -41,6 +41,75 @@ $(function(){
     init.base();
 });
 
+
+//查询设备开关状态
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+  Hekr.sendMsg("VDEV_1AFE349C3DPN",'(uartdata "00012000")');//查询净水器
+  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+      //返回 "48 09 02 01 00 01 20 01"
+      console.log(str);
+      var msg = UARTDATA.decode("4809020100012001C7");//[0,1,32,1]
+      if(msg[1]==1&&msg[2]==32){//反馈设备开关
+          if(msg[3]==1){//开
+              $(".switch").find(".open").click();
+          }else if(msg[3]==2){//关
+              $(".switch").find(".close").click();
+          }
+      }
+      //返回 "48 09 02 01 00 08 20 4B C7"
+      var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
+      if(msg[1]==8&&msg[2]==32){//反馈污染度
+          progress.stopAnim();
+          progress.drawProgress(msg[3],'pollutant');
+      }
+      //返回 "48 09 02 01 02 02 20 01"
+      var msg = UARTDATA.decode("4809020102022001C7");//[2,2,32,1]
+      if(msg[1]==2&&msg[2]==32&&msg[3]==1){
+          $('#wash').val('冲洗中');
+          $(".purifier-text").text("冲洗中");
+          progress.washProgress(30,'wash');
+      }
+  });
+}, false);
+
+
+//Hekr.sendMsg("tid",(uartdata "000082000"));
+
+
+
+
+/*var tid  = getUrlParam("tid") || "VDEV_APPOUTSOURCE";//virtualdevice中device.tid
+var host = getUrlParam("host") || "device.hekr.me";
+var token =getUrlParam("access_key") || "azBlNkU3WW8xWHNRb01tUFppWXRBKzhQSWdWVjdlak1ockhJVjdZcCtMejkyWVBmZlZCRVNJZnQxNXlKUEdkMnJi" //virtualdevice中 user access_key
+
+var user="APP_"+ Math.random().toString(36).substr(2);
+var url  = "ws://"+host+":8080/websocket/t/"+user+"/code/"+token+"/user";
+var Hekr   = new ReconnectingWebSocket(url);
+
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    //console.log(reg);
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+}
+console.log(tid);
+console.log(host);
+console.log(token);
+console.log(user);
+console.log(url);
+console.log(Hekr);*/
+
+
+
+//console.log(tid,host,token,user,url,ws);
+//设备状态回馈
+/*Hekr.setMsgHandle("480902010008204BC7",function(str){
+
+});*/
+
+
 var Progress = function(){
     var context = null,
         center = null,
@@ -68,7 +137,7 @@ var Progress = function(){
 
         center = {pointX:canvas.width/2,pointY:canvas.height/2};
         outerRadius = canvas.width/2,
-        innerRadius = outerRadius - cirWidth;
+            innerRadius = outerRadius - cirWidth;
     }
 
     function drawCirProgress(){
@@ -209,70 +278,3 @@ var Progress = function(){
         }
     }
 };
-
-//查询设备开关状态
-//设备反馈
-document.addEventListener('HekrSDKReady', function() {
-  Hekr.sendMsg("VDEV_1AFE349C3DPN",'(uartdata "00012000")');//关闭净水器
-  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      //返回 "48 09 02 01 00 01 20 01"
-      console.log(str);
-      var msg = UARTDATA.decode("4809020100012001C7");//[0,1,32,1]
-      if(msg[1]==1&&msg[2]==20){//反馈设备开关
-          if(msg[3]==1){//开
-              $(".switch").find(".open").click();
-          }else if(msg[3]==2){//关
-              $(".switch").find(".close").click();
-          }
-      }
-      //返回 "48 09 02 01 00 08 20 4B C7"
-      var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
-      if(msg[1]==8&&msg[2]==32){//反馈污染度
-          progress.stopAnim();
-          progress.drawProgress(msg[3],'pollutant');
-      }
-      //返回 "48 09 02 01 02 02 20 01"
-      var msg = UARTDATA.decode("4809020102022001C7");//[2,2,32,1]
-      if(msg[1]==2&&msg[2]==32&&msg[3]==1){
-          $('#wash').val('冲洗中');
-          $(".purifier-text").text("冲洗中");
-          progress.washProgress(30,'wash');
-      }
-  });
-}, false);
-
-
-//Hekr.sendMsg("tid",(uartdata "000082000"));
-
-
-
-
-/*var tid  = getUrlParam("tid") || "VDEV_APPOUTSOURCE";//virtualdevice中device.tid
-var host = getUrlParam("host") || "device.hekr.me";
-var token =getUrlParam("access_key") || "azBlNkU3WW8xWHNRb01tUFppWXRBKzhQSWdWVjdlak1ockhJVjdZcCtMejkyWVBmZlZCRVNJZnQxNXlKUEdkMnJi" //virtualdevice中 user access_key
-
-var user="APP_"+ Math.random().toString(36).substr(2);
-var url  = "ws://"+host+":8080/websocket/t/"+user+"/code/"+token+"/user";
-var Hekr   = new ReconnectingWebSocket(url);
-
-function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    //console.log(reg);
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]);
-    return null;
-}
-console.log(tid);
-console.log(host);
-console.log(token);
-console.log(user);
-console.log(url);
-console.log(Hekr);*/
-
-
-
-//console.log(tid,host,token,user,url,ws);
-//设备状态回馈
-/*Hekr.setMsgHandle("480902010008204BC7",function(str){
-
-});*/

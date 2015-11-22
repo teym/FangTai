@@ -45,8 +45,13 @@ $(function(){
             });
             //返回上一层
             $("body").on("touchstart",".back",function(){
-                Hekr.close();
-//                location.href = $(this).attr("data-href");
+//                Hekr.close();
+                location.href = $(this).attr("data-href");
+            });
+            //返回指定页面
+            $("body").on("touchstart",".backTo",function(){
+//                Hekr.backTo($(this).attr("data-href"),true);
+                location.href = $(this).attr("data-href");
             });
         }, 
         rem : function(){
@@ -100,9 +105,37 @@ $(function(){
         }
     };
     init.base();
-
-
 });
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+    Hekr.sendMsg("VDEV_1AFE349C3DPN",'(uartdata "00012000")');//查询净水器
+    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+        //返回 "48 09 02 01 00 01 20 01"
+        console.log(str);
+        var msg = UARTDATA.decode("4809020100012001C7");//[0,1,32,1]
+        if(msg[1]==1&&msg[2]==32){//反馈设备开关
+            if(msg[3]==1){//开
+                $(".switch").find(".open").click();
+            }else if(msg[3]==2){//关
+                $(".switch").find(".close").click();
+            }
+        }
+        //返回 "48 09 02 01 00 08 20 4B C7"
+        var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
+        if(msg[1]==8&&msg[2]==32){//反馈污染度
+            progress.stopAnim();
+            progress.drawProgress(msg[3],'pollutant');
+        }
+        //返回 "48 09 02 01 02 02 20 01"
+        var msg = UARTDATA.decode("4809020102022001C7");//[2,2,32,1]
+        if(msg[1]==2&&msg[2]==32&&msg[3]==1){
+            $('#wash').val('冲洗中');
+            $(".purifier-text").text("冲洗中");
+            progress.washProgress(30,'wash');
+        }
+    });
+}, false);
+
 /*触摸点击事件*/
 function clickStyle(info){
     $(info.box).on("touchstart",function(){
@@ -120,260 +153,3 @@ function clickStyle(info){
 function random(n,t){
     return null == t&&(t=n,n=0),n+Math.floor(Math.random()*(t-n+1))
 }
-//loading
-window.Wifi_loading = function(){
-    var context = null;
-    init();
-    //初期化
-    function init(){
-        var canvas = document.getElementById('loading');
-        canvas.width = 120;
-        canvas.height = canvas.width;
-        context = canvas.getContext('2d');
-
-        var center = {pointX:canvas.width/2,pointY:canvas.height/2};
-        var radius = canvas.width/2;
-
-        var caveIn = 20;
-        var basicVal = Math.PI/180;
-        var cssStyle = 'rgba(23, 123, 203,0.3)';
-        var pointLeft = {},pointRight = {},controlLeft = {},controlRight = {};
-        var leftDeg = 0,rightDeg = 0;
-        var loop = 0,animVal = 0;
-        setInterval(function(){
-            loop++;
-            if(loop <= 10) {
-                animVal = basicVal*loop/3;
-            }else if(loop <= 20){
-                animVal = basicVal*(20-loop)/3;
-
-            }else {
-                loop = 0;
-                return;
-            }
-
-            context.clearRect(0,0,canvas.width,canvas.height);
-
-            context.beginPath();
-            context.fillStyle = 'rgb(65, 169, 225)';
-            context.arc(center.pointX,center.pointY,radius,0,Math.PI*2,false);
-            context.fill();
-            context.closePath();
-
-            leftDeg = Math.PI*0.23 -animVal,rightDeg = 0 + animVal;
-            pointLeft = {
-                pointX:center.pointX - radius * Math.cos(leftDeg),
-                pointY:center.pointY - radius*Math.sin(leftDeg)
-            };
-            pointRight = {
-                pointX:center.pointX + radius * Math.cos(rightDeg),
-                pointY:center.pointY - radius*Math.sin(rightDeg)
-            };
-
-            controlLeft = {
-                pointX:center.pointX - radius * Math.cos(leftDeg)/2,
-                pointY:pointLeft.pointY + caveIn*3/2
-            }
-
-            controlRight = {
-                pointX:center.pointX + radius * Math.cos(rightDeg)/2,
-                pointY:pointRight.pointY
-            };
-            context.beginPath();
-            context.fillStyle = cssStyle;
-            context.moveTo(pointLeft.pointX,pointLeft.pointY);
-            context.bezierCurveTo(controlLeft.pointX,controlLeft.pointY,controlRight.pointX,controlRight.pointY,pointRight.pointX,pointRight.pointY);
-            context.arc(center.pointX,center.pointY,radius,-Math.PI/6,Math.PI*7/6,false);
-            context.fill();
-            context.closePath();
-
-            leftDeg = Math.PI/ 6 +animVal,rightDeg = Math.PI/ 6 - animVal;
-            pointLeft = {
-                pointX:center.pointX - radius * Math.cos(leftDeg),
-                pointY:center.pointY - radius*Math.sin(leftDeg)
-            };
-            pointRight = {
-                pointX:center.pointX + radius * Math.cos(rightDeg),
-                pointY:center.pointY - radius*Math.sin(rightDeg)
-            };
-
-            controlLeft = {
-                pointX:center.pointX - radius * Math.cos(leftDeg)/2,
-                pointY:pointLeft.pointY + caveIn
-            }
-
-            controlRight = {
-                pointX:center.pointX + radius * Math.cos(rightDeg)/2,
-                pointY:pointRight.pointY + caveIn
-            };
-            context.beginPath();
-            context.fillStyle = cssStyle;
-            context.moveTo(pointLeft.pointX,pointLeft.pointY);
-            context.bezierCurveTo(controlLeft.pointX,controlLeft.pointY,controlRight.pointX,controlRight.pointY,pointRight.pointX,pointRight.pointY);
-            context.arc(center.pointX,center.pointY,radius,-Math.PI/6,Math.PI*7/6,false);
-            context.fill();
-            context.closePath();
-        },200);
-
-
-    }
-};
-
-
-
-
-
-(function () {
-
-    /*
-    HEKR UARTDATA Protocol analysis
-
-
-     智能灯光示例帧：
-     0x48   0x0B    0x02    0x00
-
-     0x01   0x00    0x64    0x00    0x00    0x00    0x00    0x00
-
-     0XBA
-
-
-     v1.0.1 by fwj@hekr.me   20150901
-    */
-
-    if (typeof UARTDATA !== 'object') {
-        UARTDATA = {};
-    }
-
-
-    'use strict';
-
-    var frame_num=0;
-// var frame_header=0x48,
-
-
-    function get_check_code(frame,option) {//frame 帧   option 是否包含校验位
-        if(typeof(frame)=="string"){//格式化为数组
-            frame=frame.replace(/(\w{2})/g,'$1 ').replace(/\s*$/,'').split(' ');
-        }
-        var sum=0,i=0;
-        for(i in frame){
-            sum+=parseInt(frame[i],16);
-        }
-        // if(i){
-        //  sum=sum-0x48;
-        // }
-        if(option){
-            //console.log(frame[frame.length-1])
-            sum=sum-parseInt(frame[frame.length-1],16);
-        }
-        if(sum>255){
-            sum=sum%0x100
-        }
-        if(sum<0x10){
-            sum='0'+sum.toString(16)
-        }else{
-            sum=sum.toString(16)
-        }
-        //console.log("sum(hex)"+sum)
-        return sum;
-    }
-
-/*
-D(decimal)  十进制     dec
-B(binary)   二进制     bin
-O(octor)    八进制     oct
-H(hex)      十六进制    hex
-
-parseInt(str,2);
-.charCodeAt(0);
-*/
-    function charstr2hexstr(data){
-        var hexstr='';
-        for(var i=0; i<data.length;i++){
-            hexstr+=hex2str(data.charCodeAt(i));
-        }
-        return hexstr;
-    }
-
-    if (typeof UARTDATA.charstr2hexstr !== 'function') {
-        UARTDATA.charstr2hexstr=charstr2hexstr;
-    };
-
-    function bin2str(bin){
-        if(bin<0x10){
-            bin='0000'+bin.toString(2)
-        }else{
-            bin=bin.toString(2)
-        }
-        return bin
-    }
-
-    if (typeof UARTDATA.bin2str !== 'function') {
-        UARTDATA.bin2str=bin2str;
-    };
-
-
-    function hex2str(hex){
-        if(hex<0x10){
-            hex='0'+hex.toString(16)
-        }else{
-            hex=hex.toString(16)
-        }
-        return hex
-    }
-
-    if (typeof UARTDATA.hex2str !== 'function') {
-
-        UARTDATA.hex2str=hex2str;
-    };
-
-
-    if (typeof UARTDATA.encode !== 'function') {
-
-        UARTDATA.encode = function (frame_type,frame_data) {
-            var frame='48';
-            var frame_length=(frame_data.length/2+5);
-
-            frame+=hex2str(frame_length);
-            frame+=hex2str(frame_type);
-            frame+=hex2str(frame_num);
-            frame+=frame_data;
-            frame+=get_check_code(frame,0)
-            frame_num++;
-            if(frame_num>0xff){
-                frame_num=0;
-            }
-            return frame;
-        };
-    }
-
-
-
-
-    if (typeof UARTDATA.decode !== 'function') {
-        UARTDATA.decode = function (frame) {
-
-            var data="";
-            if(frame.length<10){
-                return ''
-            }
-
-            //校验合法性
-            var frame_check_code=get_check_code(frame,1);
-
-            if(frame[frame.length-1].toUpperCase()==frame_check_code[frame_check_code.length-1].toUpperCase()){
-                data=frame.substring(8, frame.length-2)
-                //48 0B 02 00 03 01 35 00 00 00 00 00 46
-            }
-
-
-            data=data.replace(/(\w{2})/g,'$1 ').replace(/\s*$/,'').split(' ');
-            for(var i in data){
-                data[i]=parseInt(data[i],16);
-            }
-
-            return data
-            //throw new SyntaxError('JSON.parse');
-        };
-    }
-}());

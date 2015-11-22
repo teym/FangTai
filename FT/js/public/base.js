@@ -135,5 +135,13 @@ function clickStyle(info){
 //随机数
 function random(n,t){
     return null == t&&(t=n,n=0),n+Math.floor(Math.random()*(t-n+1))
-}
-//获取
+};
+//获取字符串信息为数据
+function getArrayInfo(info){
+    var val = [];
+    info = info.slice(8,info.length-2);
+    for(){
+
+    }
+    return;
+};

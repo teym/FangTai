@@ -17,11 +17,11 @@ $(function(){
                 if($(this).hasClass("open")){
                     $(".purifier").addClass("open").removeClass("close");
                     progress.drawProgress(80,'pollutant');
-                    Hekr.sendMsg("tid",("uartdata 01012001"));//开启净水器
+                    Hekr.sendMsg("tid","(uartdata '01012001')");//开启净水器
                 }else{
                     $(".purifier").addClass("close").removeClass("open");
                     progress.stopAnim();
-                    Hekr.sendMsg("tid",("uartdata 01012002"));//关闭净水器
+                    Hekr.sendMsg("tid","(uartdata '01012002')");//开启净水器
                 }
             });
 
@@ -33,7 +33,7 @@ $(function(){
                 $this.val('冲洗中');
                 $(".purifier-text").text("冲洗中");
                 progress.washProgress(30,'wash');
-                Hekr.sendMsg("tid",("uartdata 02022001"));//冲洗净水器
+                Hekr.sendMsg("tid","(uartdata '02022001')");//开启净水器
 //                progress.washProgress(30,'wash',callback);
             });
         }

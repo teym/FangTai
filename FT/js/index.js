@@ -12,16 +12,22 @@ $(function(){
 		},
 		event : function(){
             //删除净水机
-            $("body").on("click",".icon-remove",function(){
-                $(".cancel-binding").css({display:"table"});
-                return false;
+            $("body").on("touchstart",".icon-remove",function(){
+                $(".cancel-binding").css({display:"table"}).attr("data-tid",$(this).closest("li").attr("data-tid"));
+			          return false;
             });
             //确定删除净水机
-            $("body").on("click",".cancel-binding li",function(){
+            $("body").on("touchstart",".cancel-binding li",function(){
                 if($(this).hasClass("submit")){
                     $(".status-remove").fadeOut(500,function(){
-                        $(this).remove();
-                        Hekr.removeDevice("VDEV_1AFE349C3DPN",function(){});
+											var self = $(this);
+											alert($(".cancel-binding").attr("data-tid"));
+                        Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
+													alert(ret);
+													if(ret){
+														self.remove();
+													}
+												});
                     });
                 }
                 $(".status-remove").removeClass("status-remove");
@@ -393,6 +399,9 @@ $(function(){
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
   Hekr.getDevices(function(list,error){
-    console.log(list,error);
+		for(var i=0;i<list.length;i++){
+			$(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
+			console.log($(".nav-WaterPurifier"));
+		}
   });
 }, false);

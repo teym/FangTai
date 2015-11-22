@@ -204,7 +204,7 @@ var Circle = function(){
      * @param maxRadius
      */
   function bigToSmall(maxRadius){
-      var animTimer = null,loop = maxRadius,loopTemp = (loop - 1)/20;
+      var animTimer = null,loop = maxRadius,loopTemp = (loop - 1)/15;
       animTimer = setInterval(function(){
           loop = loop < 1? 1 : loop;
           drawInit(loop);

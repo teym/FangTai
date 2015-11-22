@@ -6,7 +6,10 @@ $(function(){
         base : function(){
             init.event();
             //progress.drawProgress(70,'wash');//pollutant,wash
-            //progress.drawProgress(80,'pollutant');
+            if(!window.HerkIf){
+                $(".open").click();
+                //progress.drawProgress(80,'pollutant');
+            }
         },
         event : function(){
             //开关切换
@@ -14,28 +17,38 @@ $(function(){
                 if($(this).hasClass("active")){
                    return;
                 }
-                //$(this).addClass("active").siblings().removeClass("active");
-                if($(this).hasClass("open")){
-                    //$(".purifier").addClass("open").removeClass("close");
-                    //progress.drawProgress(80,'pollutant');
-                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012001\")");//开启净水器
+                if(window.HerkIf){
+                    if($(this).hasClass("open")){
+                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012001\")");//开启净水器
+                    }else{
+                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012002\")");//关闭净水器
+                    }
                 }else{
-                    //$(".purifier").addClass("close").removeClass("open");
-                    //progress.stopAnim();
-                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012002\")");//开启净水器
+                    $(this).addClass("active").siblings().removeClass("active");
+                    if($(this).hasClass("open")){
+                        $(".purifier").addClass("open").removeClass("close");
+                        progress.drawProgress(80,'pollutant');
+                    }else{
+                        $(".purifier").addClass("close").removeClass("open");
+                        progress.stopAnim();
+                    }
                 }
+
             });
             //点击冲
             $('#wash').on('touchend',function(){
                 if(!progress.getWashFlg()) {
                     return;
                 }
-                //var $this = $(this);
-                //$this.val('冲洗中');
-                //$(".purifier-text").text("冲洗中");
-                //progress.washProgress(30,'wash');
-                Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"02022001\")");//开启净水器
-//                progress.washProgress(30,'wash',callback);
+                if(window.HerkIf){
+                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"02022001\")");//开启净水器
+                }else{
+                    var $this = $(this);
+                    $this.val('冲洗中');
+                    $(".purifier-text").text("冲洗中");
+                    progress.washProgress(30,'wash');
+                }
+                //progress.washProgress(30,'wash',callback);
             });
         }
     };

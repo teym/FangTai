@@ -188,7 +188,49 @@
         </main>
     </div>
 </body>
+<!--提示-->
+<script type="text/html" id="hint-modal">
+    <div class="hint-modal hint">
+        <main>
+            <div class="hint-modal-box">
+                <p><%=val%></p>
+                <ul class="tools">
+                    <li class="cancel-hint-modal submit">确定</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+</script>
+<!--提示挖掘-->
+<script type="text/html" id="hint-modal-submit">
+    <div class="hint-modal hint-submit">
+        <main>
+            <div class="hint-modal-box">
+                <p><%=val%></p>
+                <ul class="tools">
+                    <li class="cancel-hint-modal submit">确定</li>
+                    <li class="strong cancel-hint-modal">取消</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+</script>
+<!--净水器列表-->
+<script type="text/html" id="WaterPurifier-list">
+    <% for(var i=0;i<value.length;i++){ %>
+    <li data-tid="<%=value[i].tid%>">
+        <h3>
+            <i class="icon-product"></i>
+            <span>净水机<%=i%></span>
+        </h3>
+        <div class="tools">
+            <i class="icon-remove"></i>
+        </div>
+    </li>
+    <% } %>
+</script>
 <script src="../js/plugIn/jquery-1.11.3.min.js"></script>
+<script src="../js/plugIn/ARTtemplate.min.js"></script>
 <script src="../js/plugIn/UARTDATA.js"></script>
 
 <script src="../js/public/base.js"></script>

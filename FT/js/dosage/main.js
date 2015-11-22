@@ -36,7 +36,7 @@ $(function(){
                 var waterData,eleData;
                 if(time=="周"){
                     waterData = [18,15,18,15,12,15,12];
-                    eleData   = [12,15,30,55,26,18,15];
+                    eleData   = [12,15,,55,26,18,''];
                     timeType = 7;
                 }else if(time=="月"){
                     waterData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25];
@@ -53,8 +53,8 @@ $(function(){
         //使用折线图
         setCanvas : function(id){
             var waterData,eleData;
-            waterData = [18,15,18,15,12,15,12];
-            eleData   = [12,15,30,55,26,18,15];
+            waterData = [18,15,18,,12,,12];
+            eleData   = ['',15,null,55,26,'',4];
             //假数据
             canvas = new Canvas(id,{});//'water','ele'
             canvas.drawAllData(waterData, eleData);
@@ -83,6 +83,8 @@ Canvas = function(id,param){
         initFlg = false,//初次显示时突出线要有动画效果
         data = {waterData:null,eleData:null},//保存传进来的数据
         maxHeight = 0;//显示范围
+
+    var nullData = [];
 
     /**
      * 初期化
@@ -284,9 +286,93 @@ Canvas = function(id,param){
                     context.stroke();
                     context.closePath();
                 }
+
+                var len = nullData.length;
+                console.log('nullData',nullData);
+                for(var nullIndex = 0; nullIndex < len; nullIndex++) {
+                    drawDotted(nullData[nullIndex]);
+                }
             }
 
         }
+    }
+
+    function drawDotted(block) {
+        var widthEvery = width/timeType,
+            startX = widthEvery * block + widthEvery/ 2,
+            endX = startX + widthEvery;
+        startX = block === 0 ? 0 : startX;
+
+
+        endX = block === timeType - 1 ? width : endX;
+
+        var dottedWidth = widthEvery/10;
+        var lineWidth =  width*0.015;
+        var startY = height/4,endY = height / 2;
+        var x  = 0,paramY = -1;
+        for(var i = 0; i < 10 && x <= endX; i++) {
+            if(paramY === -1) {
+                startY = height/4,endY = height / 2;
+            }else {
+                var count = Math.ceil(dottedWidth);
+                startY = paramY - count * lineWidth;
+                endY = paramY + 2 * count * lineWidth;
+                startY = startY < height/4?height/4:startY;
+                endY = endY > height/2?height/2:endY;
+            }
+            var xTemp = startX + 2 * i * dottedWidth;
+            for (x = xTemp; x <= xTemp + dottedWidth && x <= endX; x++ ) {
+                var paramY = toWhite(x,startY,endY)
+                startY = paramY - lineWidth;
+                endY = paramY + 2 * lineWidth;
+                startY = startY < height/4?height/4:startY;
+                endY = endY > height/2?height/2:endY;
+            }
+        }
+
+
+
+    }
+
+    function toWhite(x,startY,endY) {
+        var paramY = 0;
+        for(var y = startY; y <= endY; y++) {
+            var imageData = context.getImageData(x, y, 1, 1);
+            var pixel = imageData.data;
+            var curColor = 'rgb(' + pixel[0] + ',' + pixel[1] + ',' + pixel[2] +')';
+            if(curColor !== 'rgb(255,255,255)' && curColor !== 'rgb(0,0,0)' && curColor !== 'rgb(47,186,226,)' && curColor !=='rgb(242,88,38)') {
+                paramY = y;
+                /*context.beginPath();
+                context.strokeStyle = '#FFF';
+                context.g
+                context.lineWidth = width * 0.0001;
+                context.moveTo(x,y);
+                context.lineTo(x + 1,y);
+                context.stroke();
+                context.closePath();*/
+                insteadColor(x,y);
+
+                break;
+            }
+        }
+
+        var lineWidth =  width * 0.015;
+        for(; y < paramY + lineWidth; y++) {
+            insteadColor(x,y);
+        }
+
+        return paramY;
+    }
+
+    function insteadColor(X,Y) {
+        var imgData = context.createImageData(1,1);
+        for (var i=0;i<imgData.data.length;i+=4) {
+            imgData.data[i+0]=255;
+            imgData.data[i+1]=255;
+            imgData.data[i+2]=255;
+            imgData.data[i+3]=255;
+        }
+        return context.putImageData(imgData,X,Y);
     }
 
     /**
@@ -341,10 +427,23 @@ Canvas = function(id,param){
      */
     function getShowData(dataList) {
         var len = timeType,dataListTemp = [],srcList = [];
+        //确定空数据
+        nullData = [];
+        for( var index = 0;index < len; index++) {
+            var dataVaild = dataList[index];
+            if(dataVaild === null || dataVaild === '' || dataVaild === undefined) {
+                nullData.push(index);
+                dataVaild = 0;
+            }
+            if(index === 0 || index === len - 1) {
+                dataListTemp.push(dataVaild);
+            }
+            dataListTemp.push(dataVaild);
+        }
         //加头加尾--求3次贝塞尔曲线控制点需要
-        dataListTemp.push(dataList[0]);
-        dataListTemp = dataListTemp.concat(dataList);
-        dataListTemp.push(dataList[len - 1]);
+       /* dataListTemp.push(dataListTemp[0]);
+        var lastVal = dataListTemp[len - 1];
+        dataListTemp.push(lastVal);*/
         len += 2;
         var maxVal = minVal = dataListTemp[0];
         for(var i = 1; i < len;i++) {

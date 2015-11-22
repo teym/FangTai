@@ -27,19 +27,23 @@ $(function(){
                 var $li = $(this).closest("li");
                 if(!$li.hasClass("success")){
                     $li.addClass("success")
-                    $(this).find("i").removeClass().addClass("icon-success");
-                    var $water     = Number($li.attr("data-water")),
-                        $showWater = $(".show-water"),
-                        canvas     = $showWater.find("canvas"),
-                        $val       = $water + Number($showWater.attr("data-val"));
-                    $showWater.attr("data-val",$val);
-                    $(".show-water").find("b").text($val);
-                    init.playDrinkingWater({
-                        id     : canvas.attr("id"),
-                        width  : $showWater.width(),
-                        val    : $showWater.attr("data-val"),
-                        max    : $showWater.attr("data-max")
-                    });
+                    if(window.HerkIf){
+                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"C2072100fa\")");//设备上报单次用水量
+                    }else{
+                        $(this).find("i").removeClass().addClass("icon-success");
+                        var $water     = Number($li.attr("data-water")),
+                            $showWater = $(".show-water"),
+                            canvas     = $showWater.find("canvas"),
+                            $val       = $water + Number($showWater.attr("data-val"));
+                        $showWater.attr("data-val",$val);
+                        $(".show-water").find("b").text($val);
+                        init.playDrinkingWater({
+                            id     : canvas.attr("id"),
+                            width  : $showWater.width(),
+                            val    : $showWater.attr("data-val"),
+                            max    : $showWater.attr("data-max")
+                        });
+                    }
                 }
             });
 		},
@@ -203,3 +207,23 @@ $(function(){
 	};
 	init.base();
 });
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+        var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+        if(msg[1]=="C2"&&msg[1]==7&&msg[2]==21){
+            var $water     = parseInt(a[3]+a[4],16),
+                $showWater = $(".show-water"),
+                canvas     = $showWater.find("canvas"),
+                $val       = $water + Number($showWater.attr("data-val"));
+            $showWater.attr("data-val",$val);
+            $(".show-water").find("b").text($val);
+            init.playDrinkingWater({
+                id     : canvas.attr("id"),
+                width  : $showWater.width(),
+                val    : $showWater.attr("data-val"),
+                max    : $showWater.attr("data-max")
+            });
+        }
+    });
+}, false);

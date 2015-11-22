@@ -45,13 +45,23 @@ $(function(){
             });
             //返回上一层
             $("body").on("touchstart",".back",function(){
-                Hekr.close();
-//                location.href = $(this).attr("data-href");
+                if(window.HerkIf){
+                    Hekr.close();
+                }else{
+                    location.href = $(this).attr("data-href");
+                }
             });
             //返回指定页面
             $("body").on("touchstart",".backTo",function(){
-                Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
-//                location.href = $(this).attr("data-href");
+                if(window.HerkIf){
+                    Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
+                }else{
+                    location.href = $(this).attr("data-href");
+                }
+            });
+            //关闭提示框
+            $("body").on("touchstart",".close-hint",function(){
+                $(".hint-modal.hint").css({display:"none"});
             });
         },
         rem : function(){
@@ -109,14 +119,50 @@ $(function(){
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-        //返回 "48 09 02 01 C1 0B 30 01 50"
-        var msg = getArrayInfo("480902010008204BC7");//[0,8,32,75]
-        if(msg[1]==8&&msg[2]==32){//反馈污染度
-            progress.stopAnim();
-            progress.drawProgress(msg[3],'pollutant');
+        var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+        if(msg[0]=="C3"&&msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
+            if(msg[3]==01){//漏水
+                $(".malfunction-makeWater").show().siblings().hide();
+            }else if(msg[3]==02){//缺水
+                $(".malfunction-hydropenia").show().siblings().hide();
+            }else if(msg[3]=="0E"){//网络故障
+                $(".malfunction-wifi").show().siblings().hide();
+            }
+        }
+        if(msg[0]=="C1"&&msg[1]=="0B"&&msg[2]==30){//设备故障上报
+            if(msg[3]==03){//进水TDS故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障').show().siblings().hide();
+            }else if(msg[3]==04){//出水TDS故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障').show().siblings().hide();
+            }else if(msg[3]==05){//进水有机物故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水有机物故障').show().siblings().hide();
+            }else if(msg[3]==06){//出水有机物故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水有机物故障').show().siblings().hide();
+            }else if(msg[3]==07){//进水流量故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水流量故障').show().siblings().hide();
+            }else if(msg[3]==08){//出水流量故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水流量故障').show().siblings().hide();
+            }else if(msg[3]==09){//蓝牙故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>蓝牙故障').show().siblings().hide();
+            }else if(msg[3]=="0A"){//无线充电故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>无线充电故障').show().siblings().hide();
+            }else if(msg[3]=="0B"){//电磁阀故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>电磁阀故障').show().siblings().hide();
+            }else if(msg[3]=="0C"){//水压开关故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>水压开关故障').show().siblings().hide();
+            }else if(msg[3]=="0D"){//膜故障
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>膜故障').show().siblings().hide();
+            }
         }
     });
 }, false);
+
+/*提示信息*/
+function hintModal(info){
+    $(".hint-modal.hint").remove();
+    $("body").append(template.render("hint-modal",{val:info.val}));
+    $(".hint-modal.hint").css({display:"table"});
+};
 
 /*触摸点击事件*/
 function clickStyle(info){
@@ -143,3 +189,4 @@ function getArrayInfo(info){
     }
     return val;
 };
+

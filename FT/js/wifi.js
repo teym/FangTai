@@ -29,36 +29,41 @@ $(function(){
                     self.attr("data-status","cancel");
                     $("#loading").css({display:"block"}).siblings(".icon").hide();
                     $span.text("连接中，请稍后");
-                    Hekr.config(SSID,$.trim($(".account-password").val()),function(ret,error){
-										    if(ret.tid){//成功
-										        self.attr("data-status","success");
-										        $(".icon-wifi-success").css({display:"block"}).siblings(".icon").hide();
-										        $span.text("连接成功");
-										        $input.val("完成");
-										    }else{//失败
-										        self.attr("data-status","cancel");
-										        $(".icon-wifi-defeated").css({display:"block"}).siblings(".icon").hide();
-										        $span.text("连接失败");
-										        $input.val("返回");
-										    }
-                    });
-                    //连接返回
-                    // $time = setTimeout(function(){
-                    //     var $num = random(1);
-                    //     if($num==1&&self.attr("data-status")=="cancel"){//成功
-                    //         self.attr("data-status","success");
-                    //         $(".icon-wifi-success").css({display:"block"}).siblings(".icon").hide();
-                    //         $span.text("连接成功");
-                    //         $input.val("完成");
-                    //     }else if($num==2&&self.attr("data-status")=="cancel"){//失败
-                    //         self.attr("data-status","cancel");
-                    //         $(".icon-wifi-defeated").css({display:"block"}).siblings(".icon").hide();
-                    //         $span.text("连接失败");
-                    //         $input.val("返回");
-                    //     }
-                    // },1000);
+                    if(window.HerkIf){
+                        Hekr.config(SSID,$.trim($(".account-password").val()),function(ret,error){
+                            if(ret.tid){//成功
+                                self.attr("data-status","success");
+                                $(".icon-wifi-success").css({display:"block"}).siblings(".icon").hide();
+                                $span.text("连接成功");
+                                $input.val("完成");
+                            }else{//失败
+                                self.attr("data-status","cancel");
+                                $(".icon-wifi-defeated").css({display:"block"}).siblings(".icon").hide();
+                                $span.text("连接失败");
+                                $input.val("返回");
+                            }
+                        });
+                    }else{
+                        //连接返回
+                        $time = setTimeout(function(){
+                            var $num = random(1,2);
+                            if($num==1&&self.attr("data-status")=="cancel"){//成功
+                                self.attr("data-status","success");
+                                $(".icon-wifi-success").css({display:"block"}).siblings(".icon").hide();
+                                $span.text("连接成功");
+                                $input.val("完成");
+                            }else if($num==2&&self.attr("data-status")=="cancel"){//失败
+                                self.attr("data-status","cancel");
+                                $(".icon-wifi-defeated").css({display:"block"}).siblings(".icon").hide();
+                                $span.text("连接失败");
+                                $input.val("返回");
+                            }
+                        },1000);
+                    }
                 }else if(self.attr("data-status")=="cancel"){//取消连接网络
-                    //Herk.cancelConfig();
+                    if(window.HerkIf){
+                        Herk.cancelConfig();
+                    }
                     $(".wifi").removeClass("in-service");
                     $input.val("确定");
                     self.attr("data-status","link");

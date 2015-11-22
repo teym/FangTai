@@ -191,3 +191,33 @@ $(function(){
 	};
 	init.base();
 });
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+    var $list  = $(".filter-view-list").find(">ul>li"),
+        $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
+        $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
+        $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
+        $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
+    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
+    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+        var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+        if(msg[1]==9&&msg[2]==41&&msg[3]==4){
+            var $li = $(".filter-view-list").find(">ul>li");
+            for(var i=0;i<4;i++){
+                var $filterView = $li.eq(i).find(".filter-view"),
+                    canvas      = $filterView.find("canvas");
+                canvas.attr("width",$filterView.width());
+                canvas.attr("height",$filterView.height());
+                //绘画滤芯
+                init.playFilter({
+                    id     : canvas.attr("id"),
+                    width  : $filterView.width(),
+                    height : $filterView.height(),
+                    val    : msg[3+i],
+                    title  : $filterView.attr("data-title")
+                });
+            }
+        }
+
+    });
+}, false);

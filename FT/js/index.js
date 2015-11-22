@@ -6,29 +6,38 @@ $(function(){
             clickStyle({box:".header-nav li,.nav-WaterPurifier li",class:"active"});
             var $malfunction = $(".malfunction-status"),
                 $len         = $malfunction.length;
-            setInterval(function(){
-                $malfunction.eq(random(0,$len-1)).show().siblings().hide();
-            },1000);
+            if(!window.HerkIf){
+                setInterval(function(){
+                    $malfunction.eq(random(0,$len-1)).show().siblings().hide();
+                },1000);
+            }
 		},
 		event : function(){
             //删除净水机
             $("body").on("touchstart",".icon-remove",function(){
                 $(".cancel-binding").css({display:"table"}).attr("data-tid",$(this).closest("li").attr("data-tid"));
-			          return false;
+                return false;
             });
             //确定删除净水机
             $("body").on("touchstart",".cancel-binding li",function(){
                 if($(this).hasClass("submit")){
-                    $(".status-remove").fadeOut(500,function(){
-											var self = $(this);
-											alert($(".cancel-binding").attr("data-tid"));
+                    if(window.HerkIf){
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
-													alert(ret);
-													if(ret){
-														self.remove();
-													}
-												});
-                    });
+                            if(ret){
+                                $(".status-remove").fadeOut(500,function(){
+                                    $(".cancel-binding").css({display:"none"})
+                                    $(this).remove();
+                                });
+                            }else{
+                                hintModal({val:"删除净水机失败"});
+                            }
+                        });
+                    }else{
+                        $(".status-remove").fadeOut(500,function(){
+                            $(".cancel-binding").css({display:"none"})
+                            $(this).remove();
+                        });
+                    }
                 }
                 $(".status-remove").removeClass("status-remove");
                 return false;
@@ -231,6 +240,12 @@ $(function(){
                 //设置选中菜单为移动中的ICON
                 $(this).find(".active").addClass("moveLi selected");
             }).bind("touchmove",function(e){
+                //清除参数
+                $(this).find(".scaleFull").removeClass("scaleFull");
+                $(this).find(".notransition").removeClass("notransition")
+                $(this).find(".box").css({transform : "scale(1,1)"});
+                $(this).find("li").stop(true,true);
+
                 $(this).attr("data-move-val",event.touches[0].pageX);
                 //获取参数
                 var $val        = $(this).attr("data-start-val")-event.touches[0].pageX,
@@ -345,14 +360,14 @@ $(function(){
                 $parent.find("li.active:not(.selected) .box").addClass("scaleEmpty").animate({
                     opacity   : 1
                 },500,function(){
-                    $(this).addClass("notransition scaleFull").removeClass("scaleEmpty");
-                    $(this).css({transform : "scale(1,1)"}).stop(true,true);
+                    $(this).addClass("notransition");
+                    $(this).addClass("scaleFull").css({transform : "scale(1,1)"}).stop(true,true).removeClass("scaleEmpty");
                 });
                 $parent.find(".selected .box").addClass("scaleFull").animate({
                     opacity   : 1
                 },500,function(){
                     $(this).addClass("notransition");
-                    $(this).css({transform : "scale(1,1)"}).stop(true,true);;
+                    $(this).css({transform : "scale(1,1)"}).stop(true,true).removeClass("scaleEmpty");
                 });
                 $parent.find(".selected").removeClass("selected").animate({
                     width     : $width
@@ -399,9 +414,11 @@ $(function(){
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
   Hekr.getDevices(function(list,error){
-		for(var i=0;i<list.length;i++){
-			$(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
-			console.log($(".nav-WaterPurifier"));
-		}
+    $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
+    $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
+    for(var i=0;i<list.length;i++){
+      $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
+    }
+
   });
 }, false);

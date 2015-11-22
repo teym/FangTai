@@ -1,11 +1,12 @@
+
 $(function(){
-    var progress = null;
+  window.progress = null;
+  window.progress = new Progress();
     var init = {
         base : function(){
             init.event();
-            progress = new Progress();
             //progress.drawProgress(70,'wash');//pollutant,wash
-            progress.drawProgress(80,'pollutant');
+            //progress.drawProgress(80,'pollutant');
         },
         event : function(){
             //开关切换
@@ -13,27 +14,27 @@ $(function(){
                 if($(this).hasClass("active")){
                    return;
                 }
-                $(this).addClass("active").siblings().removeClass("active");
+                //$(this).addClass("active").siblings().removeClass("active");
                 if($(this).hasClass("open")){
-                    $(".purifier").addClass("open").removeClass("close");
-                    progress.drawProgress(80,'pollutant');
-                    Hekr.sendMsg("tid","(uartdata '01012001')");//开启净水器
+                    //$(".purifier").addClass("open").removeClass("close");
+                    //progress.drawProgress(80,'pollutant');
+                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012001\")");//开启净水器
                 }else{
-                    $(".purifier").addClass("close").removeClass("open");
-                    progress.stopAnim();
-                    Hekr.sendMsg("tid","(uartdata '01012002')");//开启净水器
+                    //$(".purifier").addClass("close").removeClass("open");
+                    //progress.stopAnim();
+                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012002\")");//开启净水器
                 }
             });
-
+            //点击冲
             $('#wash').on('touchend',function(){
                 if(!progress.getWashFlg()) {
                     return;
                 }
-                var $this = $(this);
-                $this.val('冲洗中');
-                $(".purifier-text").text("冲洗中");
-                progress.washProgress(30,'wash');
-                Hekr.sendMsg("tid","(uartdata '02022001')");//开启净水器
+                //var $this = $(this);
+                //$this.val('冲洗中');
+                //$(".purifier-text").text("冲洗中");
+                //progress.washProgress(30,'wash');
+                Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"02022001\")");//开启净水器
 //                progress.washProgress(30,'wash',callback);
             });
         }
@@ -45,27 +46,28 @@ $(function(){
 //查询设备开关状态
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-  Hekr.sendMsg("VDEV_1AFE349C3DPN",'(uartdata "00012000")');//查询净水器
+  Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00012001\")");//查询净水器
   Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      //返回 "48 09 02 01 00 01 20 01"
-      console.log(str);
-      var msg = UARTDATA.decode("4809020100012001C7");//[0,1,32,1]
-      if(msg[1]==1&&msg[2]==32){//反馈设备开关
+      var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+      //反馈设备开关
+      if(msg[1]==1&&msg[2]==20){
           if(msg[3]==1){//开
-              $(".switch").find(".open").click();
+              $(".switch").find(".open").addClass("active").siblings().removeClass("active");
+              $(".purifier").addClass("open").removeClass("close");
+              Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000821"+UARTDATA.hex2str(80)+"\")");//查询污染]
           }else if(msg[3]==2){//关
-              $(".switch").find(".close").click();
+              $(".switch").find(".close").addClass("active").siblings().removeClass("active");
+              $(".purifier").addClass("close").removeClass("open");
+              progress.stopAnim();
           }
       }
-      //返回 "48 09 02 01 00 08 20 4B C7"
-      var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
-      if(msg[1]==8&&msg[2]==32){//反馈污染度
+      //反馈污染度
+      if(msg[1]==8&&msg[2]==21){
           progress.stopAnim();
-          progress.drawProgress(msg[3],'pollutant');
+          progress.drawProgress(parseInt(msg[3],16),'pollutant');
       }
-      //返回 "48 09 02 01 02 02 20 01"
-      var msg = UARTDATA.decode("4809020102022001C7");//[2,2,32,1]
-      if(msg[1]==2&&msg[2]==32&&msg[3]==1){
+      //冲洗中
+      if(msg[1]==2&&msg[2]==20&&msg[3]==1){
           $('#wash').val('冲洗中');
           $(".purifier-text").text("冲洗中");
           progress.washProgress(30,'wash');

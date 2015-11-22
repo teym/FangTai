@@ -50,10 +50,10 @@ $(function(){
             });
             //返回指定页面
             $("body").on("touchstart",".backTo",function(){
-                Hekr.backTo($(this).attr("data-href"),true);
+                Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
 //                location.href = $(this).attr("data-href");
             });
-        }, 
+        },
         rem : function(){
             !function(win, option) {
                 var count = 0,
@@ -110,8 +110,7 @@ $(function(){
 document.addEventListener('HekrSDKReady',function(){
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
         //返回 "48 09 02 01 C1 0B 30 01 50"
-        var msg = UARTDATA.decode("480902010008204BC7");//[0,8,32,75]
-        console.log(msg);
+        var msg = getArrayInfo("480902010008204BC7");//[0,8,32,75]
         if(msg[1]==8&&msg[2]==32){//反馈污染度
             progress.stopAnim();
             progress.drawProgress(msg[3],'pollutant');
@@ -139,9 +138,8 @@ function random(n,t){
 //获取字符串信息为数据
 function getArrayInfo(info){
     var val = [];
-    info = info.slice(8,info.length-2);
-    for(){
-
+    for(var i=0;i<info.length;i+=2){
+        val.push(info.slice(i,i+2));
     }
-    return;
+    return val;
 };

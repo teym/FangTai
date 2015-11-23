@@ -143,3 +143,11 @@ $(function(){
 	};
 	init.base();
 });
+
+//设备反馈
+document.addEventListener('HekrSDKReady',function(){
+  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+      var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+      
+  });
+}, false);

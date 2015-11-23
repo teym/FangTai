@@ -7,8 +7,12 @@ $(function(){
             var $malfunction = $(".malfunction-status"),
                 $len         = $malfunction.length;
             if(!window.HerkIf){
-                setInterval(function(){
+                var $time = setInterval(function(){
                     $malfunction.eq(random(0,$len-1)).show().siblings().hide();
+										if(!window.HerkIf){
+											 clearInterval($time);
+											 $malfunction.hide();
+										}
                 },1000);
             }
 		},

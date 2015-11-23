@@ -118,8 +118,11 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
+Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3001\")");//查询净水器
+console.log("111");
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+        console.log(msg);
         if(msg[0]=="C3"&&msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
             if(msg[3]==01){//漏水
                 $(".malfunction-makeWater").show().siblings().hide();
@@ -189,4 +192,3 @@ function getArrayInfo(info){
     }
     return val;
 };
-

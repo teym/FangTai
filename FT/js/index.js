@@ -293,6 +293,13 @@ $(function(){
                     }else{
                         $moveLi.addClass("selected").next().removeClass("selected");
                     }
+                    //小于一定值，取消选中效果
+                    if($width/$dataWidth<0.1){
+                        $moveLi.removeClass("active").find(".box").css({
+                            opacity   : 1,
+                            transform : "scale(1,1)"
+                        });
+                    }
                 }else if($val<0&&$(this).find(".moveLi").prev().length>0){
                     $next.removeClass("active selected");
                     //向右拖拽
@@ -323,14 +330,15 @@ $(function(){
                     }else{
                         $moveLi.addClass("selected").prev().removeClass("selected");
                     }
+                    //小于一定值，取消选中效果
+                    if($width/$dataWidth<0.1){
+                        $moveLi.removeClass("active").find(".box").css({
+                            opacity   : 1,
+                            transform : "scale(1,1)"
+                        });
+                    }
                 }
-                //小于一定值，取消选中效果
-                if($width/$dataWidth<0.1){
-                    $moveLi.removeClass("active").find(".box").css({
-                        opacity   : 1,
-                        transform : "scale(1,1)"
-                    });
-                }
+
                 //根据值更变显示效果
                 /*if(!$moveLi.hasClass("selected")){
                     if($width>$dataWidth*0.3){

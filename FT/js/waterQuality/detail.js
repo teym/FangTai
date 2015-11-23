@@ -1,4 +1,5 @@
 $(function(){
+    //window.HerkIf = true;
 	var init = {
 		base : function(){
             init.event();
@@ -23,6 +24,10 @@ $(function(){
                 val    : $waterQualityView.attr("data-val"),
                 title  : $waterQualityView.attr("data-title")
             });
+            if(window.HerkIf){
+                $(".TDS").html('<span>mg/L</span><b>(优)</b>');
+                $(".organic").html('<span>mg/L</span><b>(优)</b>');
+            }
 		},
 		event : function(){
 
@@ -142,12 +147,24 @@ $(function(){
         }
 	};
 	init.base();
+    //设备反馈
+    document.addEventListener('HekrSDKReady',function(){
+        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"0003202404200000\")");//查询TDS进水口
+        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00054103140005064103030602\")");//查询有机物进水口
+        Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+            var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+            //var msg = [00,03,20,24,04,20,00,00];
+            if(msg[1]==3&&msg[2]==20){
+                $(".TDS").html(parseInt(msg[3],16)+'<span>mg/L</span><b>(优)</b>');
+            }
+            //var msg = [00,05,41,03,14,00,05,06,41,03,03,06,02];
+            if(msg[1]==5&&msg[2]==41&&msg[3]==03){
+                var val = "";
+                val += parseInt(msg[4],16)+".";
+                val += parseInt(msg[5],16);
+                val += parseInt(msg[6],16);
+                $(".organic").html(val+'<span>mg/L</span><b>(优)</b>');
+            }
+        });
+    }, false);
 });
-
-//设备反馈
-document.addEventListener('HekrSDKReady',function(){
-  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-      
-  });
-}, false);

@@ -14,7 +14,7 @@ $(function(){
             }).trigger("resize");
             var data = [12,15,30,55,26,18,15];
             var yearData = [18,15,18,15,12,15,12,19,20,13,17,25];
-            var monthData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25];
+            var monthData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25,18];
             canvas = new Canvas('showdata');
             canvas.draw(data);
             //时间切换
@@ -23,9 +23,9 @@ $(function(){
                 if($val=="周"){
                     canvas.changeTimeType(7,data);
                 }else if($val=="月"){
-                    canvas.changeTimeType(12,yearData);
+                    canvas.changeTimeType(15,monthData);
                 }else if($val=="年"){
-                    canvas.changeTimeType(30,monthData);
+                    canvas.changeTimeType(12,yearData);
                 }
                 $(this).addClass("active").siblings().removeClass("active");
             });

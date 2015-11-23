@@ -119,21 +119,17 @@ $(function(){
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
 Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3001\")");//查询净水器
-console.log("111");
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-        console.log(msg);
-        if(msg[0]=="C3"&&msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
+        console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
+        if(msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
             if(msg[3]==01){//漏水
                 $(".malfunction-makeWater").show().siblings().hide();
             }else if(msg[3]==02){//缺水
                 $(".malfunction-hydropenia").show().siblings().hide();
             }else if(msg[3]=="0E"){//网络故障
                 $(".malfunction-wifi").show().siblings().hide();
-            }
-        }
-        if(msg[0]=="C1"&&msg[1]=="0B"&&msg[2]==30){//设备故障上报
-            if(msg[3]==03){//进水TDS故障
+            }else if(msg[3]==03){//进水TDS故障
                 $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障').show().siblings().hide();
             }else if(msg[3]==04){//出水TDS故障
                 $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障').show().siblings().hide();

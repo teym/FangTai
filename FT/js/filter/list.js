@@ -1,5 +1,5 @@
 $(function(){
-    window.HerkIf = true;
+    //window.HerkIf = true;
 	var init = {
 		base : function(){
             init.event();

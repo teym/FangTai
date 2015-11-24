@@ -159,7 +159,7 @@ var Progress = function(){
     function drawCirProgress(){
         context.beginPath();
         context.arc(center.pointX,center.pointY,outerRadius,Math.PI*3/4,Math.PI*9/4,false);
-        context.arc(center.pointX + (outerRadius - (cirWidth/2))*Math.sin(Math.PI/4),center.pointY + (outerRadius - cirWidth/2)*Math.sin(Math.PI/4),(cirWidth/2),Math.PI*5/4,Math.PI*1/4,true);
+        context.arc(center.pointX + (outerRadius - (cirWidth/2))*Math.sin(Math.PI/4),center.pointY + (outerRadius - cirWidth/2)*Math.sin(Math.PI/4),(cirWidth/2),Math.PI*1/4,Math.PI*5/4,false);
         context.fillStyle = '#a7dbed';
         context.arc(center.pointX,center.pointY,innerRadius,Math.PI*9/4,Math.PI*3/4,true);
         context.arc(center.pointX - (outerRadius - cirWidth/2)*Math.sin(Math.PI/4),center.pointY + (outerRadius - cirWidth/2)*Math.sin(Math.PI/4),cirWidth/2,-Math.PI*1/4,Math.PI*3/4,false);

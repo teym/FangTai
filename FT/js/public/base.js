@@ -123,6 +123,7 @@ Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3001\")");//查询净水器
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
         console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
         if(msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
+            $(".malfunction-status").hide();
             if(msg[3]==01){//漏水
                 $(".malfunction-makeWater").show().siblings().hide();
             }else if(msg[3]==02){//缺水
@@ -130,27 +131,27 @@ Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3001\")");//查询净水器
             }else if(msg[3]=="0E"){//网络故障
                 $(".malfunction-wifi").show().siblings().hide();
             }else if(msg[3]==03){//进水TDS故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障');
             }else if(msg[3]==04){//出水TDS故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障');
             }else if(msg[3]==05){//进水有机物故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水有机物故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水有机物故障');
             }else if(msg[3]==06){//出水有机物故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水有机物故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水有机物故障');
             }else if(msg[3]==07){//进水流量故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水流量故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水流量故障');
             }else if(msg[3]==08){//出水流量故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水流量故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水流量故障');
             }else if(msg[3]==09){//蓝牙故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>蓝牙故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>蓝牙故障');
             }else if(msg[3]=="0A"){//无线充电故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>无线充电故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>无线充电故障');
             }else if(msg[3]=="0B"){//电磁阀故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>电磁阀故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>电磁阀故障');
             }else if(msg[3]=="0C"){//水压开关故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>水压开关故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>水压开关故障');
             }else if(msg[3]=="0D"){//膜故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>膜故障').show().siblings().hide();
+                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>膜故障');
             }
         }
     });

@@ -29,7 +29,7 @@ $(function(){
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
                             if(ret){
                                 $(".status-remove").fadeOut(500,function(){
-                                    $(".cancel-binding").css({display:"none"})
+                                    $(".cancel-binding").css({display:"none"});
                                     $(this).remove();
                                 });
                             }else{
@@ -38,12 +38,14 @@ $(function(){
                         });
                     }else{
                         $(".status-remove").fadeOut(500,function(){
-                            $(".cancel-binding").css({display:"none"})
+                            $(".cancel-binding").css({display:"none"});
                             $(this).remove();
                         });
                     }
+                }else{
+                    $(".cancel-binding").css({display:"none"});
+                    $(".status-remove").removeClass("status-remove");
                 }
-                $(".status-remove").removeClass("status-remove");
                 return false;
             });
             //选中净水机
@@ -365,6 +367,7 @@ $(function(){
                 }
                 return false;
             }).bind("touchend",function(e){
+                //清除参数
                 var $parent = $(this).parent(),
                     $width  = $(this).attr("data-width"),
                     $sWidth = $(this).attr("data-siblings-width");

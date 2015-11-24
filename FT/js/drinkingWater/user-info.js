@@ -227,7 +227,7 @@ var Canvas = function(id,param){
             }
         }
 
-        var curDate = new Date();
+        /*var curDate = new Date();
         if( timeType === 12) {
             var year = curDate.getFullYear();
             drawText(year,context,0 ,50,width,'32px','RGB(255,255,255)');
@@ -237,7 +237,7 @@ var Canvas = function(id,param){
             var month = monthText[monthIndex];
             drawText(month.code,context,0 ,40,width,'24px','RGB(255,255,255)');
             drawText(month.text,context,0 ,80,width,'40px','RGB(255,255,255)');
-        }
+        }*/
     }
 
     /**

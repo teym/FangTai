@@ -1,5 +1,6 @@
 
 $(function(){
+  window.HerkIf = true;
   window.progress = null;
   window.progress = new Progress();
     var init = {

@@ -1,4 +1,5 @@
 $(function(){
+    //window.HerkIf = true;
 	var init = {
 		base : function(){
             init.event();
@@ -11,25 +12,80 @@ $(function(){
                 $filter.css({position:"relative",top:$top>0?$top:0,bottom:"inherit",minHeight:$filterH});
             }).trigger("resize");
             //画滤
-            var $li = $(".filter-list").find("li");
-            for(var i=0;i<$li.length;i++){
-                var canvas = $li.eq(i).find("canvas");
-                canvas.attr("width",$li.eq(i).width());
-                canvas.attr("height",$li.eq(i).height());
-                //绘画滤芯
-                init.playFilter({
-                    id     : canvas.attr("id"),
-                    width  : $li.eq(i).width(),
-                    height : $li.eq(i).height(),
-                    val    : $li.eq(i).attr("data-val"),
-                    title  : $li.eq(i).attr("data-title")
-                });
+            if(!window.HerkIf){
+                var $li = $(".filter-list").find("li");
+                for(var i=0;i<$li.length;i++){
+                    var canvas = $li.eq(i).find("canvas");
+                    canvas.attr("width",$li.eq(i).width());
+                    canvas.attr("height",$li.eq(i).height());
+                    //绘画滤芯
+                    playFilter({
+                        id     : canvas.attr("id"),
+                        width  : $li.eq(i).width(),
+                        height : $li.eq(i).height(),
+                        val    : $li.eq(i).attr("data-val"),
+                        title  : $li.eq(i).attr("data-title")
+                    });
+                }
             }
 		},
 		event : function(){
 
-		},
-        playFilter : function(info){
+		}
+	};
+	init.base();
+    /*var msg = [00,09,41,04,"1e","32","64","14"];
+    if(msg[1]==9&&msg[2]==41&&msg[3]==4){
+        var $li     = $(".filter-list").find("li"),
+            $width  = $li.width(),
+            $height = $li.height();
+        for(var i=0;i<4;i++){
+            var canvas = $li.eq(i).find("canvas");
+            canvas.attr("width",$width);
+            canvas.attr("height",$height);
+            //绘画滤芯
+            playFilter({
+                id     : canvas.attr("id"),
+                width  : $width,
+                height : $height,
+                val    : parseInt(msg[4+i],16)/100,
+                title  : $li.eq(i).attr("data-title")
+            });
+        }
+    }*/
+    //设备反馈
+    document.addEventListener('HekrSDKReady',function(){
+        var $list  = $(".filter-list").find(">ul>li"),
+            $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
+            $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
+            $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
+            $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
+        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
+        Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+            var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+            //console.log(msg,msg[1]==9,msg[2]==41,msg[3]==4);
+            if(msg[1]==9&&msg[2]==41&&msg[3]==4){
+                var $li     = $(".filter-list").find("li"),
+                    $width  = $li.width(),
+                    $height = $li.height();
+                for(var i=0;i<4;i++){
+                    var canvas = $li.eq(i).find("canvas");
+                    canvas.attr("width",$width);
+                    canvas.attr("height",$height);
+                    //绘画滤芯
+                    playFilter({
+                        id     : canvas.attr("id"),
+                        width  : $width,
+                        height : $height,
+                        val    : parseInt(msg[4+i],16)/100,
+                        title  : $li.eq(i).attr("data-title")
+                    });
+                }
+            }
+        });
+    }, false);
+});
+function playFilter(info){
             var filter  = document.getElementById(info.id),
                 context = filter.getContext("2d"),
                 blank   = info.height*0.005;
@@ -98,7 +154,6 @@ $(function(){
                 /* 指定几个颜色 */
                 var $val2 = parseFloat(1-val)+(val)*0.3,
                     $val3 = parseFloat(1-val)+(val)*0.75;
-
                 grad.addColorStop(1-val,'#3bdbfe');
                 grad.addColorStop($val2,'#1aa7d6');//0.25+(1-0.25)/4
                 grad.addColorStop($val3,'#026ba3');
@@ -219,35 +274,3 @@ $(function(){
                 context.closePath();
             };
         }
-	};
-	init.base();
-});
-//设备反馈
-document.addEventListener('HekrSDKReady',function(){
-  var $list  = $(".filter-list").find("li"),
-      $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
-      $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
-      $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
-      $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
-  Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
-  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-      if(msg[1]==9&&msg[2]==41&&msg[3]==4){
-        var $li = $(".filter-list").find("li");
-        for(var i=0;i<4;i++){
-            var canvas = $li.eq(i).find("canvas");
-            canvas.attr("width",$li.eq(i).width());
-            canvas.attr("height",$li.eq(i).height());
-            //绘画滤芯
-            init.playFilter({
-                id     : canvas.attr("id"),
-                width  : $li.eq(i).width(),
-                height : $li.eq(i).height(),
-                val    : msg[3+i],
-                title  : $li.eq(i).attr("data-title")
-            });
-        }
-      }
-      
-  });
-}, false);

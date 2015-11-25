@@ -1,0 +1,237 @@
+/*主菜单*/
+#nav{
+  .sub-nav{
+    overflow: hidden;
+    width: 100%;
+    font-size: 0;
+    li{
+      display: table-cell;
+      overflow: hidden;
+      position: relative;
+      width: 2rem;
+      height: 20rem;
+      font-size: 1.5rem;
+      line-height: 100%;
+      text-align: center;
+      vertical-align: middle;
+      .box{
+        display: table-cell;
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+      }
+      i{
+        display: inline-block;
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-bottom: 0.2rem;
+        content: "";
+      }
+      h4{
+        font-weight: normal;
+      }
+      span{
+        display: none;
+      }
+      &.active{
+        width: 100%;
+        font-size: 6.5rem;
+        white-space: nowrap;
+        .box{
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+        i{
+          position: absolute;
+          top:.8rem;
+          right:.8rem;
+          width: 10rem;//44.2%
+          height: 10rem;
+          opacity: 0.8;
+        }
+        span{
+          display: block;
+          position: absolute;
+          bottom: 4.6rem;
+          left: 1.1rem;
+          font-size: 3.5rem;
+          opacity: 0.4;
+        }
+        h4{
+          position: absolute;
+          bottom: -.2rem;
+          left: .5rem;
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+  /*控制部分*/
+  .control-portion{
+    background-color:#0090ac;
+    .filter{
+      background-color:#54e6ff;
+      i{
+        background: url("../images/index/icon-small-filter.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #54e6ff), color-stop(1, #01afd1));
+        i{
+          background: url("../images/index/icon-filter.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .control{
+      background-color:#009cbc;
+      i{
+        background: url("../images/index/icon-small-control.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.prev{
+        background-color: #1dddff;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #1cddfe), color-stop(1, #019bbd));
+        i{
+          background: url("../images/index/icon-control.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .dosage{
+      background-color:#008aa3;
+      i{
+        background: url("../images/index/icon-small-dosage.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #00ccef), color-stop(1, #0088a2));
+        i{
+          background: url("../images/index/icon-dosage.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    /*.active{
+      background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #3dd8f4), color-stop(1, #01b0cf));
+    }*/
+  }
+  /*水质部分*/
+  .water-portion{
+    background-color:#01a536;
+    .waterMap{
+      background-color:#6ce700;
+      i{
+        background: url("../images/index/icon-small-waterMap.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #6de700), color-stop(1, #01b313));
+        i{
+          background: url("../images/index/icon-waterMap.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .waterQuality{
+      background-color:#60cf02;
+      i{
+        background: url("../images/index/icon-small-waterQuality.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.next{
+        background-color:#069a0e;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #63d001), color-stop(1, #019711));
+        i{
+          background: url("../images/index/icon-waterQuality.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .drinkingWater{
+      background-color:#01842b;
+      i{
+        background: url("../images/index/icon-small-drinkingWater.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #5abd02), color-stop(1, #01832b));
+        i{
+          background: url("../images/index/icon-drinkingWater.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+  /*服务部分*/
+  .serve-portion{
+    background-color:#24323c;
+    li{
+      &.active{
+        font-size: 4.5rem;
+        i{
+          width: 5rem;//22.4
+          height: 5rem;
+        }
+        span{
+          bottom: 3rem;
+          left: 0.8rem;
+          font-size: 2.5rem;
+        }
+      }
+    }
+    .store{
+      background-color:#5a7385;
+      i{
+        background: url("../images/index/icon-small-store.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #5a7485), color-stop(1, #3f4d58));
+        i{
+          background: url("../images/index/icon-store.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .serve{
+      background-color:#313b45;
+      i{
+        background: url("../images/index/icon-small-serve.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.prev{
+        background-color:#526979;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #516677), color-stop(1, #313b45));
+        i{
+          background: url("../images/index/icon-serve.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+    .upkeep{
+      background-color:#24323c;
+      i{
+        background: url("../images/index/icon-small-upkeep.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.active{
+        background-image: -webkit-gradient(linear, left top,right top, color-stop(0, #414f5c), color-stop(1, #24323b));
+        i{
+          background: url("../images/index/icon-upkeep.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,219 @@
+.coded-lock,.control-main{
+  background-image: -moz-linear-gradient(top, #45dcf9, #0b7eb7); /* Firefox */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #45dcf9), color-stop(1, #0b7eb7)); /* Saf4+, Chrome */
+}
+//密码锁
+.coded-lock{
+  overflow-x:hidden;
+  color: #fff;
+  //信息
+  .lock-caption,.lock-hint{
+    position: relative;
+    padding-top: 1rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  .lock-hint{
+    height: 1.2rem;
+    padding-top: 0.5rem;
+    font-size: 1.2rem;
+    span{color: #000;}
+  }
+  //密码点
+  .lock-dot{
+    position: relative;
+    width: 13rem;
+    margin: 1.2rem auto 0;
+    text-align: center;
+    li{
+      display: inline-block;
+      width: 0.55rem;
+      height: 0.55rem;
+      margin:0 0.5rem;
+      border:0.15rem solid #fff;
+      border-radius: 100%;
+      &.active{
+        background-color: #fff;
+      }
+    }
+    /*.icon-remove2{
+      display: none;
+      position: absolute;
+      top:-0.2rem;
+      right: 0;
+      width: 1.5rem;
+      height: 1.5rem;
+    }*/
+  }
+  >ul{
+    width: 25rem;
+    margin:0 auto 2rem;
+    font-size: 0;
+    text-align: center;
+    >li{
+      display: inline-block;
+      margin:0 0.8rem;
+      padding-top: 1.2rem;
+      i{
+        display: inline-block;
+        width: 5.5rem;
+        height: 5.5rem;
+        border:0.15rem solid #fff;
+        border-radius: 100%;
+        font-style: normal;
+        font-size: 2.25rem;
+        line-height: 5.5rem;
+        font-family: 'CenturyGothic' ;
+      }
+      &.hover{
+        i{
+          background-color: rgba(255,255,255,0.6);
+        }
+      }
+    }
+  }
+}
+//控制主页
+
+.control-main{
+  position: relative;
+  //开关
+  .switch{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 5rem;
+    box-shadow: 0rem 0.2rem 0.8rem rgba(112,112,112,0.5);
+    font-size: 0;
+    input{
+      border:none;
+      border-radius: 0;
+      background-color: #f3f3f3;
+      color: #969696;
+      font-size: 2rem;
+      line-height: 5rem;
+      text-align: center;
+      &.active{
+        background-image: -moz-linear-gradient(top, #44dcfa, #3ed2f3); /* Firefox */
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #44dcfa), color-stop(1, #3ed2f3)); /* Saf4+, Chrome */
+        color: #fff;
+      }
+    }
+    .open{width: 74%;}
+    .close{width: 26%;}
+  }
+  //净水机
+  .purifier{
+    width: 100%;
+    height: 100%;
+    padding: 5rem 0 6.5rem;
+    box-sizing: border-box;
+    &.close{
+      .hint{
+        display: block;
+      }
+      .purifier-show{
+        display: none;
+      }
+    }
+    .wash-btn{
+      display: block;
+      width: 10rem;
+      height: 2.5rem;
+      margin:1rem auto;
+      border:none;
+      border-radius: 2.5rem;
+      background-color: #279ecd;
+      box-shadow: .1rem .15rem .15rem rgba(0,0,0,0.35);
+      color: #fff;
+      font-size: 1.6rem;
+      line-height: 2.5rem;
+    }
+  }
+  //提示开启
+  .hint{
+    display: none;
+    position: absolute;
+    top:50%;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 3.5rem;
+    text-align: center;
+  }
+  //时间
+  .time{
+    position: absolute;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    height: 6.5rem;
+    color: #fff;
+    font-size: 0;
+    text-align: center;
+  }
+  .prev-time,.next-time{
+    display: inline-block;
+    border-right: 0.1rem solid #5badd1;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    h5{
+      display: inline-block;
+      opacity: 0.5;
+      font-weight: normal;
+      font-size: 1.5rem;
+      text-align: left;
+      span{
+        display: block;
+        font-size: 1.3rem;
+      }
+    }
+    time{
+      display: inline-block;
+      padding:0rem 1rem;
+      text-align: right;
+      span{
+        display: block;
+        font-size: 1.3rem;
+        b{
+          font-weight: normal;
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+  .next-time{
+    border-right: none;
+  }
+}
+//canvas
+#progress_bar {
+  margin:3rem auto -1rem;
+}
+.purifier-caption,.purifier-text{
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  margin-top: -4.5rem;
+  color: #fff;
+  font-weight: normal;
+  font-size: 6.5rem;
+  font-family: 'CenturyGothic';
+  text-align: center;
+  span{
+    padding-left: 0.2rem;
+    font-size: 2rem;
+  }
+}
+.purifier-text{
+  margin-top: 3rem;
+  font-size: 1.2rem;
+  font-family: 'FZLTCXHJW';
+}

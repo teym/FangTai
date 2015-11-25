@@ -1,0 +1,173 @@
+/*头部*/
+#header {
+  position: relative;
+  height: 4rem;
+  background-color: #3d3d3d;
+}
+
+#header:hover .header-nav {
+  //display: block;
+}
+
+#header .icon-catalogue, #header .add {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  width: 3rem;
+  height: 3rem;
+}
+
+#header .add {
+  left: inherit;
+  right: 0.5rem;
+}
+
+/*头部公用菜单*/
+.header-nav {
+  display: none;
+  position: absolute;
+  top: 4rem;
+  z-index: 10;
+  background-color: #3d3d3d;
+  font-size: 1.4rem;
+  font-family: 'FZLTCXHJW';
+  transition: height .2s;
+}
+
+.header-nav:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 20px;
+  background: url("../../images/public/header-nav-catalogue-bg.png") repeat-x;
+  content: "";
+}
+
+.header-nav li {
+  position: relative;
+  padding: 0 0.5rem;
+  border-top: 0.1rem solid #323232;
+  box-sizing: border-box;
+  background-color: #3d3d3d;
+  &.active{
+    z-index: 2;
+    background-color: #313131;
+  }
+  a{
+    display: block;
+    color: #fff;
+  }
+}
+
+.header-nav li:first-child {
+  border-top: none;
+}
+
+.header-nav h3 {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 0 0 3rem;
+  color: #fefefe;
+  box-sizing: border-box;
+  font-weight: normal;
+  text-align: left;
+}
+
+/*目录菜单*/
+.nav-catalogue {
+  left: 0;
+  min-width: 7rem;
+}
+
+.nav-catalogue li {
+  height: 9rem;
+}
+.nav-catalogue i {
+  margin: 1rem 0;
+}
+.nav-catalogue h3{
+  padding-left: 0rem;
+  text-align: center;
+}
+
+.nav-catalogue span {
+  display: block;
+  text-align: center;
+}
+
+/*净水机列表*/
+.nav-WaterPurifier {
+  right: 0;
+  min-width: 16rem;
+  text-align: left;
+  li {
+    height: 4rem;
+    margin:0;
+    padding-left: 0.8rem;
+    border-top:0.1rem solid #404040;
+    border-bottom:0.1rem solid #2a2a2a;
+    line-height: 2rem;
+
+    &:first-child{
+      border-top:none;
+    }
+    &:last-child{
+      border-bottom:none;
+    }
+    &.status-remove{
+      .tools{
+        display: block;
+      }
+    }
+  }
+  h3 i {
+    position: absolute;
+    top: 1rem;
+    left: 0.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+  //工具
+  .tools{
+    display: none;
+    position: absolute;
+    top:50%;
+    right: 0.3rem;
+    z-index: 1;
+    margin-top: -0.6rem;
+    line-height: 100%;
+    i{
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 0.3rem;
+    }
+  }
+}
+//故障状态
+.malfunction{
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  color: #f00;
+  font-size: 1.5rem;
+  line-height: 4rem;
+  text-align: center;
+  >a{
+    display: block;
+  }
+  .icon{
+    position: relative;
+    top:-0.3rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .malfunction-wifi{
+    color: #fff;
+  }
+}

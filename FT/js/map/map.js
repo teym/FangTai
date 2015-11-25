@@ -59,7 +59,8 @@ var Map = function(){
     var map = null,
         local = null,
         mapLevel = 16,
-        pointList = [];
+        pointList = [],
+        pointData = {};
 
     var searchThing = '景点';
 
@@ -84,6 +85,12 @@ var Map = function(){
                         continue;
                     }
 
+                    var tds = Math.round(Math.random() * 100),
+                        pro = (Math.round(Math.random() * 10))/10,
+                        ph = (Math.round(Math.random()*14 * 10))/10;
+
+                    pointData[pointStr] = {tds:tds,pro:pro,ph:ph};
+
                     pointList.push(pointStr);
 
                     if( i === 0) {
@@ -94,7 +101,7 @@ var Map = function(){
                     marker = new BMap.Marker(newPoint,{icon:myIcon});
                     marker.addEventListener("click",attribute);
                     map.addOverlay(marker);
-                    var label = new BMap.Label("TDS<div style='font-size:56px;'>50</div>");
+                    var label = new BMap.Label("TDS<div style='font-size:56px;'>" + tds + "</div>");
                     label.setStyle({
                         border:0,
                         marginTop:'5px',
@@ -135,20 +142,19 @@ var Map = function(){
             $(p.zc.childNodes[0]).find('img').attr('src','../../images/map/icon-address-green.png');
             $(p.zc.childNodes[0]).addClass('active');
             $(p.zc.childNodes[1]).addClass('active');
+            var point = p.getPosition(),
+                pointStr = 'lng' + point.lng + 'lat' + point.lat;
+            var data = pointData[pointStr];
+            $('#tds').html(data.tds);
+            $('#pro').html(data.pro);
+            $('#ph').html(data.ph);
+
         }
-        //alert("marker的位置是" + p.getPosition().lng + "," + p.getPosition().lat);
     }
 
     init();
     function init(){
         initMap();
-//        navigator.geolocation.getCurrentPosition(function(position){
-//           var lat = position.coords.latitude,lng = position.coords.longitude;
-//            initMap({lng:lng,lat:lat});
-//        },function(error){
-//            initMap();
-//            //console.error(error);
-//        });
     }
 
     function initMap(point) {
@@ -177,12 +183,7 @@ var Map = function(){
                 ) {
                 bsTemp = newBs;
                 search(newBs);
-            }else {
-//                if(activeMarket)
-//                activeMarket.dispatchEvent('click');
             }
-//            var bs = map.getBounds();
-//            search(bs);
         });
 
         map.addEventListener('addoverlay',function(type, target){
@@ -206,28 +207,3 @@ var Map = function(){
     }
 
 };
-
-
-//map.enableScrollWheelZoom();
-
-/*var options = {
- onSearchComplete: function(results){
- // 判断状态是否正确
- if (local.getStatus() == BMAP_STATUS_SUCCESS){
- var s = [];
- for (var i = 0; i < results.getCurrentNumPois(); i ++){
- //var marker = new BMap.Marker(new BMap.Point(116.404, 39.915));
- s.push(results.getPoi(i).title + ", " + results.getPoi(i).address);
- }
- document.getElementById("map_result").innerHTML = s.join("<br/>");
- }
- }
- };*/
-
-
-/*
-
-function showInfo(e){
-    alert(e.point.lng + ", " + e.point.lat);
-}
-map.addEventListener("click", showInfo);*/

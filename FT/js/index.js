@@ -1,4 +1,5 @@
 $(function(){
+    window.HerkIf = true;
 	var init = {
 		base : function(){
             init.event();
@@ -29,7 +30,7 @@ $(function(){
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
                             if(ret){
                                 $(".status-remove").fadeOut(500,function(){
-                                    $(".cancel-binding").css({display:"none"})
+                                    $(".cancel-binding").css({display:"none"});
                                     $(this).remove();
                                 });
                             }else{
@@ -38,12 +39,14 @@ $(function(){
                         });
                     }else{
                         $(".status-remove").fadeOut(500,function(){
-                            $(".cancel-binding").css({display:"none"})
+                            $(".cancel-binding").css({display:"none"});
                             $(this).remove();
                         });
                     }
+                }else{
+                    $(".cancel-binding").css({display:"none"});
+                    $(".status-remove").removeClass("status-remove");
                 }
-                $(".status-remove").removeClass("status-remove");
                 return false;
             });
             //选中净水机
@@ -293,6 +296,13 @@ $(function(){
                     }else{
                         $moveLi.addClass("selected").next().removeClass("selected");
                     }
+                    //小于一定值，取消选中效果
+                    if($width/$dataWidth<0.1){
+                        $moveLi.removeClass("active").find(".box").css({
+                            opacity   : 1,
+                            transform : "scale(1,1)"
+                        });
+                    }
                 }else if($val<0&&$(this).find(".moveLi").prev().length>0){
                     $next.removeClass("active selected");
                     //向右拖拽
@@ -323,14 +333,15 @@ $(function(){
                     }else{
                         $moveLi.addClass("selected").prev().removeClass("selected");
                     }
+                    //小于一定值，取消选中效果
+                    if($width/$dataWidth<0.1){
+                        $moveLi.removeClass("active").find(".box").css({
+                            opacity   : 1,
+                            transform : "scale(1,1)"
+                        });
+                    }
                 }
-                //小于一定值，取消选中效果
-                if($width/$dataWidth<0.1){
-                    $moveLi.removeClass("active").find(".box").css({
-                        opacity   : 1,
-                        transform : "scale(1,1)"
-                    });
-                }
+
                 //根据值更变显示效果
                 /*if(!$moveLi.hasClass("selected")){
                     if($width>$dataWidth*0.3){
@@ -357,6 +368,7 @@ $(function(){
                 }
                 return false;
             }).bind("touchend",function(e){
+                //清除参数
                 var $parent = $(this).parent(),
                     $width  = $(this).attr("data-width"),
                     $sWidth = $(this).attr("data-siblings-width");
@@ -413,16 +425,17 @@ $(function(){
         }
 	};
 	init.base();
+    //设备反馈
+    document.addEventListener('HekrSDKReady',function(){
+        Hekr.getDevices(function(list,error){
+            $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
+            $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
+            for(var i=0;i<list.length;i++){
+                $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
+            }
+
+        });
+    }, false);
 });
 
-//设备反馈
-document.addEventListener('HekrSDKReady',function(){
-  Hekr.getDevices(function(list,error){
-    $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
-    $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
-    for(var i=0;i<list.length;i++){
-      $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
-    }
 
-  });
-}, false);

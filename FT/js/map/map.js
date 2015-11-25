@@ -13,6 +13,8 @@ $(function(){
             }).trigger("resize");
             mapObj = new Map();
 //            map.searchTest();
+            //表单键盘控制
+            new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
             //打开关闭选择地址

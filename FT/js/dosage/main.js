@@ -41,7 +41,13 @@ $(function(){
                 }else if(time=="月"){
                     waterData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25];
                     eleData   = [12,15,30,55,26,18,15,12,15,30,55,26,18,15,14,18,13,20,17,15,14,18,13,20,17,15,14,18,13,20,17];
-                    timeType = getCurDays();
+                    var dayCount = getCurDays();
+                    if(dayCount === 28) {
+                        timeType = 14;
+                    }else {
+                        timeType = 15;
+                    }
+                    //timeType = getCurDays();
                 }else if(time=="年"){
                     waterData = [18,15,18,15,12,15,12,19,20,13,17,25];
                     eleData   = [12,15,30,55,26,18,15,14,18,13,20,17];
@@ -85,6 +91,20 @@ Canvas = function(id,param){
         maxHeight = 0;//显示范围
 
     var nullData = [];
+    var monthText = [
+        {text:'一月',code:'YIYUE'},
+        {text:'二月',code:'ERYUE'},
+        {text:'三月',code:'SANYUE'},
+        {text:'四月',code:'SIYUE'},
+        {text:'五月',code:'WUYUE'},
+        {text:'六月',code:'LIUYUE'},
+        {text:'七月',code:'QIYUE'},
+        {text:'八月',code:'BAYUE'},
+        {text:'九月',code:'JIUYUE'},
+        {text:'十月',code:'SHIYUE'},
+        {text:'十一月',code:'SHIYIYUE'},
+        {text:'十二月',code:'SHIERYUE'}
+    ];
 
     /**
      * 初期化
@@ -412,12 +432,25 @@ Canvas = function(id,param){
                 drawText('ZHOU',context,widthEvery * (i - 1) ,20,widthEvery,'12px');
                 drawText(week[i - 1],context,widthEvery * (i - 1),36,widthEvery,'12px');
             }else if(timeType === 12){
-
+                drawText(i,context,widthEvery * (i - 1) ,16,widthEvery,'12px');
+            }else if(timeType === 14){
+                drawText(i*2,context,widthEvery * (i - 1),16,widthEvery,'12px');
             }else {
-                drawText(i,context,widthEvery * (i - 1),16,widthEvery,'12px');
-
+                drawText(i*2 - 1,context,widthEvery * (i - 1),16,widthEvery,'12px');
             }
         }
+
+        /*var curDate = new Date();
+        if( timeType === 12) {
+            var year = curDate.getFullYear();
+            drawText(year,context,0 ,50,width,'32px','RGB(255,255,255)');
+
+        }else if(timeType > 12) {
+            var monthIndex = curDate.getMonth();
+            var month = monthText[monthIndex];
+            drawText(month.code,context,0 ,40,width,'24px','RGB(255,255,255)');
+            drawText(month.text,context,0 ,80,width,'40px','RGB(255,255,255)');
+        }*/
     }
 
     /**

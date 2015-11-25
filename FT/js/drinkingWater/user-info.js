@@ -14,7 +14,7 @@ $(function(){
             }).trigger("resize");
             var data = [12,15,30,55,26,18,15];
             var yearData = [18,15,18,15,12,15,12,19,20,13,17,25];
-            var monthData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25];
+            var monthData = [18,15,18,15,12,15,12,18,15,18,15,12,15,12,19,20,13,17,25,12,19,20,13,17,25,12,19,20,13,17,25,18];
             canvas = new Canvas('showdata');
             canvas.draw(data);
             //时间切换
@@ -23,9 +23,15 @@ $(function(){
                 if($val=="周"){
                     canvas.changeTimeType(7,data);
                 }else if($val=="月"){
-                    canvas.changeTimeType(12,yearData);
+                    var dayCount = getCurDays();
+                    if(dayCount === 28) {
+                        canvas.changeTimeType(14,monthData);
+                    }else {
+                        canvas.changeTimeType(15,monthData);
+                    }
+
                 }else if($val=="年"){
-                    canvas.changeTimeType(30,monthData);
+                    canvas.changeTimeType(12,yearData);
                 }
                 $(this).addClass("active").siblings().removeClass("active");
             });
@@ -36,6 +42,11 @@ $(function(){
 		},
 	};
 	init.base();
+
+    function getCurDays(){
+        var curDate = new Date();
+        return new Date(curDate.getFullYear(), (curDate.getMonth()+1), 0).getDate();
+    }
 });
 
 var Canvas = function(id,param){
@@ -209,23 +220,24 @@ var Canvas = function(id,param){
                 drawText(week[i - 1],context,widthEvery * (i - 1),36,widthEvery,'12px');
             }else if(timeType === 12){
                 drawText(i,context,widthEvery * (i - 1) ,16,widthEvery,'12px');
+            }else if(timeType === 14){
+                drawText(i*2,context,widthEvery * (i - 1),16,widthEvery,'12px');
             }else {
-                drawText(i,context,widthEvery * (i - 1),16,widthEvery,'12px');
-
+                drawText(i*2 - 1,context,widthEvery * (i - 1),16,widthEvery,'12px');
             }
         }
 
-        var curDate = new Date();
+        /*var curDate = new Date();
         if( timeType === 12) {
             var year = curDate.getFullYear();
             drawText(year,context,0 ,50,width,'32px','RGB(255,255,255)');
 
-        }else if(timeType > 27) {
+        }else if(timeType > 12) {
             var monthIndex = curDate.getMonth();
             var month = monthText[monthIndex];
             drawText(month.code,context,0 ,40,width,'24px','RGB(255,255,255)');
             drawText(month.text,context,0 ,80,width,'40px','RGB(255,255,255)');
-        }
+        }*/
     }
 
     /**

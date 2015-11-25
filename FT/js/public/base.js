@@ -118,7 +118,7 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3001\")");//查询净水器
+    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3002\")");//查询净水器
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
         console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
@@ -199,7 +199,7 @@ var inputControl = function($obj) {
             inputFlg = true;
         });
     });
-    
+
     $('body').bind('touchend',function(event){
         //console.log('lv','touch');
         var target = event.target;

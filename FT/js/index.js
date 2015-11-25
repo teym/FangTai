@@ -1,4 +1,5 @@
 $(function(){
+    window.HerkIf = true;
 	var init = {
 		base : function(){
             init.event();
@@ -424,16 +425,17 @@ $(function(){
         }
 	};
 	init.base();
+    //设备反馈
+    document.addEventListener('HekrSDKReady',function(){
+        Hekr.getDevices(function(list,error){
+            $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
+            $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
+            for(var i=0;i<list.length;i++){
+                $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
+            }
+
+        });
+    }, false);
 });
 
-//设备反馈
-document.addEventListener('HekrSDKReady',function(){
-  Hekr.getDevices(function(list,error){
-    $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
-    $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
-    for(var i=0;i<list.length;i++){
-      $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);
-    }
 
-  });
-}, false);

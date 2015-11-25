@@ -1,5 +1,5 @@
 $(function(){
-    //window.HerkIf = true;
+    window.HerkIf = true;
     var init = {
         base : function(){
             document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
@@ -110,7 +110,7 @@ $(function(){
                 designHeight: 1136,
                 designFontSize: 20,
                 callback: function (argument) {
-                    console.timeEnd("test")
+                    //console.timeEnd("test")
                 }
             });
         }
@@ -122,7 +122,7 @@ document.addEventListener('HekrSDKReady',function(){
     Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3002\")");//查询净水器
     Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-        console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
+        //console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
         if(msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
             $(".malfunction-status").hide();
             if(msg[3]==01){//漏水

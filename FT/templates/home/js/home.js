@@ -68,11 +68,11 @@ var Circle = function(){
       var maxX = $W - original.pointX,
           maxY = $H/2 +  original.pointY,
           maxRadius = maxX > maxY ? maxX : maxY;
-      console.log('$W',$W);
+      /*console.log('$W',$W);
       console.log('$H',$H);
       console.log('maxX',maxX);
       console.log('maxY',maxY);
-      console.log('maxRadius',maxRadius);
+      console.log('maxRadius',maxRadius);*/
       maxRadius = Math.ceil((35 * maxRadius / 23)/original.pointY);
 
       drawInit(maxRadius,true);
@@ -208,13 +208,13 @@ var Circle = function(){
       animTimer = setInterval(function(){
           loop = loop < 1? 1 : loop;
           drawInit(loop);
-          console.log('loop',loop);
+          //console.log('loop',loop);
           if(loop === 1) {
               clearInterval(animTimer);
               animTimer = null;
               //图片渐显
               $('.logo-container img').animate({opacity:1},500,'linear',function(){
-                  console.log('lv','finish');
+//                  console.log('lv','finish');
                   setTimeout(function(){
                       location.href = "login.html"
                   },2500);

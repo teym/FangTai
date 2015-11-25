@@ -308,7 +308,7 @@ Canvas = function(id,param){
                 }
 
                 var len = nullData.length;
-                console.log('nullData',nullData);
+                //console.log('nullData',nullData);
                 for(var nullIndex = 0; nullIndex < len; nullIndex++) {
                     drawDotted(nullData[nullIndex]);
                 }

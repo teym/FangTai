@@ -35,16 +35,16 @@ $(function(){
                 return false;
             });
             //关闭提示层
-            $("body").on("click",".cancel-hint-modal",function(){
+            $("body").on("touchend",".cancel-hint-modal",function(){
                 $(".hint-modal").hide();
             });
             //开关
-            $("body").on("touchstart",".switch-btn",function(){
+            $("body").on("touchend",".switch-btn",function(){
                 $(this).hasClass("close")?$(this).removeClass("close"):$(this).addClass("close");
                 return false;
             });
             //返回上一层
-            $("body").on("touchstart",".back",function(){
+            $("body").on("touchend",".back",function(){
                 if(window.HerkIf){
                     Hekr.close();
                 }else{
@@ -52,7 +52,7 @@ $(function(){
                 }
             });
             //返回指定页面
-            $("body").on("touchstart",".backTo",function(){
+            $("body").on("touchend",".backTo",function(){
                 if(window.HerkIf){
                     Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
                 }else{
@@ -60,7 +60,7 @@ $(function(){
                 }
             });
             //关闭提示框
-            $("body").on("touchstart",".close-hint",function(){
+            $("body").on("touchend",".close-hint",function(){
                 $(".hint-modal.hint").css({display:"none"});
             });
         },
@@ -188,4 +188,24 @@ function getArrayInfo(info){
         val.push(info.slice(i,i+2));
     }
     return val;
+};
+//表单键盘控制
+var inputControl = function($obj) {
+    var type = typeof $obj;
+    var inputFlg = false;
+
+    $obj.each(function(index, ele) {
+        $(ele).focus(function(){
+            inputFlg = true;
+        });
+    });
+    
+    $('body').bind('touchend',function(event){
+        //console.log('lv','touch');
+        var target = event.target;
+        if($obj.index(target) === -1 && inputFlg === true) {
+            //alert(1);
+            $obj.blur();
+        }
+    })
 };

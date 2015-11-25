@@ -2,6 +2,8 @@ $(function(){
 	var init = {
 		base : function(){
             init.event();
+            //表单键盘控制
+            new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
              $(".feedback-info textarea").bind("focus",function(){

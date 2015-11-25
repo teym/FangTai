@@ -11,6 +11,8 @@ $(function(){
                 $(".wifi-main").css({minHeight:$other-$tools});
             }).trigger("resize");
             var Wifi_loading = new window.Wifi_loading();
+            //表单键盘控制
+            new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
             //记住密码

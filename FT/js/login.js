@@ -4,6 +4,8 @@ $(function(){
             init.event();
             init.loginBg();
             clickStyle({box:"#login-btn",class:"hover"});
+            //表单键盘控制
+            new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
 

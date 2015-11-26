@@ -1,5 +1,5 @@
 $(function(){
-    window.HerkIf = true;
+    //window.HerkIf = true;
     var init = {
         base : function(){
             document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单

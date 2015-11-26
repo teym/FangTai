@@ -19,6 +19,15 @@ $(function(){
             $("body").on("touchend",".remember-password",function(){
                 $(this).hasClass("active")?$(this).removeClass("active"):$(this).addClass("active");
             });
+            //显示密码
+            $("body").on("touchend",".icon-eye",function(){
+                var $input = $(".account-password");
+                if($input.attr("type")=="password"){
+                    $input.attr("type","text");
+                }else{
+                    $input.attr("type","password");
+                }
+            });
             //连接网站
             $("body").on("touchend",".wifi-tools-btn",function(){
                 var self   = $(this),

@@ -139,7 +139,7 @@ var Canvas = function(id,param){
             context.lineTo(width,height);
             context.lineTo(0,height);
             context.lineTo(0,dataList[0]);
-            context.fillStyle = 'RGBA(255,255,255,0.8)';
+            context.fillStyle = 'RGBA(255,255,255,0.9)';
             context.fill();
             context.closePath();
             lineParam.push(dataList);
@@ -194,7 +194,7 @@ var Canvas = function(id,param){
         context.beginPath();
         context.font = fontSize + ' microsoft yahei';
         var text=context.measureText(textVal);
-        context.fillStyle = fillStyle?fillStyle:'RGBA(255,255,255,0.3)';
+        context.fillStyle = fillStyle?fillStyle:'RGBA(255,255,255,1)';
         context.fillText(textVal,xVal + (width / 2) - (text.width /2),yVal);
         context.closePath();
     }
@@ -209,7 +209,7 @@ var Canvas = function(id,param){
         var week = ['日','一','二','三','四','五','六']
         for(var i = 1;i <= timeType;i++) {
             context.beginPath();
-            context.strokeStyle = 'RGBA(255,255,255,0.3)';
+            context.strokeStyle = 'RGBA(255,255,255,0.5)';
             context.lineWidth = '1';
             context.moveTo(widthEvery * i , 0);
             context.lineTo(widthEvery * i , height);

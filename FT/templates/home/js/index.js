@@ -19,7 +19,7 @@ $(function(){
 		},
 		event : function(){
             //删除净水机
-            $("body").on("touchstart",".icon-remove",function(){
+            $("body").on("touchstart",".status-remove",function(){
                 $(".cancel-binding").css({display:"table"}).attr("data-tid",$(this).closest("li").attr("data-tid"));
                 return false;
             });

@@ -18,7 +18,7 @@ $(function(){
                 //获取页面最小高度
                 var $H = $(window).height(),
                     $header = $(".main-header").height();
-                $(".main-other").css({height:$H-$header});
+                $(".main-other").css({height:$H-$header,minHeight:"0"});
             }).trigger("resize");
 		},
 		event : function(){

@@ -51,6 +51,7 @@ $(function(){
                 }else{
                     location.href = $(this).attr("data-href");
                 }
+                return false;
             });
             //返回指定页面
             $("body").on("touchend",".backTo",function(){
@@ -59,6 +60,7 @@ $(function(){
                 }else{
                     location.href = $(this).attr("data-href");
                 }
+                return false;
             });
             //关闭提示框
             $("body").on("touchend",".close-hint",function(){

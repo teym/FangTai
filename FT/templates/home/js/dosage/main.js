@@ -111,11 +111,12 @@ Canvas = function(id,param){
      */
     function init() {
         var canvas = document.getElementById(id);
-        canvas.height = $('#data-content').height();
-        canvas.width = $('#data-content').width();
+        canvas.height = $('#data-content').height() * 2;
+        canvas.width = $('#data-content').width() * 2;
         height = canvas.height,width = canvas.width;
         maxHeight = height/2 - height/4;
         context = canvas.getContext('2d');
+
 
         //绑定事件
         initBind();
@@ -130,19 +131,19 @@ Canvas = function(id,param){
         var handler = param.handlerCallback || function(data,num){
                 var $day;
                 switch (num){
-                    case 1 : $day = "周一"
+                    case 2 : $day = "周一"
                         break;
-                    case 2 : $day = "周二"
+                    case 3 : $day = "周二"
                         break;
-                    case 3 : $day = "周三"
+                    case 4 : $day = "周三"
                         break;
-                    case 4 : $day = "周四"
+                    case 5 : $day = "周四"
                         break;
-                    case 5 : $day = "周五"
+                    case 6 : $day = "周五"
                         break;
-                    case 6 : $day = "周六"
+                    case 7 : $day = "周六"
                         break;
-                    case 7 : $day = "周日"
+                    case 1 : $day = "周日"
                         break;
                 }
                 $(".day-info").css({opacity:1}).find("dt").text($day);
@@ -163,14 +164,12 @@ Canvas = function(id,param){
             var touchEvent = event;
             showDataTimer = setTimeout(function(){
                 var touchX = touchEvent.originalEvent.touches[0].pageX;//点击位置
-                var count = Math.ceil(touchX/(width/timeType));//属于第几块
+                var count = Math.ceil(touchX * 2/(width/timeType));//属于第几块
                 var curData = dataType === 'water' ? data.waterData[count - 1]:data.eleData[count - 1];
                 handlerData(count);
                 handler(curData,count);
             },leastTime);
-        });
-        //释放
-        $('#showdata').bind('touchend',function(event) {
+        }).bind('touchend',function(event) {
             //周数据有效
             if(timeType !== 7) {
                 return;
@@ -179,7 +178,6 @@ Canvas = function(id,param){
             if(showDataTimer !== null) {
                 clearTimeout(showDataTimer);
                 showDataTimer = null;
-                clearCanva();
                 drawAllData(data.waterData,data.eleData);
                 release();
             }
@@ -215,6 +213,7 @@ Canvas = function(id,param){
     function drawAllData(waterData,eleData) {
         data.waterData = waterData;
         data.eleData = eleData;
+        clearCanva();
         drawTable(context);
         drawData();
     }
@@ -406,10 +405,11 @@ Canvas = function(id,param){
      */
     function drawText(textVal,context,xVal,yVal,width,fontSize) {
         context.beginPath();
-        context.font = fontSize + 'Arial';
+        context.font = fontSize + ' FZLTCXHJW';
         var text=context.measureText(textVal);
         context.fillStyle = 'RGBA(255,255,255,1)';
         context.fillText(textVal,xVal + (width / 2) - (text.width /2),yVal);
+        context.closePath();
     }
 
     /**
@@ -419,7 +419,7 @@ Canvas = function(id,param){
      */
     function drawTable(context) {
         var widthEvery = width/timeType;
-        var week = ['日','一','二','三','四','五','六']
+        var week = ['日','一','二','三','四','五','六'];
         for(var i = 1;i <= timeType;i++) {
             context.beginPath();
             context.strokeStyle = 'RGBA(255,255,255,0.5)';
@@ -429,14 +429,14 @@ Canvas = function(id,param){
             context.stroke();
             context.closePath();
             if( timeType === 7 ) {
-                drawText('ZHOU',context,widthEvery * (i - 1) ,20,widthEvery,'12px');
-                drawText(week[i - 1],context,widthEvery * (i - 1),36,widthEvery,'12px');
+                drawText('ZHOU',context,widthEvery * (i - 1) ,Math.floor(3 * widthEvery/12),widthEvery,Math.floor(3 * widthEvery/16) + 'px');
+                drawText(week[i - 1],context,widthEvery * (i - 1),Math.floor(3 * widthEvery/20) * 2 + 20,widthEvery,Math.floor(3 * widthEvery/12) + 'px');
             }else if(timeType === 12){
-                drawText(i,context,widthEvery * (i - 1) ,16,widthEvery,'12px');
+                drawText(i,context,widthEvery * (i - 1) ,Math.floor(3 * widthEvery/9),widthEvery,Math.floor(4 * widthEvery/12) + 'px');
             }else if(timeType === 14){
-                drawText(i*2,context,widthEvery * (i - 1),16,widthEvery,'12px');
+                drawText(i*2,context,widthEvery * (i - 1),Math.floor(3 * widthEvery/7),widthEvery,Math.floor(6 * widthEvery/14) + 'px');
             }else {
-                drawText(i*2 - 1,context,widthEvery * (i - 1),16,widthEvery,'12px');
+                drawText(i*2 - 1,context,widthEvery * (i - 1),Math.floor(3 * widthEvery/7.5),widthEvery,Math.floor(6 * widthEvery/15) + 'px');
             }
         }
 

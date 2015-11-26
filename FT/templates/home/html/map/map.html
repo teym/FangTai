@@ -95,18 +95,28 @@
     .BMap_Marker.BMap_noprint{
         transform-origin: bottom center;
         transform: scale(0.4);
+        -webkit-transform-origin: bottom center;
+        -webkit-transform: scale(0.4);
     }
 
     .BMap_Marker>*{
         transform-origin: bottom center;
         transform: scale(0.4);
+        -webkit-transform-origin: bottom center;
+        -webkit-transform: scale(0.4);
+    }
+
+    .BMap_Marker img {
+        width: 100%;
     }
 
     .BMap_Marker.active{
         transform: scale(0.6);
+        -webkit-transform: scale(0.6);
     }
     .BMap_Marker > .active{
         transform: scale(0.6);
+        -webkit-transform: scale(0.6);
     }
 </style>
 

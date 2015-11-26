@@ -63,10 +63,10 @@ var Map = function(){
         pointData = {};
 
     var searchThing = '景点';
-
+    var width = $(window).width()/ 3,height = width * 135 /110;
     var myIcon = new BMap.Icon("../../images/map/icon-address-grey.png",
-        new BMap.Size(110,135));
-    var myIcon2 = new BMap.Icon("../../images/map/icon-address-green.png", new BMap.Size(110,135));
+        new BMap.Size(width,height));
+    var myIcon2 = new BMap.Icon("../../images/map/icon-address-green.png", new BMap.Size(width,height));
     var activeMarketIndex = 0;
 
     var laterTimer = null;
@@ -101,14 +101,13 @@ var Map = function(){
                     marker = new BMap.Marker(newPoint,{icon:myIcon});
                     marker.addEventListener("click",attribute);
                     map.addOverlay(marker);
-                    var label = new BMap.Label("TDS<div style='font-size:56px;'>" + tds + "</div>");
+                    var label = new BMap.Label("TDS<div style='font-size:" + (40 * width/110) + "px;'>" + tds + "</div>");
                     label.setStyle({
                         border:0,
-                        marginTop:'5px',
-                        fontSize: '20px',
-                        width: '110px',
-                        height: '135px',
-                        lineHeight:'40px',
+                        marginTop:height/10 + 'px',
+                        fontSize: (20 * width/110) + 'px',
+                        width: width + 'px',
+                        height: height + 'px',
                         textAlign:'center',
                         fontFamily:'FZLTCXHJW',
                         color:'#FFF',

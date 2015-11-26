@@ -55,7 +55,7 @@ $(function(){
             //返回指定页面
             $("body").on("touchend",".backTo",function(){
                 if(window.HerkIf){
-                    Hekr.backTo($(this).attr("data-href").replace("..","/html"),true);
+                    Hekr.backTo($(this).attr("data-href").replace("..","/templates/home/html"),true);
                 }else{
                     location.href = $(this).attr("data-href");
                 }

@@ -264,7 +264,7 @@ Canvas = function(id,param){
             context.lineTo(width,height);
             context.lineTo(0,height);
             context.lineTo(0,dataList[0]);
-            context.fillStyle = 'RGBA(255,255,255,0.)';
+            context.fillStyle = 'RGBA(255,255,255,0.8)';
             context.fill();
             context.closePath();
             if( index === 0) {

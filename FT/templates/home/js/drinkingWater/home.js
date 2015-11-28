@@ -1,17 +1,32 @@
 $(function(){
 	var init = {
 		base : function(){
-            init.event();
+
             //画滤
             var $showWater = $(".show-water"),
                 canvas     = $showWater.find("canvas");
             canvas.attr("width",$showWater.width());
             canvas.attr("height",$showWater.width());
-            //绘画滤芯
+            //获取前次数据 -- 每天自动清空
+            var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
+            var val = init.getLocalStorage(paramStr);
+            if(val > 0) {
+                var selectedStr = localStorage.getItem('selected_index');
+                var indexList = selectedStr.split(','),len = indexList.length;
+                for(var i = 0; i < len; i++) {
+                    $('.main-other li').eq(indexList[i]).find('.icon > i').attr('class','icon-success');
+                }
+            }
+            $(".show-water").find("b").text(val);
+            $(".show-water").attr("data-val",val);
+
+            init.event();
+
+                //绘画滤芯
             init.playDrinkingWater({
                 id     : canvas.attr("id"),
                 width  : $showWater.width(),
-                val    : $showWater.attr("data-val"),
+                val    : val,
                 max    : $showWater.attr("data-max")
             });
             $(window).bind("resize",function(){
@@ -23,8 +38,10 @@ $(function(){
 		},
 		event : function(){
             //勾选饮水
+            var timer = null,preVal = Number($(".show-water").attr("data-val"));
             $("body").on("touchend",".main-other .icon",function(){
                 var $li = $(this).closest("li");
+
                 if(!$li.hasClass("success")){
                     $li.addClass("success")
                     if(window.HerkIf){
@@ -37,31 +54,40 @@ $(function(){
                             $val       = $water + Number($showWater.attr("data-val")),
                             max        = $showWater.attr("data-max"),
                             width      = $showWater.width();
-                        var preVal = Number($showWater.attr("data-val"));
+
                             $showWater.attr("data-val",$val);
+
+                        //保存当前数据
+                        var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
+                        init.saveLocalStorage(paramStr,$val,$('.main-other li').index($li));
                         //time文字变化速度
                         var time = 50,textObj = $(".show-water").find("b"),canvasId = canvas.attr("id"),showFlg = true;
-                        var timer = setInterval(function(){
-                            preVal += 10;
+                        if(timer === null) {
+                            timer = setInterval(function(){
+                                preVal += 10;
 //                        preVal = $val;
-                            if(preVal >= $val) {
-                                showFlg = false;
-                                preVal = $val;
-                            }
-                            textObj.text(preVal);
-                            init.playDrinkingWater({
-                                id     : canvasId,
-                                width  : width,
-                                val    : preVal,
-                                max    : max,
-                                showFlg:showFlg
-                            });
+                                //重新取得当前值 -- 时间问题timer外部取得有问题
+                                $val = Number($showWater.attr("data-val"));
+                                if(preVal >= $val) {
+                                    showFlg = false;
+                                    preVal = $val;
+                                }
+                                textObj.text(preVal);
+                                init.playDrinkingWater({
+                                    id     : canvasId,
+                                    width  : width,
+                                    val    : preVal,
+                                    max    : max,
+                                    showFlg:showFlg
+                                });
 
-                            if(preVal === $val) {
-                                clearInterval(timer);
-                                timer = null;
-                            }
-                        },time);
+                                if(preVal === $val) {
+                                    clearInterval(timer);
+                                    timer = null;
+                                }
+                            },time);
+                        }
+
                     }
                 }
             });
@@ -230,6 +256,20 @@ $(function(){
 
 
             },animTime);
+        },
+        saveLocalStorage : function(paramStr, val, index) {
+            localStorage.setItem(paramStr,val);
+            var indexList = localStorage.getItem('selected_index') || '';
+            localStorage.setItem('selected_index',indexList + ',' + index);
+        },
+        getLocalStorage  : function(paramStr){
+            var val = localStorage.getItem(paramStr);
+            if(val === null || val === undefined) {
+                localStorage.clear();
+                return 0;
+            }
+
+            return Number(val);
         }
 	};
 	init.base();

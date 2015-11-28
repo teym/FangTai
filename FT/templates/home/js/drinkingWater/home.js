@@ -34,15 +34,34 @@ $(function(){
                         var $water     = Number($li.attr("data-water")),
                             $showWater = $(".show-water"),
                             canvas     = $showWater.find("canvas"),
-                            $val       = $water + Number($showWater.attr("data-val"));
-                        $showWater.attr("data-val",$val);
-                        $(".show-water").find("b").text($val);
-                        init.playDrinkingWater({
-                            id     : canvas.attr("id"),
-                            width  : $showWater.width(),
-                            val    : $showWater.attr("data-val"),
-                            max    : $showWater.attr("data-max")
-                        });
+                            $val       = $water + Number($showWater.attr("data-val")),
+                            max        = $showWater.attr("data-max"),
+                            width      = $showWater.width();
+                        var preVal = Number($showWater.attr("data-val"));
+                            $showWater.attr("data-val",$val);
+                        //time文字变化速度
+                        var time = 50,textObj = $(".show-water").find("b"),canvasId = canvas.attr("id"),showFlg = true;
+                        var timer = setInterval(function(){
+                            preVal += 10;
+//                        preVal = $val;
+                            if(preVal >= $val) {
+                                showFlg = false;
+                                preVal = $val;
+                            }
+                            textObj.text(preVal);
+                            init.playDrinkingWater({
+                                id     : canvasId,
+                                width  : width,
+                                val    : preVal,
+                                max    : max,
+                                showFlg:showFlg
+                            });
+
+                            if(preVal === $val) {
+                                clearInterval(timer);
+                                timer = null;
+                            }
+                        },time);
                     }
                 }
             });
@@ -50,26 +69,27 @@ $(function(){
         playDrinkingWater : function(info){
             var filter  = document.getElementById(info.id),
                 context = filter.getContext("2d"),
-                val     = info.val/info.max;
+                val     = info.val/info.max,
+                showFlg = info.showFlg;
             info.height = info.width;
 
             var outerCirLineWidth = info.width*0.05,
                 outerRadius = info.width/2 - outerCirLineWidth/2;//外部圆半径
 
-            var outline = info.width*0.035,innerRadius = outerRadius-outline;
+            var outline = info.width*0.035,innerRadius = outerRadius-outline,radius = innerRadius-outline/2;
             var center = {pointX:info.width/2,pointY:info.height/2};
 
             var curPoint = {};
 
-            curPoint.radius = Math.sqrt(Math.pow(innerRadius,2) - Math.pow(Math.abs(innerRadius - innerRadius*2*val),2));
-            curPoint.deg = Math.asin(curPoint.radius/innerRadius) //弧度 * (180/Math.PI)转化为角度
-            curPoint.center = {pointX:center.pointX,pointY:center.pointY + innerRadius - innerRadius*2*val};
+            curPoint.radius = Math.sqrt(Math.pow(radius,2) - Math.pow(Math.abs(radius - radius*2*val),2));
+            curPoint.deg = Math.asin(curPoint.radius/radius) //弧度 * (180/Math.PI)转化为角度
+            curPoint.center = {pointX:center.pointX,pointY:center.pointY + radius - radius*2*val};
             curPoint.left = {pointX:center.pointX - curPoint.radius,pointY:curPoint.center.pointY};
             curPoint.right = {pointX:center.pointX + curPoint.radius,pointY:curPoint.center.pointY};
             curPoint.startDeg = val > 0.5 ? -Math.PI/2 + curPoint.deg:Math.PI/2 - curPoint.deg;
             curPoint.endDeg = val > 0.5 ? (Math.PI*3)/2 - curPoint.deg:Math.PI/2 + curPoint.deg;
-
-            var symbol = 1,loop = 0,animTime = 100;
+            //showFlg -- 上升动画 -- animTime:上升速度-- 小于time
+            var symbol = 1,loop = 0,animTime = showFlg? 30 : 100;
             var diffDeg = (val > 0.5? Math.PI * (1-val) / 3:Math.PI * val / 3),
                 diffDeg2 = diffDeg/ 2,
                 valdiff = 0;
@@ -109,29 +129,29 @@ $(function(){
                 //高低阴影
                 if(val > 0.5) {
                     curPoint.left_2 = {
-                        pointX:center.pointX - innerRadius*Math.sin(Math.asin(curPoint.radius/innerRadius) + diffDeg),
-                        pointY:center.pointY - innerRadius*Math.cos(Math.asin(curPoint.radius/innerRadius) + diffDeg)
+                        pointX:center.pointX - radius*Math.sin(Math.asin(curPoint.radius/radius) + diffDeg),
+                        pointY:center.pointY - radius*Math.cos(Math.asin(curPoint.radius/radius) + diffDeg)
                     };
                     curPoint.right_2 = {
-                        pointX:center.pointX + innerRadius*Math.sin(Math.asin(curPoint.radius/innerRadius) - diffDeg2),
-                        pointY:center.pointY - innerRadius*Math.cos(Math.asin(curPoint.radius/innerRadius) - diffDeg2)
+                        pointX:center.pointX + radius*Math.sin(Math.asin(curPoint.radius/radius) - diffDeg2),
+                        pointY:center.pointY - radius*Math.cos(Math.asin(curPoint.radius/radius) - diffDeg2)
                     };
 
-                    curPoint.endDeg_2 = Math.PI*1.5 - (Math.asin(curPoint.radius/innerRadius) + diffDeg2);
-                    curPoint.startDeg_2 = -Math.PI/2 + (Math.asin(curPoint.radius/innerRadius) - diffDeg);
+                    curPoint.endDeg_2 = Math.PI*1.5 - (Math.asin(curPoint.radius/radius) + diffDeg2);
+                    curPoint.startDeg_2 = -Math.PI/2 + (Math.asin(curPoint.radius/radius) - diffDeg);
 
                 }else {
                     curPoint.left_2 = {
-                        pointX:center.pointX - innerRadius*Math.sin(Math.asin(curPoint.radius/innerRadius) - diffDeg),
-                        pointY:center.pointY + innerRadius*Math.cos(Math.asin(curPoint.radius/innerRadius) - diffDeg)
+                        pointX:center.pointX - radius*Math.sin(Math.asin(curPoint.radius/radius) - diffDeg),
+                        pointY:center.pointY + radius*Math.cos(Math.asin(curPoint.radius/radius) - diffDeg)
                     };
                     curPoint.right_2 = {
-                        pointX:center.pointX + innerRadius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/innerRadius) - diffDeg2),
-                        pointY:center.pointY + innerRadius*Math.sin(Math.PI/2 - Math.asin(curPoint.radius/innerRadius) - diffDeg2)
+                        pointX:center.pointX + radius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/radius) - diffDeg2),
+                        pointY:center.pointY + radius*Math.sin(Math.PI/2 - Math.asin(curPoint.radius/radius) - diffDeg2)
                     };
 
-                    curPoint.startDeg_2 = Math.PI/2 - Math.asin(curPoint.radius/innerRadius) - diffDeg;
-                    curPoint.endDeg_2 = Math.asin(curPoint.radius/innerRadius) - diffDeg2 + Math.PI/2;
+                    curPoint.startDeg_2 = Math.PI/2 - Math.asin(curPoint.radius/radius) - diffDeg;
+                    curPoint.endDeg_2 = Math.asin(curPoint.radius/radius) - diffDeg2 + Math.PI/2;
 
                 }
                 //大圆
@@ -153,22 +173,22 @@ $(function(){
                 context.beginPath();
                 context.lineWidth = 1;
                 context.fillStyle = 'rgba(59, 214, 255, 0.6)';
-                context.moveTo(curPoint.left.pointX + outline/2,curPoint.left.pointY + (outline/2) * val);
+                context.moveTo(curPoint.left.pointX,curPoint.left.pointY);
 
                 if(val > 0.5) {
                     context.bezierCurveTo(
-                        curPoint.left.pointX + (innerRadius/1.5) * 2*(1-val), curPoint.left.pointY + (outline/2) * val + 1.5 * (1 - val)  * innerRadius - valdiff*(1-val),
-                        curPoint.right.pointX - (2 * (1-val) *innerRadius)/1.5, curPoint.right.pointY + (outline/2) * val + valdiff*(1-val),
-                        curPoint.right.pointX - outline/2,curPoint.right.pointY + (outline/2) *(1-val)
+                        curPoint.left.pointX + (radius/1.5) * 2*(1-val), curPoint.left.pointY + (outline/2) * val + 1.5 * (1 - val)  * radius - valdiff*(1-val),
+                        curPoint.right.pointX - (2 * (1-val) *radius)/1.5, curPoint.right.pointY + (outline/2) * val + valdiff*(1-val),
+                        curPoint.right.pointX,curPoint.right.pointY
                     );
                 }else {
                     context.bezierCurveTo(
-                        curPoint.left.pointX + (innerRadius/(1 + val)), curPoint.left.pointY + (outline/2) * val + (1.5*val) *innerRadius - valdiff*val,
-                        curPoint.right.pointX - (2 * val *innerRadius)/(1 + val), curPoint.right.pointY + (outline/2) * val + valdiff*val,
-                        curPoint.right.pointX - outline/2,curPoint.right.pointY + (outline/2) * val
+                        curPoint.left.pointX + (radius/(1 + val)), curPoint.left.pointY + (outline/2) * val + (1.5*val) *radius - valdiff*val,
+                        curPoint.right.pointX - (2 * val *radius)/(1 + val), curPoint.right.pointY + (outline/2) * val + valdiff*val,
+                        curPoint.right.pointX,curPoint.right.pointY
                     );
                 }
-                context.arc(center.pointX, center.pointY, innerRadius - (outline/2)*val, curPoint.startDeg, curPoint.endDeg, false);
+                context.arc(center.pointX, center.pointY, radius, curPoint.startDeg, curPoint.endDeg, false);
                 context.fill();
                 context.closePath();
 
@@ -181,25 +201,32 @@ $(function(){
 
 
                 if(val > 0.5) {
-                    context.moveTo(curPoint.left_2.pointX + outline/2* (1-val),curPoint.left_2.pointY - outline/2* (1-val) );
+                    context.moveTo(curPoint.left_2.pointX,curPoint.left_2.pointY);
                     context.bezierCurveTo(
-                        curPoint.left_2.pointX + (innerRadius*Math.sin(Math.asin(curPoint.radius/innerRadius) - diffDeg))*(0.8),curPoint.left_2.pointY + innerRadius*((1 - val)*(1 - val)),
-                        (innerRadius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/innerRadius) - diffDeg))*((1 - val)*(1 - val)) + center.pointX, curPoint.right_2.pointY,
-                        curPoint.right_2.pointX - outline/2* (1-val),curPoint.right_2.pointY - outline/2* (1-val)
+                        curPoint.left_2.pointX + (radius*Math.sin(Math.asin(curPoint.radius/radius) - diffDeg))*(0.8),curPoint.left_2.pointY + radius*((1 - val)*(1 - val)),
+                        (radius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/radius) - diffDeg))*((1 - val)*(1 - val)) + center.pointX, curPoint.right_2.pointY,
+                        curPoint.right_2.pointX,curPoint.right_2.pointY
                     );
-                    context.arc(center.pointX, center.pointY, innerRadius - (outline/2) * (1-val), curPoint.startDeg_2, curPoint.endDeg_2, false);
+                    context.arc(center.pointX, center.pointY, radius, curPoint.startDeg_2, curPoint.endDeg_2, false);
                 }else {
-                    context.moveTo(curPoint.left_2.pointX + outline/2*val,curPoint.left_2.pointY - outline/2*val );
+                    context.moveTo(curPoint.left_2.pointX,curPoint.left_2.pointY);
                     context.bezierCurveTo(
-                        curPoint.left_2.pointX + (innerRadius*Math.sin(Math.asin(curPoint.radius/innerRadius) - diffDeg))*(1),curPoint.left_2.pointY + innerRadius*(val*val),
-                        (innerRadius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/innerRadius) - diffDeg))*(val*val) + center.pointX, curPoint.right_2.pointY,
-                        curPoint.right_2.pointX - outline/2*val,curPoint.right_2.pointY - outline/2*val
+                        curPoint.left_2.pointX + (radius*Math.sin(Math.asin(curPoint.radius/radius) - diffDeg))*(1),curPoint.left_2.pointY + radius*(val*val),
+                        (radius*Math.cos(Math.PI/2 - Math.asin(curPoint.radius/radius) - diffDeg))*(val*val) + center.pointX, curPoint.right_2.pointY,
+                        curPoint.right_2.pointX,curPoint.right_2.pointY
                     );
-                    context.arc(center.pointX, center.pointY, innerRadius - (outline/2) * (val), curPoint.startDeg_2, curPoint.endDeg_2, false);
+                    context.arc(center.pointX, center.pointY, radius, curPoint.startDeg_2, curPoint.endDeg_2, false);
                 }
 
                 context.fill();
                 context.closePath();
+
+                if(showFlg) {
+                    if(this.animTimer!==null){
+                        clearInterval(this.animTimer);
+                        this.animTimer = null;
+                    }
+                }
 
 
             },animTime);

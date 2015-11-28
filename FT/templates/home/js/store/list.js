@@ -6,7 +6,7 @@ $(function(){
 		event : function(){
             //拖动切换菜单
             $("body").on("touchstart",".store-list .active",function(e){
-                $(this).stop(true,true);
+                $(".store-list").find("li").stop(true,true);
                 //获取拖拽基本参数
                 $(this).attr("data-start-val",event.touches[0].pageY).attr("data-move-val",event.touches[0].pageY);
                 $(this).attr("data-height",$(this).height());

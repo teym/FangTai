@@ -18,7 +18,7 @@
     display: inline-block;
     overflow: hidden;
     width: 25%;
-    height: 26rem;
+    min-height: 26rem;
     padding:0 0.1rem;
     box-sizing: border-box;
     canvas{}
@@ -124,15 +124,5 @@
     &:last-child{
       border-right:0;
     }
-  }
-}
-@media screen and (min-height: 600px) {
-  .filter-list li,.filter-view{
-    height:28rem;
-  }
-}
-@media screen and (min-height: 700px) {
-  .filter-list li,.filter-view{
-    height: 32rem;
   }
 }

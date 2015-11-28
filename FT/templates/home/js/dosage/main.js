@@ -6,12 +6,9 @@ $(function(){
             //searchData(handlerCanvas,releaseCallback);
             $(window).bind("resize",function(){
                 //定位
-                var $dosage  = $(".dosage"),
-                    $otherH  = $(".main-other").height(),
-                    $dosageH = $dosage.height(),
-                    $top     = $otherH-$dosageH;
-                $dosage.css({position:"relative",top:$top>0?$top:0,bottom:"inherit",minHeight:$dosageH});
-                $(".main-other").css({minHeight:$dosageH});
+                var $otherH  = $(".main-other").height();
+                $(".dosage").css({position:"relative",height:$otherH});
+                $(".dosage-main").css({height:$otherH-$(".menu-bar").height()-$(".submenu-bar").height()});
             }).trigger("resize");
             init.setCanvas('showdata');
         },
@@ -407,7 +404,7 @@ Canvas = function(id,param){
         context.beginPath();
         context.font = fontSize + ' FZLTCXHJW';
         var text=context.measureText(textVal);
-        context.fillStyle = 'RGBA(255,255,255,1)';
+        context.fillStyle = 'RGBA(255,255,255,0.8)';
         context.fillText(textVal,xVal + (width / 2) - (text.width /2),yVal);
         context.closePath();
     }
@@ -422,7 +419,7 @@ Canvas = function(id,param){
         var week = ['日','一','二','三','四','五','六'];
         for(var i = 1;i <= timeType;i++) {
             context.beginPath();
-            context.strokeStyle = 'RGBA(255,255,255,0.5)';
+            context.strokeStyle = 'RGBA(255,255,255,0.3)';
             context.lineWidth = '1';
             context.moveTo(widthEvery * i , 0);
             context.lineTo(widthEvery * i , height);

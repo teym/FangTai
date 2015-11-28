@@ -8,11 +8,21 @@ $(function(){
             init.event();
             //progress.drawProgress(70,'wash');//pollutant,wash
             if(!window.HerkIf){
-                $(".open").click();
-                //progress.drawProgress(80,'pollutant');
+                $(".switch .open").click();
             }
         },
         event : function(){
+            //冲洗经过效果
+            $(".wash-btn").on("touchstart",function(){
+                if($(this).hasClass("true")){
+                    $(this).addClass("opacity8");
+                }
+            }).on("touchend",".wash-btn.true",function(){
+                var self = $(this);
+                setTimeout(function(){
+                    self.removeClass("opacity8");
+                },100);
+            });
             //开关切换
             $("body").on("click",".switch input",function(){
                 if($(this).hasClass("active")){
@@ -45,7 +55,7 @@ $(function(){
                     Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"02022001\")");//开启净水器
                 }else{
                     var $this = $(this);
-                    $this.val('冲洗中');
+                    $this.val('冲洗中').addClass("underway").removeClass("true");
                     $(".purifier-text").text("冲洗中");
                     progress.washProgress(30,'wash');
                 }
@@ -82,7 +92,7 @@ document.addEventListener('HekrSDKReady',function(){
       }
       //冲洗中
       if(msg[1]==2&&msg[2]==20&&msg[3]==1){
-          $('#wash').val('冲洗中');
+          $('#wash').val('冲洗中').addClass("underway").removeClass("true");
           $(".purifier-text").text("冲洗中");
           progress.washProgress(30,'wash');
       }
@@ -234,6 +244,7 @@ var Progress = function(){
                     washFlg = true;
                     clearInterval(animTimer);
                     animTimer = null;
+                    $('#wash').addClass("true").removeClass("opacity8");
                 }
             },20);
 
@@ -263,9 +274,9 @@ var Progress = function(){
                 if(valTemp === 0) {
                     $(".purifier-caption").html("0<span>%</span>");
                     $(".purifier-text").text('污染度');
-                    $('#wash').val('冲洗完毕');
+                    $('#wash').val('冲洗完毕').removeClass("underway true opacity8");
                     lastTimerOut = setTimeout(function(){
-                        $('#wash').val('冲洗');
+                        $('#wash').val('冲洗').removeClass("underway").addClass("true");
                         washFlg = true;
                     },2000);
                     clearInterval(animTimer);
@@ -280,12 +291,12 @@ var Progress = function(){
             if(animTimer !== null) {
                 washFlg = true;
                 $(".purifier-text").text('污染度');
-                $('#wash').val('冲洗');
+                $('#wash').val('冲洗').removeClass("underway true");
                 context.clearRect(0,0,2*outerRadius,2*outerRadius);
                 clearInterval(animTimer);
                 animTimer = null;
             }else if(lastTimerOut !== null) {
-                $('#wash').val('冲洗');
+                $('#wash').val('冲洗').removeClass("underway true");
                 washFlg = true;
                 context.clearRect(0,0,2*outerRadius,2*outerRadius);
                 clearTimeout(lastTimerOut)

@@ -5,11 +5,12 @@ $(function(){
             init.event();
             $(window).bind("resize",function(){
                 //定位
-                var $filter  = $(".filter-list"),
-                    $otherH  = $(".main-other").height(),
+                var $filter  = $(".filter-list");
+                $filter.find("li").height($(window).height()*0.6);
+                var $otherH  = $(".main-other").height(),
                     $filterH = $filter.height(),
                     $top     = $otherH-$filterH;
-                $filter.css({position:"relative",top:$top>0?$top:0,bottom:"inherit",minHeight:$filterH});
+                $filter.css({position:"relative",top:$top>0?$top:0,bottom:"inherit"});
             }).trigger("resize");
             //画滤
             if(!window.HerkIf){

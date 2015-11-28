@@ -4,13 +4,15 @@ $(function(){
             init.event();
             $(window).bind("resize",function(){
                 //定位
+                $(".filter-view").height($(window).height()*0.6);
                 var $WH = $(window).height(),
                     $FH = $(".filter-view-list").height(),
                     $H  = $(".main-header").height();
                 //$("#main").css({minHeight:$WH-$FH>$H?$WH:$H,paddingBottom:$WH-$FH>$H?0:$FH});
-                $(".buy-filter-caption").css({marginBottom:$WH-$H-$FH-1});
+                $(".buy-filter-caption").css({marginBottom:$WH-$H-$FH<0?0:$WH-$H-$FH});
                 $(".history").css({display:"table-cell"});
             }).trigger("resize");
+            $(".filter-view-list").find("li").css({left:-location.href.split("num=")[1].split("&")[0]*$(window).width()});
             //画滤
             var $li = $(".filter-view-list").find(">ul>li");
             for(var i=0;i<$li.length;i++){

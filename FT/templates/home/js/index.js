@@ -10,11 +10,11 @@ $(function(){
             if(!window.HerkIf){
                 var $time = setInterval(function(){
                     $malfunction.eq(random(0,$len-1)).show().siblings().hide();
-										if(!window.HerkIf){
-											 clearInterval($time);
-											 $malfunction.hide();
-										}
-                },1000);
+                    if(!window.HerkIf){
+                         clearInterval($time);
+                         $malfunction.hide();
+                    }
+            },1000);
             }
 		},
 		event : function(){
@@ -243,7 +243,7 @@ $(function(){
                 //获取拖拽基本参数
                 $(this).attr("data-start-val",event.touches[0].pageX).attr("data-move-val",event.touches[0].pageX);
                 $(this).attr("data-width",$(this).find(".active").width());
-                $(this).attr("data-siblings-width",$(this).find(".active").siblings().width());
+                $(this).attr("data-siblings-width",$("#nav").find(">ul>li").find("li:not(.active)").width());
                 //设置选中菜单为移动中的ICON
                 $(this).find(".active").addClass("moveLi selected");
             }).bind("touchmove",function(e){
@@ -411,6 +411,8 @@ $(function(){
                 $(".control-portion,.control-portion li").height($H*0.425);//控制
                 $(".water-portion,.water-portion li").height($H*0.37);//水质
                 $(".serve-portion,.serve-portion li").height($H*0.205);//服务
+                console.log($liWidth);
+                //$li.find("li").width($liWidth*1.5);
                 $li.find(".active").css({width:$W-($liWidth*2)});
                 //42.5  37  20.5
                 //为下面元素设计百分比

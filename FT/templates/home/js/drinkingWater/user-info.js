@@ -35,10 +35,39 @@ $(function(){
                 }
                 $(this).addClass("active").siblings().removeClass("active");
             });
+            //表单键盘控制
+            new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
-
-
+            //切换编辑状态
+            $("body").on("touchend",".icon-set2",function(){
+                if($(this).hasClass("active")){
+                    $(this).removeClass("active");
+                    $(".text").find("input").attr("disabled",true).siblings("b").show();
+                }else{
+                    $(this).addClass("active");
+                    $(".text").find("input").attr("disabled",false).siblings("b").hide();
+                }
+                return false;
+            });
+            //更换性别
+            $("body").on("touchstart",".icon-boy,.icon-girl",function(){
+                if($(".icon-set2").hasClass("active")){
+                    if($(this).hasClass("icon-boy")){
+                        $(this).addClass("icon-girl").removeClass("icon-boy");
+                    }else{
+                        $(this).removeClass("icon-girl").addClass("icon-boy");
+                    }
+                }
+            });
+            //离开编辑个人信息
+            $("body").on("focus",".text input",function(){
+                $(this).css({color:"#adf020"});
+            }).on("blur",".text input",function(){
+                var $val = $(this).css({color:"#fff"}).val();
+                $(this).siblings("span").show();
+                //$(this).hide().siblings("b").show().text($val);
+            });
 		},
 	};
 	init.base();

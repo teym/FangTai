@@ -5,6 +5,7 @@ $(function(){
             init.event();
             $(window).bind("resize",function(){
                 //定位
+                $(".waterQuality-view").height($(window).height()*0.7);
                 var $WH = $(window).height(),
                     $FH = $(".waterQuality-view").height(),
                     $H  = $(".main-header").height();

@@ -18,6 +18,7 @@ $(function(){
             //}).trigger("resize");
         },
         event : function(){
+            
             //显示热水器
             $(".icon-add").on("touchend",function(){
                 $(".nav-WaterPurifier").show().find(".active").removeClass("active");

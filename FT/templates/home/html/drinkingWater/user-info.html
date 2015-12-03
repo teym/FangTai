@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>方太净水器</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../css/public/style.css">
+    <link rel="stylesheet" href="../../css/drinkingWater/drinkingWater.css">
+</head>
+<body class="bg-darkgray">
+<main id="main">
+    <div class="main-header user-info-box clearfix">
+        <!--个人信息-->
+        <div class="user-info">
+            <h3>个人信息<i class="icon icon-set2"></i></h3>
+            <div class="pr">
+                <a data-href="home.html" href="javascript:void(0)" data-title="返回饮水主页面" class="close-userInfo back"></a>
+                <ul>
+                    <li class="nickname">
+                        <img class="portrait" src="../../images/drinkingWater/photo_0002.png" alt="用户头像">
+                        <h5>昵称</h5>
+                        <div class="text">
+                            <input name="nick" disabled value="王大一"/>
+                            <i class="icon-boy"></i>
+                        </div>
+                    </li>
+                    <li class="age">
+                        <h5>年龄</h5>
+                        <div class="text">
+                            <input maxlength="3" disabled name="age" value="26"/>
+                        </div>
+                    </li>
+                    <li class="line-bottom line-right">
+                        <h5>身高</h5>
+                        <div class="text">
+                            <input class="small" disabled maxlength="3" name="height" value="171"/>
+                            <span>mm</span>
+                        </div>
+                    </li>
+                    <li class="line-bottom">
+                        <h5>体重</h5>
+                        <div class="text">
+                            <input class="small" disabled maxlength="3" name="weight" value="62"/>
+                            <span>kg</span>
+                        </div>
+                    </li>
+                    <li class="line-right">
+                        <h5>起床时间</h5>
+                        <div class="text">
+                            <input name="weight" disabled value="07:30"/>
+                        </div>
+                    </li>
+                    <li>
+                        <h5>睡觉时间</h5>
+                        <div class="text">
+                            <input name="weight" disabled value="23:30"/>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="Drink-water-records" id="data_content">
+        <div class="summary">
+            <dl>
+                <dt>本周喝水</dt>
+                <dd><strong>13650</strong>/14000CC</dd>
+            </dl>
+        </div>
+        <canvas id="showdata"></canvas>
+    </div>
+    <div class="submenu-bar">
+        <input type="button" class="active" value="周"/>
+        <input type="button" value="月"/>
+        <input type="button" value="年"/>
+    </div>
+</main>
+</body>
+<script src="../../js/plugIn/jquery-1.11.3.min.js"></script>
+<script src="../../js/plugIn/UARTDATA.js"></script>
+<script src="../../js/plugIn/Font.js"></script>
+<script src="../../js/public/base.js"></script>
+<script src="../../js/drinkingWater/user-info.js"></script>
+</html>

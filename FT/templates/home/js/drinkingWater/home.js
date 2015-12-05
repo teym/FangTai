@@ -9,9 +9,9 @@ $(function(){
             canvas.attr("height",$showWater.width());
             //获取前次数据 -- 每天自动清空
             var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
-            var val = init.getLocalStorage(paramStr);
+            var val = com.fangtai.localStorage.getDrinkWaterDate(paramStr);
             if(val > 0) {
-                var selectedStr = localStorage.getItem('selected_index');
+                var selectedStr = com.fangtai.localStorage.getDrinkWater_SaveIndex();
                 var indexList = selectedStr.split(','),len = indexList.length;
                 for(var i = 0; i < len; i++) {
                     $('.main-other li').eq(indexList[i]).find('.icon > i').attr('class','icon-success');
@@ -33,15 +33,15 @@ $(function(){
                 //获取页面最小高度
                 var $H = $(window).height(),
                     $header = $(".main-header").height();
+                $(".quantum-transparency").css({height:$H-$header,minHeight:"0"});
                 $(".main-other").css({height:$H-$header,minHeight:"0"});
             }).trigger("resize");
 		},
 		event : function(){
-            //勾选饮水
+            //实现勾选饮水效果
             var timer = null,preVal = Number($(".show-water").attr("data-val"));
-            $("body").on("touchend",".main-other .icon",function(){
+            $("body").on("click",".main-other .icon",function(){
                 var $li = $(this).closest("li");
-
                 if(!$li.hasClass("success")){
                     $li.addClass("success")
                     if(window.HerkIf){
@@ -59,7 +59,7 @@ $(function(){
 
                         //保存当前数据
                         var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
-                        init.saveLocalStorage(paramStr,$val,$('.main-other li').index($li));
+                        com.fangtai.localStorage.setDrinkWaterDate(paramStr,$val,$('.main-other li').index($li));
                         //time文字变化速度
                         var time = 50,textObj = $(".show-water").find("b"),canvasId = canvas.attr("id"),showFlg = true;
                         if(timer === null) {
@@ -90,6 +90,28 @@ $(function(){
 
                     }
                 }
+            });
+            //滑动饮水时间
+            $(".quantum-transparency").on("touchstart",function(){
+                $(this).attr("Stop",$(".main-other").scrollTop());
+                $(this).attr("startY",event.touches[0].pageY);
+                $(this).attr("moveY",event.touches[0].pageY);
+            }).on("touchmove",function(){
+                    $(this).attr("moveY",event.touches[0].pageY);
+                    var $Stop   = parseFloat($(this).attr("Stop")),
+                        $startY = parseFloat($(this).attr("startY")),
+                        $moveY  = parseFloat($(this).attr("moveY")),
+                        $val    = $Stop-($moveY-$startY);
+                    console.log($val);
+                    $(this).scrollTop($val);
+                    $(".main-other").scrollTop($val);
+                    return false;
+                });
+            //勾选饮水
+            $("body").on("touchend",".quantum-transparency .icon",function(){
+                var $len = $(this).closest("li").prevAll().length;
+                console.log($len);
+                $(".main-other").find(".icon").eq($len).click();
             });
 		},
         playDrinkingWater : function(info){
@@ -256,20 +278,6 @@ $(function(){
 
 
             },animTime);
-        },
-        saveLocalStorage : function(paramStr, val, index) {
-            localStorage.setItem(paramStr,val);
-            var indexList = localStorage.getItem('selected_index') || '';
-            localStorage.setItem('selected_index',indexList + ',' + index);
-        },
-        getLocalStorage  : function(paramStr){
-            var val = localStorage.getItem(paramStr);
-            if(val === null || val === undefined) {
-                localStorage.clear();
-                return 0;
-            }
-
-            return Number(val);
         }
 	};
 	init.base();

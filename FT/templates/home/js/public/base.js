@@ -226,3 +226,32 @@ var inputControl = function($obj) {
         }
     })
 };
+
+//方太缓存
+var com = {};
+if(!com.fangtai) {
+    com.fangtai = {};
+}
+
+com.fangtai.localStorage = {
+    setDrinkWaterDate : function(paramStr, val, index){
+        localStorage.setItem(paramStr,val);
+        localStorage.setItem('drinkWater_date',paramStr);
+        var indexList = localStorage.getItem('selected_index') || '';
+        localStorage.setItem('selected_index',indexList + ',' + index);
+    },
+    getDrinkWaterDate : function(paramStr){
+        var val = localStorage.getItem(paramStr);
+        if(val === null || val === undefined) {
+            localStorage.setItem('selected_index',null);
+            var date = localStorage.getItem('drinkWater_date');
+            localStorage.setItem(date,null);
+            return 0;
+        }
+
+        return Number(val);
+    },
+    getDrinkWater_SaveIndex: function(){
+        return localStorage.getItem('selected_index') || '';
+    }
+}

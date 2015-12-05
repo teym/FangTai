@@ -3,6 +3,7 @@ $(function(){
   //window.HerkIf = true;
   window.progress = null;
   window.progress = new Progress();
+  progress.initData('last',12);
     var init = {
         base : function(){
             init.event();
@@ -38,7 +39,7 @@ $(function(){
                     $(this).addClass("active").siblings().removeClass("active");
                     if($(this).hasClass("open")){
                         $(".purifier").addClass("open").removeClass("close");
-                        progress.drawProgress(80,'pollutant');
+                        progress.drawProgress(80,'pre');
                     }else{
                         $(".purifier").addClass("close").removeClass("open");
                         progress.stopAnim();
@@ -88,7 +89,7 @@ document.addEventListener('HekrSDKReady',function(){
       //反馈污染度
       if(msg[1]==8&&msg[2]==21){
           progress.stopAnim();
-          progress.drawProgress(parseInt(msg[3],16),'pollutant');
+          progress.drawProgress(parseInt(msg[3],16),'pre');
       }
       //冲洗中
       if(msg[1]==2&&msg[2]==20&&msg[3]==1){
@@ -148,7 +149,35 @@ var Progress = function(){
         animTimer = null,
         lastTimerOut = null;
 
+    var $purifierCaption = $('purifier-caption');
+
     var washFlg = true;
+
+    var curUse = {pre:null,next:null};
+
+    var config = {
+        purifier:{
+            text:'污染度',
+            text_color:'#FFF',
+            unit:'%',
+            color:'#f50000',
+            type : 'pollutant'
+        },
+        last:{
+            text:'距上次<div>冲洗时间</div>',
+            text_color:'rgb(102,255,51)',
+            unit:'小时',
+            color:'rgb(102,255,51)',
+            type : 'last'
+        },
+        wash:{
+            text:'冲洗中',
+            text_color:'#FFF',
+            unit:'s',
+            color:'#2cbfe9',
+            type : 'wash'
+        },
+    }
 
     init();
 
@@ -164,6 +193,8 @@ var Progress = function(){
         center = {pointX:canvas.width/2,pointY:canvas.height/2};
         outerRadius = canvas.width/2,
             innerRadius = outerRadius - cirWidth;
+
+
     }
 
     function drawCirProgress(){
@@ -184,7 +215,7 @@ var Progress = function(){
         var startDeg = 0,
             endDeg = 0;
 
-        var cssStyle = type === 'pollutant'?(val >= 70?'#f50000':'#2cbfe9'):'#2cbfe9';
+        var cssStyle = type === 'pre'?curUse.pre.color:curUse.next.color;
         if(val < sval) {
             var precent = val/(sval);
             startDeg = Math.PI/4 - precent*Math.PI/2;
@@ -231,16 +262,31 @@ var Progress = function(){
     }
 
     return publicMethod = {
+        initData: function(preType,val){
+            var pre = curUse.pre = config[preType];
+            curUse.next = config.wash;
+            $(".purifier-caption").css('color',pre.text_color);
+            $('.purifier-text').html(pre.text);
+        },
         drawProgress: function(val, type) {
-            var valTemp = 0;
+            var valTemp = 0,curVal = 0;
+            if(val > 0) {
+                curVal = Math.floor(((val % 12)/12) * 100);
+                curVal = curVal === 0? 100 : curVal;
+            }
             washFlg = false;
+            if(type === 'pre') {
+                unit = curUse.pre.unit;
+            }else {
+                unit = curUse.next.unit;
+            }
             animTimer = setInterval(function(){
                 valTemp++;
-                $(".purifier-caption").html(valTemp+"<span>%</span>");
+                $(".purifier-caption").html(Math.floor(valTemp * 12 / 100)+ '<span>' + unit  + '</span>');
                 context.clearRect(0,0,2*outerRadius,2*outerRadius);
                 drawCirProgress();
                 drawProgressVal(valTemp, type);
-                if(valTemp === val) {
+                if(valTemp === curVal) {
                     washFlg = true;
                     clearInterval(animTimer);
                     animTimer = null;
@@ -252,6 +298,8 @@ var Progress = function(){
         washProgress: function(val,type,callback) {
             var valTemp = 0,startFlg = true,valDiffTemp = val/12,valDiff = 5/val;
             washFlg = false;
+
+            var unit = curUse.next.unit,color = curUse.next.text_color;
             animTimer = setInterval(function(){
                 if(valTemp >=100) {
                     startFlg = false;
@@ -266,14 +314,14 @@ var Progress = function(){
                     context.clearRect(0,0,2*outerRadius,2*outerRadius);
                     drawCirProgress();
                 }
-
+                $(".purifier-caption").css('color',color);
                 drawProgressVal(valTemp, type);
                 var $val = Math.ceil(valTemp*30/100);
-                $(".purifier-caption").html($val+"<span>s</span>");
+                $(".purifier-caption").html($val + '<span>' + unit  + '</span>');
                 //$(".purifier-text").text("冲洗中");
                 if(valTemp === 0) {
-                    $(".purifier-caption").html("0<span>%</span>");
-                    $(".purifier-text").text('污染度');
+                    $(".purifier-caption").html('0' + '<span>' + curUse.pre.unit  + '</span>');
+                    $(".purifier-text").html(curUse.pre.text);
                     $('#wash').val('冲洗完毕').removeClass("underway true opacity8");
                     lastTimerOut = setTimeout(function(){
                         $('#wash').val('冲洗').removeClass("underway").addClass("true");

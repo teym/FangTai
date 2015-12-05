@@ -3,11 +3,11 @@
   position: relative;
   margin: 0rem 0 0.4rem;
   color: #8c8c8c;
-  font-size: 1rem;
+  font-size: 1.2rem;
   //展示
   .show-water{
     position: relative;
-    width: 69%;
+    width: 71%;
     margin:0 auto;
     h5{
       position: absolute;
@@ -35,33 +35,31 @@
   .user-head{
     position: absolute;
     top:-2rem;
-    right:0.8rem;
+    right:3.5%;
+    width: 17.2%;
     color: #8c8c8c;
     text-align: center;
-    i{
-      display: block;
-      width: 4.2rem;
-      height: 4.2rem;
+    img{
+      width: 100%;
       margin-bottom: .5rem;
       border:.4rem solid #606060;
       border-radius: 100%;
+      box-sizing: border-box;
       box-shadow: 0 .2rem .6em #848484;
-      img{
-        width: 100%;
-      }
     }
   }
   //每日一润
   .every-day-info{
     position: absolute;
     bottom: 0.2rem;
-    left: 0.5rem;
+    left: 3.5%;
+    width: 13%;
     color: #8c8c8c;
     text-align: center;
-    i{
+    white-space: nowrap;
+    img{
       display: block;
-      width: 4.5rem;
-      height: 4.5rem;
+      width: 120%;
     }
   }
 }
@@ -92,10 +90,9 @@
   .icon-downward{
     margin-top: 0rem;
   }
-
   //列表
-  ul{
-    overflow: auto;
+  >ul{
+    overflow: hidden;
     position: relative;
     min-height: 15rem;
   }
@@ -183,15 +180,50 @@
     }
   }
 }
+//点击焦点
+.quantum-transparency{
+  overflow: hidden;
+  position: absolute;
+  top:0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  li{
+    position: relative;
+    width: 50%;
+    min-height: 4rem;
+    margin-top: -1rem;
+    padding-right: 5.5rem;
+    box-sizing: border-box;
+    text-align: right;
+    &:before{
+      display: none;
+    }
+    //图标
+    .icon{
+      position: absolute;
+      top:50%;
+      right:2rem;
+      width: 4rem;
+      height: 4rem;
+      margin-top: -2rem;
+      border:.3rem solid transparent;
+      background: rgba(255,255,255,0);
+      box-sizing: border-box;
+    }
+  }
+}
 //上下背景
 .time-quantum-top-bg,.time-quantum-bottom-bg{
   position: absolute;
   top:0;
   left: 0;
+  z-index: 1;
   width: 100%;
-  height: 60px;
+  height: 100px;
   background: url("../../images/drinkingWater/time-quantum-top-bg.png") repeat-x;
-  opacity: 0.25;
+  opacity: 1;
 }
 .time-quantum-bottom-bg{
   top:inherit;
@@ -294,11 +326,11 @@
     text-shadow: 0 0 2px #999;
     text-align: center;
   }
-  ul{
+  >div>ul{
     padding-top: 3.5rem;
     text-align: center;
   }
-  li{
+  >div>ul>li{
     display: inline-block;
     position: relative;
     width: 40%;
@@ -349,16 +381,6 @@
       height: 3.5rem;
       margin:-0.6rem 0 0 -3rem;
     }
-    //男女标签
-    .icon-boy,.icon-girl{
-      position: absolute;
-      top:50%;
-      right:0;
-      width: 1.5rem;
-      height: 1.5rem;
-      margin:-0.9rem 0 0 0rem;
-    }
-
     //昵称年龄
     &.nickname,&.age{
       padding-left: 2rem;
@@ -369,25 +391,33 @@
         color: #999;
         font-size: 1rem;
       }
-      .text{
-        padding-right: 3rem;
-        text-align: right;
-        input{
-          text-align: right;
-        }
+      input{
+        padding-left: 1rem;
+        text-align: left;
       }
     }
     &.age{
       padding-left: 0;
-      h5{
-        padding-left: 1rem;
-      }
-      .text{
-        padding-left: 3.5rem;
-        text-align: left;
-        input{
-          text-align: left;
+      .sub-list{
+        li{
+          display: inline-block;
+          width: 4rem;
+          &:first-child{
+            width: 2.8rem;
+          }
         }
+      }
+      h5{
+        padding-left: 0rem;
+      }
+      input{
+        padding-left: 0;
+      }
+      //男女标签
+      .icon-boy,.icon-girl{
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-left: -1.2rem;
       }
     }
   }

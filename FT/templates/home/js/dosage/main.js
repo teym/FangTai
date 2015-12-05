@@ -160,7 +160,7 @@ Canvas = function(id,param){
                 $(".day-info").css({opacity:0});
             };//释放
         var showDataTimer = null,
-            leastTime = 200;//持续时间
+            leastTime = 0;//持续时间
         //点击
         $('#' + id).bind('touchstart',function(event) {
             //周数据有效
@@ -278,49 +278,86 @@ Canvas = function(id,param){
             if( index === 0) {
                 lineParam.push(dataList);
                 lineParam.push(controlList);
-                //画突出线
-                context.beginPath();
-                context.globalCompositeOperation="destination-over";
                 context.strokeStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
-
                 var lineWidth = width*0.0015;
                 context.lineWidth = width*0.015;
                 context.moveTo(0,dataList[0]- lineWidth);
-                var k = 1;
-                if(initFlg) {
-                    initFlg = false;
-                    var anim = setInterval(function(){
-                        var dataListTemp = lineParam[0];
-                        var controlListTemp = lineParam[1];
-                        if( k === block) {
-                            clearInterval(anim);
-                            anim = null;
-                        }else {
-                            context.beginPath();
-                            context.lineTo(pointA[k - 1],dataListTemp[k] - lineWidth);
-                            context.bezierCurveTo(controlListTemp[k - 1].pointAX,controlListTemp[k - 1].pointAY - lineWidth,controlListTemp[k - 1].pointBX,controlListTemp[k - 1].pointBY - lineWidth,pointA[k],dataListTemp[k + 1] - lineWidth);
-                            k++;
-                            context.stroke();
-                            context.closePath();
-                        }
-                    },100);
-                }else {
-                    while(k < block) {
-                        context.lineTo(pointA[k - 1],dataList[k] - lineWidth);
-                        context.bezierCurveTo(controlList[k - 1].pointAX,controlList[k - 1].pointAY - lineWidth,controlList[k - 1].pointBX,controlList[k - 1].pointBY - lineWidth,pointA[k],dataList[k + 1] - lineWidth);
-                        k++;
+                //画突出线
+                if(timeType === 7) {
+                    context.beginPath();
+                    context.globalCompositeOperation="source-over";
+                    context.lineWidth = width*0.015/2;
+                    var j = 1;
+
+                    while(j <= block) {
+                        context.lineTo(pointA[j - 1],dataList[j] - lineWidth);
+                        j++;
                     }
                     context.stroke();
                     context.closePath();
-                }
+                    j = 1;
+                    context.beginPath();
+                    context.fillStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
+                    context.arc(pointA[j - 1] + widthEvery/2,(dataList[j] - lineWidth) + (dataList[j + 1] - dataList[j]) /3,lineWidth * 10,0,Math.PI * 2,true);
+                    context.fill();
+                    context.closePath();
+                    j++;
+                    while(j < block) {
+                        context.beginPath();
+                        context.fillStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
+                        context.arc(pointA[j - 1],dataList[j] - lineWidth,lineWidth * 10,0,Math.PI * 2,true);
+                        context.fill();
+                        context.closePath();
+                        j++;
+                    }
 
-                var len = nullData.length;
-                //console.log('nullData',nullData);
-                for(var nullIndex = 0; nullIndex < len; nullIndex++) {
-                    drawDotted(nullData[nullIndex]);
+                    context.beginPath();
+                    context.fillStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
+                    context.arc(pointA[j - 1] - widthEvery/2,(dataList[j] - lineWidth) - (dataList[j] - dataList[j - 1]) /3,lineWidth * 10,0,Math.PI * 2,true);
+                    context.fill();
+                    context.closePath();
+
+
+
+                }else {
+                    context.beginPath();
+                    context.globalCompositeOperation="destination-over";
+                    context.lineWidth = width*0.015;
+                    var k = 1;
+                    if(initFlg) {
+                        initFlg = false;
+                        var anim = setInterval(function(){
+                            var dataListTemp = lineParam[0];
+                            var controlListTemp = lineParam[1];
+                            if( k === block) {
+                                clearInterval(anim);
+                                anim = null;
+                            }else {
+                                context.beginPath();
+                                context.lineTo(pointA[k - 1],dataListTemp[k] - lineWidth);
+                                context.bezierCurveTo(controlListTemp[k - 1].pointAX,controlListTemp[k - 1].pointAY - lineWidth,controlListTemp[k - 1].pointBX,controlListTemp[k - 1].pointBY - lineWidth,pointA[k],dataListTemp[k + 1] - lineWidth);
+                                k++;
+                                context.stroke();
+                                context.closePath();
+                            }
+                        },100);
+                    }else {
+                        while(k < block) {
+                            context.lineTo(pointA[k - 1],dataList[k] - lineWidth);
+                            context.bezierCurveTo(controlList[k - 1].pointAX,controlList[k - 1].pointAY - lineWidth,controlList[k - 1].pointBX,controlList[k - 1].pointBY - lineWidth,pointA[k],dataList[k + 1] - lineWidth);
+                            k++;
+                        }
+                        context.stroke();
+                        context.closePath();
+                    }
+
+                    var len = nullData.length;
+                    //console.log('nullData',nullData);
+                    for(var nullIndex = 0; nullIndex < len; nullIndex++) {
+                        drawDotted(nullData[nullIndex]);
+                    }
                 }
             }
-
         }
     }
 
@@ -651,6 +688,8 @@ Canvas = function(id,param){
          */
         changeDataType:function(type){
             dataType = type;
+            var colorStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)'
+            $('.dosage-main .day-info dd strong').css('color',colorStyle);
             changeText();
             clearCanva();
             drawAllData(data.waterData,data.eleData);

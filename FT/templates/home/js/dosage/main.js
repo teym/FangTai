@@ -153,10 +153,11 @@ Canvas = function(id,param){
         var handler = param.handlerCallback || function(data,num){
                 var text = ["周日","周一","周二","周三","周四","周五","周日"],
                     $day = text[num - 1];
-                $(".day-info").css({opacity:1}).find("dt").text($day);
+                $(".day-info").css({opacity:0}).animate({opacity:1},500).find("dt").text($day);
                 $(".day-info").find("strong").text(data);
             },//长按
             release = param.releaseCallback || function(){
+                return;
                 $(".day-info").css({opacity:0});
             };//释放
         var showDataTimer = null,
@@ -286,7 +287,8 @@ Canvas = function(id,param){
                 if(timeType === 7) {
                     context.beginPath();
                     context.globalCompositeOperation="source-over";
-                    context.lineWidth = width*0.015/2;
+                    context.strokeStyle = 'RGBA(25,161,199,0.8)';
+                    context.lineWidth = width*0.015;
                     var j = 1;
 
                     while(j <= block) {

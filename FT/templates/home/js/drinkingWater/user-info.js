@@ -168,32 +168,68 @@ var Canvas = function(id,param){
         dataList = getShowData(data);
         controlList = getControlPoint(dataList);
 
+        context.beginPath();
+        //if(index === 1) {
+        context.globalCompositeOperation="destination-over";
+        //}
+        context.moveTo(0,dataList[0]);
+
+        for(var j = 1;j < block;j++) {
+            context.lineTo(pointA[j - 1],dataList[j])
+            context.bezierCurveTo(controlList[j - 1].pointAX,controlList[j - 1].pointAY,controlList[j - 1].pointBX,controlList[j - 1].pointBY,pointA[j],dataList[j + 1])
+
+        }
+        context.lineTo(width,height);
+        context.lineTo(0,height);
+        context.lineTo(0,dataList[0]);
+        context.fillStyle = 'RGBA(255,255,255,0.8)';
+        context.fill();
+        context.closePath();
+        lineParam.push(dataList);
+        lineParam.push(controlList);
+        //画突出线
+        if(timeType === 7) {
+            var lineWidth = width*0.0015;
             context.beginPath();
-            //if(index === 1) {
-            context.globalCompositeOperation="destination-over";
-            //}
-            context.moveTo(0,dataList[0]);
-
-            for(var j = 1;j < block;j++) {
-                context.lineTo(pointA[j - 1],dataList[j])
-                context.bezierCurveTo(controlList[j - 1].pointAX,controlList[j - 1].pointAY,controlList[j - 1].pointBX,controlList[j - 1].pointBY,pointA[j],dataList[j + 1])
-
+            context.globalCompositeOperation="source-over";
+            context.strokeStyle = 'RGBA(25,161,199,0.8)';
+            context.lineWidth = width*0.015/2;
+            context.moveTo(0,dataList[0]- lineWidth);
+            var j = 1;
+            while(j <= block) {
+                context.lineTo(pointA[j - 1],dataList[j] - lineWidth);
+                j++;
             }
-            context.lineTo(width,height);
-            context.lineTo(0,height);
-            context.lineTo(0,dataList[0]);
-            context.fillStyle = 'RGBA(255,255,255,0.8)';
+            context.stroke();
+            context.closePath();
+            j = 1;
+            context.beginPath();
+            context.fillStyle = 'RGBA(25,161,199,0.8)';
+            context.arc(pointA[j - 1] + widthEvery/2,(dataList[j] - lineWidth) + (dataList[j + 1] - dataList[j]) /3,lineWidth * 10,0,Math.PI * 2,true);
             context.fill();
             context.closePath();
-            lineParam.push(dataList);
-            lineParam.push(controlList);
-            //画突出线
+            j++;
+            while(j < block) {
+                context.beginPath();
+                context.fillStyle = 'RGBA(25,161,199,0.8)';
+                context.arc(pointA[j - 1],dataList[j] - lineWidth,lineWidth * 10,0,Math.PI * 2,true);
+                context.fill();
+                context.closePath();
+                j++;
+            }
+
+            context.beginPath();
+            context.fillStyle = 'RGBA(25,161,199,0.8)';
+            context.arc(pointA[j - 1] - widthEvery/2,(dataList[j] - lineWidth) - (dataList[j] - dataList[j - 1]) /3,lineWidth * 10,0,Math.PI * 2,true);
+            context.fill();
+            context.closePath();
+        }else {
             context.beginPath();
             context.globalCompositeOperation="destination-over";
             context.strokeStyle = 'RGBA(25,161,199,0.8)';
 
-            var lineWidth = 2;
-            context.lineWidth = 5;
+            var lineWidth = width*0.0015;
+            context.lineWidth = width*0.015;
             context.moveTo(0,dataList[0]- lineWidth);
             var k = 1;
             if(initFlg) {
@@ -222,6 +258,7 @@ var Canvas = function(id,param){
                 context.stroke();
                 context.closePath();
             }
+        }
     }
 
     /**

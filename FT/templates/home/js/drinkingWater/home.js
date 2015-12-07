@@ -102,7 +102,6 @@ $(function(){
                         $startY = parseFloat($(this).attr("startY")),
                         $moveY  = parseFloat($(this).attr("moveY")),
                         $val    = $Stop-($moveY-$startY);
-                    console.log($val);
                     $(this).scrollTop($val);
                     $(".main-other").scrollTop($val);
                     return false;
@@ -110,7 +109,6 @@ $(function(){
             //勾选饮水
             $("body").on("touchend",".quantum-transparency .icon",function(){
                 var $len = $(this).closest("li").prevAll().length;
-                console.log($len);
                 $(".main-other").find(".icon").eq($len).click();
             });
 		},

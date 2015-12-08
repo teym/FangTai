@@ -8,7 +8,16 @@ $(function(){
             new inputControl($("input:not(input[type='button'])"));
 		},
 		event : function(){
-
+            //本地登陆
+            $("body").on("touchend",".local-login",function(){
+                Hekr.guestLogin(function(user){
+                    if(user){
+                        locahref = "index.html";
+                    }else{
+                        alert("请检查网络");
+                    }
+                });
+            });
 		},
         //登陆背景
         loginBg : function(){

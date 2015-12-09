@@ -6,7 +6,7 @@ $(function(){
             document.documentElement.style.webkitUserSelect = "none";//禁止选中
             init.event();
             clickStyle({box:".defaultClick,.icon-add,.icon-catalogue,.close-userInfo,.close-everyDay,.every-day-info,.user-head,.icon-home",class:"opacity8"});
-            clickStyle({box:".icon-upward,.icon-downward,.hint-modal-box .tools li,.list-info .link",class:"hover"});
+            clickStyle({box:".icon-upward,.icon-downward,.hint-modal-box .tools li,.list-info .link,.hoverClick",class:"hover"});
             //自动获取屏幕最小高度
             //$(window).bind("resize",function(){
                 init.rem();

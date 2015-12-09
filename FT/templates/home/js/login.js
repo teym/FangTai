@@ -9,7 +9,7 @@ $(function(){
 		},
 		event : function(){
             //本地登陆
-            $("body").on("touchend",".local-login",function(){
+            $("body").on("touchend",".localLogin",function(){
                 Hekr.guestLogin(function(user){
                     if(user){
                         locahref = "index.html";

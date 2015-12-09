@@ -287,7 +287,7 @@ Canvas = function(id,param){
                 if(timeType === 7) {
                     context.beginPath();
                     context.globalCompositeOperation="source-over";
-                    context.strokeStyle = 'RGBA(25,161,199,0.8)';
+                    context.strokeStyle = dataType === 'water'?'RGBA(25,161,199,0.8)':'RGBA(218,51,11,0.8)';
                     context.lineWidth = width*0.015;
                     var j = 1;
 

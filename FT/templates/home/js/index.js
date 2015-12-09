@@ -1,5 +1,6 @@
 $(function(){
     //window.HerkIf = true;
+		alert(UARTDATA.encode(0x02,00094104000000000A410401000000));
 	var init = {
 		base : function(){
             init.event();
@@ -20,6 +21,7 @@ $(function(){
 		event : function(){
             //删除净水机
             $("body").on("touchstart",".status-remove",function(){
+							alert($(this).closest("li").attr("data-tid"));
                 $(".cancel-binding").css({display:"table"}).attr("data-tid",$(this).closest("li").attr("data-tid"));
                 return false;
             });
@@ -27,6 +29,7 @@ $(function(){
             $("body").on("touchstart",".cancel-binding li",function(){
                 if($(this).hasClass("submit")){
                     if(window.HerkIf){
+											alert($(".cancel-binding").attr("data-tid"));
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
                             if(ret){
                                 $(".status-remove").fadeOut(500,function(){
@@ -429,7 +432,13 @@ $(function(){
 	init.base();
     //设备反馈
     document.addEventListener('HekrSDKReady',function(){
+			//获取用户信息
+        Hekr.currentUser(function(user){
+            window.uid = user.uid;
+        });
+			  //获取设备列表
         Hekr.getDevices(function(list,error){
+					  localStorage.tid = list[0].tid;
             $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
             $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
             for(var i=0;i<list.length;i++){
@@ -439,5 +448,3 @@ $(function(){
         });
     }, false);
 });
-
-

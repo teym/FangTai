@@ -11,8 +11,9 @@ $(function(){
             //本地登陆
             $("body").on("touchend",".localLogin",function(){
                 Hekr.guestLogin(function(user){
+									  console.log(user);
                     if(user){
-                        locahref = "index.html";
+                        location.href = "index.html"
                     }else{
                         alert("请检查网络");
                     }

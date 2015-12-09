@@ -1,5 +1,7 @@
 $(function(){
+	var tid = localStorage.tid;
     //window.HerkIf = true;
+	alert(tid);
 	var init = {
 		base : function(){
             init.event();
@@ -61,8 +63,10 @@ $(function(){
             $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
             $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
             $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
-        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
-        Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+        //Hekr.sendMsg(tid,"(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
+				alert(UARTDATA.encode(0x02,00094104000000000A410401000000));
+				Hekr.sendMsg(tid,"(uartdata \"00094104000000000A410401000000\")");
+			  Hekr.setMsgHandle(tid,function(str){
             var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
             //console.log(msg,msg[1]==9,msg[2]==41,msg[3]==4);
             if(msg[1]==9&&msg[2]==41&&msg[3]==4){

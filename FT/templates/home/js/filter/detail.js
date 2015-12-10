@@ -1,4 +1,5 @@
 $(function(){
+    window.tid = localStorage.tid;
 	var init = {
 		base : function(){
             init.event();
@@ -195,13 +196,15 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-    var $list  = $(".filter-view-list").find(">ul>li"),
-        $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
-        $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
-        $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
-        $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
-    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
-    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+    // var $list  = $(".filter-view-list").find(">ul>li"),
+    //     $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
+    //     $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
+    //     $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
+    //     $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
+    // Hekr.sendMsg(tid,"(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
+    var $sendMsg = sendInfo("00094104000000000A410400000000");
+    Hekr.sendMsg(tid,$sendMsg);
+    Hekr.setMsgHandle(tid,function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
         if(msg[1]==9&&msg[2]==41&&msg[3]==4){
             var $li = $(".filter-view-list").find(">ul>li");
@@ -220,6 +223,19 @@ document.addEventListener('HekrSDKReady',function(){
                 });
             }
         }
-
+        //选中的滤芯
+        var $num;
+        if(msg[12]==1){
+            $num = 0;
+        }else if(msg[13]==1){
+            $num = 1;
+        }else if(msg[14]==1){
+            $num = 2;
+        }else if(msg[15]==1){
+            $num = 3;
+        }
+        if($num){
+            $(".filter-view-list").find("li").css({left:-$num*$(window).width()});
+        }
     });
 }, false);

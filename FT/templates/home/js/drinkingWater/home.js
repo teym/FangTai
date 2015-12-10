@@ -44,50 +44,45 @@ $(function(){
                 var $li = $(this).closest("li");
                 if(!$li.hasClass("success")){
                     $li.addClass("success")
-                    if(window.HerkIf){
-                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"C2072100fa\")");//设备上报单次用水量
-                    }else{
-                        $(this).find("i").removeClass().addClass("icon-success");
-                        var $water     = Number($li.attr("data-water")),
-                            $showWater = $(".show-water"),
-                            canvas     = $showWater.find("canvas"),
-                            $val       = $water + Number($showWater.attr("data-val")),
-                            max        = $showWater.attr("data-max"),
-                            width      = $showWater.width();
+                    $(this).find("i").removeClass().addClass("icon-success");
+                    var $water     = Number($li.attr("data-water")),
+                        $showWater = $(".show-water"),
+                        canvas     = $showWater.find("canvas"),
+                        $val       = $water + Number($showWater.attr("data-val")),
+                        max        = $showWater.attr("data-max"),
+                        width      = $showWater.width();
 
-                            $showWater.attr("data-val",$val);
+                        $showWater.attr("data-val",$val);
 
-                        //保存当前数据
-                        var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
-                        com.fangtai.localStorage.setDrinkWaterDate(paramStr,$val,$('.main-other li').index($li));
-                        //time文字变化速度
-                        var time = 50,textObj = $(".show-water").find("b"),canvasId = canvas.attr("id"),showFlg = true;
-                        if(timer === null) {
-                            timer = setInterval(function(){
-                                preVal += 10;
+                    //保存当前数据
+                    var paramStr ='drink_data_' + (new Date()).toLocaleDateString();
+                    com.fangtai.localStorage.setDrinkWaterDate(paramStr,$val,$('.main-other li').index($li));
+                    //time文字变化速度
+                    var time = 50,textObj = $(".show-water").find("b"),canvasId = canvas.attr("id"),showFlg = true;
+                    if(timer === null) {
+                        timer = setInterval(function(){
+                            preVal += 10;
 //                        preVal = $val;
-                                //重新取得当前值 -- 时间问题timer外部取得有问题
-                                $val = Number($showWater.attr("data-val"));
-                                if(preVal >= $val) {
-                                    showFlg = false;
-                                    preVal = $val;
-                                }
-                                textObj.text(preVal);
-                                init.playDrinkingWater({
-                                    id     : canvasId,
-                                    width  : width,
-                                    val    : preVal,
-                                    max    : max,
-                                    showFlg:showFlg
-                                });
+                            //重新取得当前值 -- 时间问题timer外部取得有问题
+                            $val = Number($showWater.attr("data-val"));
+                            if(preVal >= $val) {
+                                showFlg = false;
+                                preVal = $val;
+                            }
+                            textObj.text(preVal);
+                            init.playDrinkingWater({
+                                id     : canvasId,
+                                width  : width,
+                                val    : preVal,
+                                max    : max,
+                                showFlg:showFlg
+                            });
 
-                                if(preVal === $val) {
-                                    clearInterval(timer);
-                                    timer = null;
-                                }
-                            },time);
-                        }
-
+                            if(preVal === $val) {
+                                clearInterval(timer);
+                                timer = null;
+                            }
+                        },time);
                     }
                 }
             });
@@ -282,7 +277,7 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
+    Hekr.setMsgHandle(tid,function(str){
         var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
         if(msg[1]=="C2"&&msg[1]==7&&msg[2]==21){
             var $water     = parseInt(a[3]+a[4],16),

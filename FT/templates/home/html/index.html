@@ -41,6 +41,14 @@
                     </a>
                 </h3>
             </li>
+            <li class="login-out">
+                <h3>
+                    <a href="javascript:void(0)" title="退出登陆">
+                        <i class="icon-login-out icon-big"></i>
+                        <span>退出登陆</span>
+                    </a>
+                </h3>
+            </li>
         </ul>
         <i class="icon-add add"></i>
         <!--目录菜单-->
@@ -53,7 +61,7 @@
                     </h3>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <h3>
                     <i class="icon-product"></i>
                     <span>净水机1</span>
@@ -70,7 +78,7 @@
                 <div class="tools">
                     <i class="icon-remove"></i>
                 </div>
-            </li>
+            </li> -->
         </ul>
         <!--故障状态-->
         <div class="malfunction">
@@ -217,7 +225,7 @@
 </script>
 <!--净水器列表-->
 <script type="text/html" id="WaterPurifier-list">
-    <% for(var i=0;i<value.length;i++){ %>
+    <% for(var i=0;i<value.length&&i<3;i++){ %>
     <li data-tid="<%=value[i].tid%>">
         <h3>
             <i class="icon-product"></i>

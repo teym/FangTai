@@ -36,11 +36,13 @@ $(function(){
                 $(".nav-WaterPurifier").show().find(".active").removeClass("active");
                 $("body").append("<div class='transparency'></div>");
                 $(".status-remove").removeClass("status-remove");
+                return false;
             });
             //显示头部左侧菜单
             $(".icon-catalogue").on("touchend",function(){
                 $(".nav-catalogue").show();
                 $("body").append("<div class='transparency'></div>");
+                return false;
             });
             //关闭透明层
             $("body").on("touchend",".transparency",function(){
@@ -60,7 +62,7 @@ $(function(){
             //返回上一层
             $("body").on("touchend",".back",function(){
                 if(window.HerkIf){
-                    Hekr.close();
+                    Hekr.close(true);
                 }else{
                     location.href = $(this).attr("data-href");
                 }
@@ -68,8 +70,9 @@ $(function(){
             });
             //返回指定页面
             $("body").on("touchend",".backTo",function(){
+                console.log(1);
                 if(window.HerkIf){
-                    Hekr.backTo($(this).attr("data-href").replace("..","/templates/home/html"),true);
+                    Hekr.backTo("/home/html/index.html",true);
                 }else{
                     location.href = $(this).attr("data-href");
                 }
@@ -78,6 +81,11 @@ $(function(){
             //关闭提示框
             $("body").on("touchend",".close-hint",function(){
                 $(".hint-modal.hint").css({display:"none"});
+            });
+            //登出
+            $("body").on("touchend",".login-out",function(){
+                Hekr.logout();
+                location.href = "login.html";
             });
         },
         rem : function(){
@@ -134,43 +142,58 @@ $(function(){
 });
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000B3002\")");//查询净水器
-    Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-        var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-        //console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
-        if(msg[1]=="0B"&&msg[2]==30){//告警消息实时推送
-            $(".malfunction-status").hide();
-            if(msg[3]==01){//漏水
-                $(".malfunction-makeWater").show().siblings().hide();
-            }else if(msg[3]==02){//缺水
-                $(".malfunction-hydropenia").show().siblings().hide();
-            }else if(msg[3]=="0E"){//网络故障
-                $(".malfunction-wifi").show().siblings().hide();
-            }else if(msg[3]==03){//进水TDS故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障');
-            }else if(msg[3]==04){//出水TDS故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障');
-            }else if(msg[3]==05){//进水有机物故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水有机物故障');
-            }else if(msg[3]==06){//出水有机物故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水有机物故障');
-            }else if(msg[3]==07){//进水流量故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水流量故障');
-            }else if(msg[3]==08){//出水流量故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水流量故障');
-            }else if(msg[3]==09){//蓝牙故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>蓝牙故障');
-            }else if(msg[3]=="0A"){//无线充电故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>无线充电故障');
-            }else if(msg[3]=="0B"){//电磁阀故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>电磁阀故障');
-            }else if(msg[3]=="0C"){//水压开关故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>水压开关故障');
-            }else if(msg[3]=="0D"){//膜故障
-                $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>膜故障');
+    Hekr.getConfig(function(info){
+        window.tid = info.tid;
+        if(window.tid){
+            // var $sendMsg = sendInfo("000B3000");
+            // Hekr.sendMsg(tid,$sendMsg);
+        }       
+        console.log(tid);
+        Hekr.setMsgHandle(tid,function(str){
+            var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
+            console.log(str,msg);
+            //console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
+            window.errorone = window.errortwo = false;
+            if(msg[0]=="C1"){//告警消息实时推送
+                Hekr.backTo("/home/html/index.html",true);
+                $(".malfunction-status").hide();
+                if(msg[1]=="0B"){//漏水
+                    window.errorone = true;
+                    $(".malfunction-makeWater").show().siblings().hide();
+                }else if(msg[1]=="0C"){//缺水
+                    window.errorone = true;
+                    $(".malfunction-hydropenia").show().siblings().hide();
+                }else if(msg[1]=="0D"){//设备故障
+                    // $(".malfunction-wifi").show().siblings().hide();
+                    $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>设备故障').show().siblings().hide();
+                }
             }
-        }
+                // }else if(msg[3]==03){//进水TDS故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水TDS故障');
+                // }else if(msg[3]==04){//出水TDS故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水TDS故障');
+                // }else if(msg[3]==05){//进水有机物故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水有机物故障');
+                // }else if(msg[3]==06){//出水有机物故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水有机物故障');
+                // }else if(msg[3]==07){//进水流量故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>进水流量故障');
+                // }else if(msg[3]==08){//出水流量故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>出水流量故障');
+                // }else if(msg[3]==09){//蓝牙故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>蓝牙故障');
+                // }else if(msg[3]=="0A"){//无线充电故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>无线充电故障');
+                // }else if(msg[3]=="0B"){//电磁阀故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>电磁阀故障');
+                // }else if(msg[3]=="0C"){//水压开关故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>水压开关故障');
+                // }else if(msg[3]=="0D"){//膜故障
+                //     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>膜故障');
+                // }
+        });
     });
+        
 }, false);
 
 /*提示信息*/
@@ -205,6 +228,11 @@ function getArrayInfo(info){
         val.push(info.slice(i,i+2));
     }
     return val;
+};
+//发送命令
+function sendInfo(data){
+    var frame = UARTDATA.encode(0x02,data);
+    return "(uartdata \""+frame+"\")";
 };
 //表单键盘控制
 var inputControl = function($obj) {

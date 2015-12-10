@@ -1,7 +1,5 @@
 $(function(){
-	var tid = localStorage.tid;
     //window.HerkIf = true;
-	alert(tid);
 	var init = {
 		base : function(){
             init.event();
@@ -58,36 +56,44 @@ $(function(){
     }*/
     //设备反馈
     document.addEventListener('HekrSDKReady',function(){
-        var $list  = $(".filter-list").find(">ul>li"),
-            $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
-            $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
-            $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
-            $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
+        // var $list  = $(".filter-list").find(">ul>li"),
+        //     $one   = UARTDATA.hex2str($list.eq(0).attr("data-val")*100),
+        //     $two   = UARTDATA.hex2str($list.eq(1).attr("data-val")*100),
+        //     $three = UARTDATA.hex2str($list.eq(2).attr("data-val")*100),
+        //     $four  = UARTDATA.hex2str($list.eq(3).attr("data-val")*100);
         //Hekr.sendMsg(tid,"(uartdata \"00094104"+$one+$two+$three+$four+"0A410401000000\")");//查询净水器设备滤芯状态
-				alert(UARTDATA.encode(0x02,00094104000000000A410401000000));
-				Hekr.sendMsg(tid,"(uartdata \"00094104000000000A410401000000\")");
-			  Hekr.setMsgHandle(tid,function(str){
-            var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-            //console.log(msg,msg[1]==9,msg[2]==41,msg[3]==4);
-            if(msg[1]==9&&msg[2]==41&&msg[3]==4){
-                var $li     = $(".filter-list").find("li"),
-                    $width  = $li.width(),
-                    $height = $li.height();
-                for(var i=0;i<4;i++){
-                    var canvas = $li.eq(i).find("canvas");
-                    canvas.attr("width",$width);
-                    canvas.attr("height",$height);
-                    //绘画滤芯
-                    playFilter({
-                        id     : canvas.attr("id"),
-                        width  : $width,
-                        height : $height,
-                        val    : parseInt(msg[4+i],16)/100,
-                        title  : $li.eq(i).attr("data-title")
-                    });
-                }
-            }
+        Hekr.getConfig(function(info){
+            window.tid = info.tid;
+            if(window.tid){
+                var $sendMsg = sendInfo("00094104000000000A410401000000");
+                Hekr.sendMsg(tid,$sendMsg);
+                Hekr.setMsgHandle(tid,function(str){
+                    $(".main-other").append(str);
+                    //var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
+                    var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
+                    //console.log(msg,msg[1]==9,msg[2]==41,msg[3]==4);
+                    if(msg[1]==9&&msg[2]==41&&msg[3]==4){
+                        var $li     = $(".filter-list").find("li"),
+                            $width  = $li.width(),
+                            $height = $li.height();
+                        for(var i=0;i<4;i++){
+                            var canvas = $li.eq(i).find("canvas");
+                            canvas.attr("width",$width);
+                            canvas.attr("height",$height);
+                            //绘画滤芯
+                            playFilter({
+                                id     : canvas.attr("id"),
+                                width  : $width,
+                                height : $height,
+                                val    : parseInt(msg[4+i],16)/100,
+                                title  : $li.eq(i).attr("data-title")
+                            });
+                        }
+                    }
+                });
+            }       
         });
+	    
     }, false);
 });
 function playFilter(info){

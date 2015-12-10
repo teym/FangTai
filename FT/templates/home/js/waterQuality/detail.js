@@ -1,4 +1,5 @@
 $(function(){
+    window.tid = localStorage.tid;
     //window.HerkIf = true;
 	var init = {
 		base : function(){
@@ -150,22 +151,30 @@ $(function(){
 	init.base();
     //设备反馈
     document.addEventListener('HekrSDKReady',function(){
-        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"0003202404200000\")");//查询TDS进水口
-        Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-            var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-            //var msg = [00,03,20,24,04,20,00,00];
-            if(msg[1]==3&&msg[2]==20){
-                $(".TDS").html(parseInt(msg[3],16)+'<span>mg/L</span><b>(优)</b>');
-                Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00054103140005064103030602\")");//查询有机物进水口
-            }
-            //var msg = [00,05,41,03,14,00,05,06,41,03,03,06,02];
-            if(msg[1]==5&&msg[2]==41&&msg[3]==03){
-                var val = "";
-                val += parseInt(msg[4],16)+".";
-                val += parseInt(msg[5],16);
-                val += parseInt(msg[6],16);
-                $(".organic").html(val+'<span>mg/L</span><b>(优)</b>');
-            }
+        Hekr.getConfig(function(info){
+            window.tid = info.tid;
+            if(window.tid){
+                var $sendMsg = sendInfo("000421000006410400000000");
+                Hekr.sendMsg(tid,$sendMsg);
+                Hekr.setMsgHandle(tid,function(str){
+                    var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
+                    //var msg = [00,03,20,24,04,20,00,00];
+                    if(msg[1]==4&&msg[2]==21){
+                        var val = 0;
+                        val += msg[3]*255;
+                        val += parseInt(msg[4],16);
+                        console.log(val);
+                        $(".TDS").html(val+'<span>mg/L</span><b>(优)</b>');
+
+                        var val = "";
+                        val += parseInt(msg[8],16)+".";
+                        val += parseInt(msg[9],16);
+                        val += parseInt(msg[10],16);
+                        val += parseInt(msg[11],16);
+                        $(".organic").html(val+'<span>mg/L</span><b>(优)</b>');
+                    }
+                });
+            }       
         });
     }, false);
 });

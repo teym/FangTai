@@ -11,13 +11,14 @@ $(function(){
             //本地登陆
             $("body").on("touchend",".localLogin",function(){
                 Hekr.guestLogin(function(user){
-									  console.log(user);
+					console.log(user);
                     if(user){
                         location.href = "index.html"
                     }else{
                         alert("请检查网络");
                     }
                 });
+                return false;
             });
 		},
         //登陆背景

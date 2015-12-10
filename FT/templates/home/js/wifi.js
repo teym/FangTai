@@ -1,5 +1,4 @@
 $(function(){
-
 	var init = {
 		base : function(){
             init.event();
@@ -43,6 +42,7 @@ $(function(){
                     if(window.HerkIf){
                         Hekr.config(SSID,$.trim($(".account-password").val()),function(ret,error){
                             if(ret.tid){//成功
+                                Hekr.saveConfig({tid:ret.tid});
                                 self.attr("data-status","success");
                                 $(".icon-wifi-success").css({display:"block"}).siblings(".icon").hide();
                                 $span.text("连接成功");
@@ -73,13 +73,14 @@ $(function(){
                     }
                 }else if(self.attr("data-status")=="cancel"){//取消连接网络
                     if(window.HerkIf){
-                        Herk.cancelConfig();
+                        Hekr.cancelConfig();
                     }
                     $(".wifi").removeClass("in-service");
                     $input.val("确定");
                     self.attr("data-status","link");
                     $(".icon-wifi").css({display:"block"}).siblings(".icon").hide();
                     $span.text("请选择一个可以用的WLAN");
+
                     clearTimeout($time);
                 }else if(self.attr("data-status")=="success"){
                     location.href = "index.html?openType=push";

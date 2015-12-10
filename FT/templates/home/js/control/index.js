@@ -1,4 +1,3 @@
-
 $(function(){
   //window.HerkIf = true;
   window.progress = null;
@@ -31,9 +30,11 @@ $(function(){
                 }
                 if(window.HerkIf){
                     if($(this).hasClass("open")){
-                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012001\")");//开启净水器
+                        var $sendMsg = sendInfo("01012001");//开启净水器
+                        Hekr.sendMsg(tid,$sendMsg);
                     }else{
-                        Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"01012002\")");//关闭净水器
+                        var $sendMsg = sendInfo("01012002");//关闭净水器
+                        Hekr.sendMsg(tid,$sendMsg);
                     }
                 }else{
                     $(this).addClass("active").siblings().removeClass("active");
@@ -53,7 +54,8 @@ $(function(){
                     return;
                 }
                 if(window.HerkIf){
-                    Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"02022001\")");//开启净水器
+                    var $sendMsg = sendInfo("02022001");//开启净水器
+                    Hekr.sendMsg(tid,$sendMsg);
                 }else{
                     var $this = $(this);
                     $this.val('冲洗中').addClass("underway").removeClass("true");
@@ -71,42 +73,47 @@ $(function(){
 //查询设备开关状态
 //设备反馈
 document.addEventListener('HekrSDKReady',function(){
-  Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"00012001\")");//查询净水器
-  Hekr.setMsgHandle("VDEV_1AFE349C3DPN",function(str){
-      var msg = getArrayInfo(str.split('uartdata\" \"')[1].split('\"')[0]);//获取反馈信息
-      //反馈设备开关
-      if(msg[1]==1&&msg[2]==20){
-          if(msg[3]==1){//开
-              $(".switch").find(".open").addClass("active").siblings().removeClass("active");
-              $(".purifier").addClass("open").removeClass("close");
-              Hekr.sendMsg("VDEV_1AFE349C3DPN","(uartdata \"000821"+UARTDATA.hex2str(80)+"\")");//查询污染]
-          }else if(msg[3]==2){//关
-              $(".switch").find(".close").addClass("active").siblings().removeClass("active");
-              $(".purifier").addClass("close").removeClass("open");
-              progress.stopAnim();
-          }
-      }
-      //反馈污染度
-      if(msg[1]==8&&msg[2]==21){
-          progress.stopAnim();
-          progress.drawProgress(parseInt(msg[3],16),'pre');
-      }
-      //冲洗中
-      if(msg[1]==2&&msg[2]==20&&msg[3]==1){
-          $('#wash').val('冲洗中').addClass("underway").removeClass("true");
-          $(".purifier-text").text("冲洗中");
-          progress.washProgress(30,'wash');
-      }
-  });
+  
+    Hekr.getConfig(function(info){
+        window.tid = info.tid;
+        if(window.tid){
+            var $sendMsg = sendInfo("00012000");//查询净水器
+          Hekr.sendMsg(tid,$sendMsg);
+          Hekr.setMsgHandle(tid,function(str){
+              var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
+              console.log(msg);
+              //反馈设备开关
+              if(msg[1]==1&&msg[2]==20){
+                  if(msg[3]==1){//开
+                      $(".switch").find(".open").addClass("active").siblings().removeClass("active");
+                      $(".purifier").addClass("open").removeClass("close");
+                      var $sendMsg = sendInfo("00082000");//查询污染
+                      Hekr.sendMsg(tid,$sendMsg);
+                  }else if(msg[3]==2){//关
+                      $(".switch").find(".close").addClass("active").siblings().removeClass("active");
+                      $(".purifier").addClass("close").removeClass("open");
+                      progress.stopAnim();
+                  }
+              }
+              //反馈污染度
+              if(msg[1]==8&&msg[2]==20){
+                  progress.stopAnim();
+                  console.log(msg[3],parseInt(msg[3],16));
+                  progress.drawProgress(parseInt(msg[3],16),'pre');
+              }
+              //冲洗中
+              if(msg[1]==2&&msg[2]==20&&msg[3]==1){
+                  $('#wash').val('冲洗中').addClass("underway").removeClass("true");
+                  $(".purifier-text").text("冲洗中");
+                  progress.washProgress(30,'wash');
+              }
+          });
+        }       
+    });
 }, false);
 
 
-//Hekr.sendMsg("tid",(uartdata "000082000"));
-
-
-
-
-/*var tid  = getUrlParam("tid") || "VDEV_APPOUTSOURCE";//virtualdevice中device.tid
+/*var tid  = getUrlParam(tid) || "VDEV_APPOUTSOURCE";//virtualdevice中device.tid
 var host = getUrlParam("host") || "device.hekr.me";
 var token =getUrlParam("access_key") || "azBlNkU3WW8xWHNRb01tUFppWXRBKzhQSWdWVjdlak1ockhJVjdZcCtMejkyWVBmZlZCRVNJZnQxNXlKUEdkMnJi" //virtualdevice中 user access_key
 
@@ -271,7 +278,8 @@ var Progress = function(){
         drawProgress: function(val, type) {
             var valTemp = 0,curVal = 0;
             if(val > 0) {
-                curVal = Math.floor(((val % 12)/12) * 100);
+                //curVal = Math.floor(((val % 12)/12) * 100);
+                curVal = Math.floor(((val)/12) * 100);
                 curVal = curVal === 0? 100 : curVal;
             }
             washFlg = false;

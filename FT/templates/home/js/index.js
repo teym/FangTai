@@ -1,6 +1,6 @@
 $(function(){
     //window.HerkIf = true;
-		alert(UARTDATA.encode(0x02,00094104000000000A410401000000));
+		//alert(UARTDATA.encode(0x02,00094104000000000A410401000000));
 	var init = {
 		base : function(){
             init.event();
@@ -20,19 +20,20 @@ $(function(){
 		},
 		event : function(){
             //删除净水机
-            $("body").on("touchstart",".status-remove",function(){
-							alert($(this).closest("li").attr("data-tid"));
+            $("body").on("touchstart",".status-remove .icon-remove",function(){
                 $(".cancel-binding").css({display:"table"}).attr("data-tid",$(this).closest("li").attr("data-tid"));
+                $(this).closest("li").addClass("status-active");
                 return false;
             });
             //确定删除净水机
             $("body").on("touchstart",".cancel-binding li",function(){
                 if($(this).hasClass("submit")){
                     if(window.HerkIf){
-											alert($(".cancel-binding").attr("data-tid"));
+									//		alert($(".cancel-binding").attr("data-tid"));
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
                             if(ret){
-                                $(".status-remove").fadeOut(500,function(){
+                                $(".status-active").fadeOut(500,function(){
+                                    console.log(ret);
                                     $(".cancel-binding").css({display:"none"});
                                     $(this).remove();
                                 });
@@ -64,19 +65,43 @@ $(function(){
             //删除净水机
             $("body").on("touchstart",".nav-WaterPurifier li",function(){
                 if(!$(this).hasClass("status-remove")){
-                    window.startVal = window.moveVal = event.touches[0].pageX;
+                    this.startVal = this.moveVal = event.touches[0].pageX;
                     $(".status-remove").removeClass("status-remove");
                 }else{
-                    window.startVal = "";
+                    this.startVal = "";
                 }
             }).on("touchmove",".nav-WaterPurifier li:not(.status-remove)",function(){
-                    if(window.startVal){
-                        window.moveVal = event.touches[0].pageX;
+                    if(this.startVal){
+                        this.moveVal = event.touches[0].pageX;
                         //左滑效果
-                        var $distance = window.startVal-window.moveVal,
+                        var $distance = this.startVal-this.moveVal,
                             $width    = $(this).width();
                         if($distance/$width>0.1){
                             $(this).addClass("status-remove");
+                        }
+                    }
+                    return false;
+                }).on("touchend",".nav-WaterPurifier li",function(){
+                    var $state = this.startVal-this.moveVal>1||this.startVal-this.moveVal<-1;
+                    this.startVal = this.moveVal = null;
+                    console.log($state);
+                    if(!$state&&!$(this).hasClass("add-WaterPurifier")){
+                        if($(this).hasClass("status-remove")){
+                            $(this).removeClass("status-remove");
+                        }else{
+                            Hekr.saveConfig({tid:$(this).attr("data-tid")});
+                            window.tid = $(this).attr("data-tid");
+                            $(".nav-WaterPurifier").hide();
+                            $(".transparency").remove();    
+                        }
+                        
+                    }else{
+                        if($(this).find(">a").attr("href")){
+                            if($(".nav-WaterPurifier li").length>=4){
+                                hintModal({val:"设置已达绑定上限，请删除设备在重新绑定"});
+                            }else{
+                                location.href = $(this).find(">a").attr("href");
+                            }
                         }
                     }
                     return false;
@@ -399,6 +424,26 @@ $(function(){
                 });
                 //解绑移动中的ICON
                 $parent.find(".moveLi").removeClass("moveLi");
+                console.log($(this).attr("data-start-val")-$(this).attr("data-move-val"));
+                var $state = $(this).attr("data-start-val")-$(this).attr("data-move-val")>-10||$(this).attr("data-start-val")-$(this).attr("data-move-val")<10;
+                console.log($state,$(this).attr("data-start-val")-$(this).attr("data-move-val"),$(this).find(".active a").attr("href"),$(this));
+                if($state){
+                    //故障1
+                    if(window.errorone){
+                        console.log($(this).find(".active a").attr("href").indexOf("filter/list.html")>-1||$(this).find(".active a").attr("href").indexOf("control/coded-lock.html")>-1||$(this).find(".active a").attr("href").indexOf("dosage/main.html">-1));
+                        if($(this).find(".active a").attr("href").indexOf("filter/list.html")>-1||$(this).find(".active a").attr("href").indexOf("control/coded-lock.html")>-1||$(this).find(".active a").attr("href").indexOf("dosage/main.html">-1)){
+                          console.log(1);
+                          event.stopPropagation();
+                            return false;
+                        }
+                    }
+                    //故障2
+                    if(window.errortwo){
+                        if($(this).find(".active a").attr("href")=="waterQuality/detail.html?openType=push"){
+                            return false;
+                        }
+                    }
+                }
             });
 		},
         //获取屏幕
@@ -432,14 +477,32 @@ $(function(){
 	init.base();
     //设备反馈
     document.addEventListener('HekrSDKReady',function(){
-			//获取用户信息
+		//获取用户信息
         Hekr.currentUser(function(user){
             window.uid = user.uid;
         });
 			  //获取设备列表
         Hekr.getDevices(function(list,error){
-					  localStorage.tid = list[0].tid;
-            $(".nav-WaterPurifier").find("li").eq(0).nextAll().remove();
+            if(!list.length){
+                Hekr.saveConfig({tid:""});
+                return;
+            }
+            Hekr.getConfig(function(info){
+                window.tid = info.tid;
+                if(!info){
+                    Hekr.saveConfig({tid:list[0].tid});
+                    window.tid = list[0].tid;
+                }else{
+                    for(var i=0;i<list.length&&i<3;i++){
+                        if(list[i].tid==tid){
+                            return;
+                        }else if(i==2){
+                            Hekr.saveConfig({tid:list[0].tid});
+                            window.tid = list[0].tid;
+                        }
+                    }
+                }
+            });
             $(".nav-WaterPurifier").append(template.render("WaterPurifier-list",{value:list}));
             for(var i=0;i<list.length;i++){
                 $(".nav-WaterPurifier").find("li").eq(1+i).attr("data-tid",list[i].tid);

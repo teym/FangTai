@@ -107,8 +107,8 @@ Canvas = function(id,param){
      */
     function initBind() {
 
-        var handler = param.handlerCallback || function(data){console.log('curData: ' + data)},//长按
-            release = param.releaseCallback || function(){console.log('release')};//释放
+        var handler = param.handlerCallback || function(data){},//长按  console.log('curData: ' + data)
+            release = param.releaseCallback || function(){};//释放  console.log('release')
         var showDataTimer = null,
             leastTime = 200;//持续时间
         //点击

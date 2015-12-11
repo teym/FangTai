@@ -163,7 +163,6 @@ $(function(){
                         var val = 0;
                         val += msg[3]*255;
                         val += parseInt(msg[4],16);
-                        console.log(val);
                         $(".TDS").html(val+'<span>mg/L</span><b>(优)</b>');
 
                         var val = "";

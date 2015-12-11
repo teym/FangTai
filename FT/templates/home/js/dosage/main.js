@@ -140,7 +140,6 @@ Canvas = function(id,param){
      */
     function hadLoadFont() {
         var text = context.measureText('0');
-        console.log(text.width);
         loadFontFlg = loadFontFlg?loadFontFlg : '8.734375' != text.width;
         return loadFontFlg;
     }

@@ -70,7 +70,6 @@ $(function(){
             });
             //返回指定页面
             $("body").on("touchend",".backTo",function(){
-                console.log(1);
                 if(window.HerkIf){
                     Hekr.backTo("/home/html/index.html",true);
                 }else{
@@ -84,7 +83,9 @@ $(function(){
             });
             //登出
             $("body").on("touchend",".login-out",function(){
-                Hekr.logout();
+                if(window.HerkIf){
+                    Hekr.logout();
+                }
                 location.href = "login.html";
             });
         },
@@ -148,11 +149,8 @@ document.addEventListener('HekrSDKReady',function(){
             // var $sendMsg = sendInfo("000B3000");
             // Hekr.sendMsg(tid,$sendMsg);
         }       
-        console.log(tid);
         Hekr.setMsgHandle(tid,function(str){
             var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
-            console.log(str,msg);
-            //console.log(msg,msg[1]=="0B",msg,msg[2]==30,msg);
             window.errorone = window.errortwo = false;
             if(msg[0]=="C1"){//告警消息实时推送
                 Hekr.backTo("/home/html/index.html",true);
@@ -248,7 +246,6 @@ var inputControl = function($obj) {
     });
 
     $('body').bind('touchend',function(event){
-        //console.log('lv','touch');
         var target = event.target;
         if($obj.index(target) === -1 && inputFlg === true) {
             //alert(1);

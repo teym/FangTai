@@ -81,7 +81,6 @@ document.addEventListener('HekrSDKReady',function(){
           Hekr.sendMsg(tid,$sendMsg);
           Hekr.setMsgHandle(tid,function(str){
               var msg = getArrayInfo(str.state.uartdata);//获取反馈信息
-              console.log(msg);
               //反馈设备开关
               if(msg[1]==1&&msg[2]==20){
                   if(msg[3]==1){//开
@@ -98,7 +97,6 @@ document.addEventListener('HekrSDKReady',function(){
               //反馈污染度
               if(msg[1]==8&&msg[2]==20){
                   progress.stopAnim();
-                  console.log(msg[3],parseInt(msg[3],16));
                   progress.drawProgress(parseInt(msg[3],16),'pre');
               }
               //冲洗中
@@ -288,7 +286,7 @@ var Progress = function(){
                 unit = curUse.next.unit;
             }
             animTimer = setInterval(function(){
-                valTemp += 0.5;
+                valTemp += 0.5;//环形的递增量
                 valTemp = valTemp > val ? val : valTemp;
                 $(".purifier-caption").html(Math.floor(valTemp) + '<span>' + unit  + '</span>');
                 context.clearRect(0,0,2*outerRadius,2*outerRadius);
@@ -302,7 +300,7 @@ var Progress = function(){
                     animTimer = null;
                     $('#wash').addClass("true").removeClass("opacity8");
                 }
-            },50);
+            },50);//环形的递增速度
 
         },
         washProgress: function(val,type,callback) {

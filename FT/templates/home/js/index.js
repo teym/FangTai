@@ -33,7 +33,6 @@ $(function(){
                         Hekr.removeDevice($(".cancel-binding").attr("data-tid"),function(ret){
                             if(ret){
                                 $(".status-active").fadeOut(500,function(){
-                                    console.log(ret);
                                     $(".cancel-binding").css({display:"none"});
                                     $(this).remove();
                                 });
@@ -84,7 +83,6 @@ $(function(){
                 }).on("touchend",".nav-WaterPurifier li",function(){
                     var $state = this.startVal-this.moveVal>1||this.startVal-this.moveVal<-1;
                     this.startVal = this.moveVal = null;
-                    console.log($state);
                     if(!$state&&!$(this).hasClass("add-WaterPurifier")){
                         if($(this).hasClass("status-remove")){
                             $(this).removeClass("status-remove");
@@ -458,7 +456,6 @@ $(function(){
                 $(".control-portion,.control-portion li").height($H*0.425);//控制
                 $(".water-portion,.water-portion li").height($H*0.37);//水质
                 $(".serve-portion,.serve-portion li").height($H*0.205);//服务
-                console.log($liWidth);
                 //$li.find("li").width($liWidth*1.5);
                 $li.find(".active").css({width:$W-($liWidth*2)});
                 //42.5  37  20.5

@@ -40,7 +40,7 @@ $(function(){
                     $(this).addClass("active").siblings().removeClass("active");
                     if($(this).hasClass("open")){
                         $(".purifier").addClass("open").removeClass("close");
-                        progress.drawProgress(80,'pre');
+                        progress.drawProgress(15,'pre');
                     }else{
                         $(".purifier").addClass("close").removeClass("open");
                         progress.stopAnim();
@@ -277,11 +277,10 @@ var Progress = function(){
         },
         drawProgress: function(val, type) {
             var valTemp = 0,curVal = 0;
-            if(val > 0) {
-                //curVal = Math.floor(((val % 12)/12) * 100);
-                curVal = Math.floor(((val)/12) * 100);
-                curVal = curVal === 0? 100 : curVal;
-            }
+            // if(val > 0) {
+            //     curVal = Math.floor(((val % 12)/12) * 100);
+            //     curVal = curVal === 0? 100 : curVal;
+            // }
             washFlg = false;
             if(type === 'pre') {
                 unit = curUse.pre.unit;
@@ -289,18 +288,21 @@ var Progress = function(){
                 unit = curUse.next.unit;
             }
             animTimer = setInterval(function(){
-                valTemp++;
-                $(".purifier-caption").html(Math.floor(valTemp * 12 / 100)+ '<span>' + unit  + '</span>');
+                valTemp += 0.5;
+                valTemp = valTemp > val ? val : valTemp;
+                $(".purifier-caption").html(Math.floor(valTemp) + '<span>' + unit  + '</span>');
                 context.clearRect(0,0,2*outerRadius,2*outerRadius);
                 drawCirProgress();
-                drawProgressVal(valTemp, type);
-                if(valTemp === curVal) {
+                curVal = Math.floor((valTemp/12) * 100);
+                curVal = curVal > 100 ? 100 : curVal;
+                drawProgressVal(curVal, type);
+                if(valTemp === val) {
                     washFlg = true;
                     clearInterval(animTimer);
                     animTimer = null;
                     $('#wash').addClass("true").removeClass("opacity8");
                 }
-            },20);
+            },50);
 
         },
         washProgress: function(val,type,callback) {

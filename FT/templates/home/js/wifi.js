@@ -83,7 +83,11 @@ $(function(){
 
                     clearTimeout($time);
                 }else if(self.attr("data-status")=="success"){
-                    location.href = "index.html?openType=push";
+                    if(window.HerkIf){
+                        Hekr.backTo("/home/html/index.html",true);
+                    }else{
+                        location.href = "index.html?openType=push";
+                    }
                 }
             });
 		}

@@ -157,6 +157,7 @@ document.addEventListener('HekrSDKReady',function(){
             if(msg[0]=="C1"){//告警消息实时推送
                 Hekr.backTo("/home/html/index.html",true);
                 $(".malfunction-status").hide();
+                window.errorone = window.errortwo = false;
                 if(msg[1]=="0B"){//漏水
                     window.errorone = true;
                     $(".malfunction-makeWater").show().siblings().hide();
@@ -164,6 +165,7 @@ document.addEventListener('HekrSDKReady',function(){
                     window.errorone = true;
                     $(".malfunction-hydropenia").show().siblings().hide();
                 }else if(msg[1]=="0D"){//设备故障
+                    window.errorone = false;
                     // $(".malfunction-wifi").show().siblings().hide();
                     $(".malfunction-malfunction").html('<i class="icon icon-malfunction"></i>设备故障').show().siblings().hide();
                 }

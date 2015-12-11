@@ -424,25 +424,24 @@ $(function(){
                 });
                 //解绑移动中的ICON
                 $parent.find(".moveLi").removeClass("moveLi");
-                console.log($(this).attr("data-start-val")-$(this).attr("data-move-val"));
-                var $state = $(this).attr("data-start-val")-$(this).attr("data-move-val")>-10||$(this).attr("data-start-val")-$(this).attr("data-move-val")<10;
-                console.log($state,$(this).attr("data-start-val")-$(this).attr("data-move-val"),$(this).find(".active a").attr("href"),$(this));
+                var $state = $(this).attr("data-start-val")-$(this).attr("data-move-val")==0;
                 if($state){
+                    var $active = $(this).find(".active");
                     //故障1
                     if(window.errorone){
-                        console.log($(this).find(".active a").attr("href").indexOf("filter/list.html")>-1||$(this).find(".active a").attr("href").indexOf("control/coded-lock.html")>-1||$(this).find(".active a").attr("href").indexOf("dosage/main.html">-1));
-                        if($(this).find(".active a").attr("href").indexOf("filter/list.html")>-1||$(this).find(".active a").attr("href").indexOf("control/coded-lock.html")>-1||$(this).find(".active a").attr("href").indexOf("dosage/main.html">-1)){
-                          console.log(1);
-                          event.stopPropagation();
+                        if($active.hasClass("filter")||$active.hasClass("control")||$active.hasClass("dosage")){
+                            hintModal({val:"设备漏水或缺水，无法使用该功能"});
                             return false;
                         }
                     }
-                    //故障2
                     if(window.errortwo){
-                        if($(this).find(".active a").attr("href")=="waterQuality/detail.html?openType=push"){
+                    //故障2
+                        if($active.hasClass("waterQuality")){
+                            hintModal({val:"设备故障，无法使用该功能"});
                             return false;
                         }
                     }
+                    location.href = $(this).find(".active a").attr("data-href");
                 }
             });
 		},
